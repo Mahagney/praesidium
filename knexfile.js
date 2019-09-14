@@ -9,7 +9,13 @@ module.exports = {
           user : 'me',
           password : 'password',
           database : 'postgres'
-      }
+      },
+    migrations: {
+      directory: './knex/migrations'
+    },
+    seeds: {
+      directory: './knex/seeds'
+    }
   },
 
   staging: {
