@@ -1,3 +1,5 @@
-var user = require('../models/userModel');
+var User = require('../models/userModel');
 
-exports.getUserByEmail = email => user.getUserByEmail(email);
+exports.getUserByEmail = email => User.getUserByEmail(email);
+
+exports.create = user => User.create(user);

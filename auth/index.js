@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Users = require('../services/usersService');
+var bcrypt = require('bcrypt');
 
 router.get('/', function(req, res, next) {
     res.json({ message: 'auth' });
@@ -19,8 +20,19 @@ router.post('/signup', function(req, res, next) {
     if(validateUser(req.body)) {
         Users
             .getUserByEmail(req.body.email)
-            .then(user =>
-                res.json({user: user, message : "signed up"})
+            .then(user => {
+                if(!user){
+                    bcrypt.hash(req.body.password, 10)
+                        .then((hash) => {
+                            const user = {...req.body};
+                            user.password = hash;
+                            const id = Users
+                                .create(user);
+                            res.json({hash, message: "signed up"});
+                        });
+                }else{
+                    next(new Error('Email in use'));
+                }}
     )
     } else {
         next(new Error('Invalid user'))
