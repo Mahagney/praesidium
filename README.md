@@ -8,6 +8,7 @@ run the app in normal mode(no logs):
 initialize db:
 insert db data in knexfile.js development
 run following:
+
     knex migrate:latest
     knex seed:run
 
