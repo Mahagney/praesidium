@@ -3,50 +3,42 @@ let Auth = require('../services/authService');
 let Users = require('../services/usersService');
 
 exports.signUp = (req, res, next) => {
-    if(Auth.validateUser(req.body)) {
-        Users
-            .getUserByEmail(req.body.email)
-            .then(user => {
-                if(!user){
-                    bcrypt.hash(req.body.password, 10)
-                        .then((hash) => {
-                            const user = {...req.body};
-                            user.password = hash;
-                            const id = Users
-                                .create(user);
-                            res.json({hash, message: "signed up"});
-                        });
-                }else{
-                    next(new Error('Email in use'));
-                }}
-            )
-    } else {
-        next(new Error('Invalid user'))
-    }
-}
+  if (Auth.validateUser(req.body)) {
+    Users.getUserByEmail(req.body.email).then((user) => {
+      if (!user) {
+        bcrypt.hash(req.body.password, 10).then((hash) => {
+          const user = { ...req.body };
+          user.password = hash;
+          const id = Users.create(user);
+          res.json({ hash, message: 'signed up' });
+        });
+      } else {
+        next(new Error('Email in use'));
+      }
+    });
+  } else {
+    next(new Error('Invalid user'));
+  }
+};
 
-exports.signIn =  function(req, res, next) {
-    if (Auth.validateUser(req.body)) {
-        Users
-            .getUserByEmail(req.body.email)
-            .then(user => {
-                if (user) {
-                    bcrypt.compare(req.body.password, user.password)
-                        .then((result) => {
-                            const isSecure = req.app.get('env') != 'development';
-                            res.cookie('user_id', user.id,
-                                {
-                                    httpOnly: true,
-                                    secure: isSecure,
-                                    signed: true
-                                })
-                            res.json({result, message: "signed in"});
-                        });
-                }else {
-                    next(new Error('Invalid Login'));
-                }
-            });
-    }else {
+exports.signIn = function(req, res, next) {
+  if (Auth.validateUser(req.body)) {
+    Users.getUserByEmail(req.body.email).then((user) => {
+      if (user) {
+        bcrypt.compare(req.body.password, user.password).then((result) => {
+          const isSecure = req.app.get('env') != 'development';
+          res.cookie('user_id', user.id, {
+            httpOnly: true,
+            secure: isSecure,
+            signed: true,
+          });
+          res.json({ result, message: 'signed in' });
+        });
+      } else {
         next(new Error('Invalid Login'));
-    }
-}
+      }
+    });
+  } else {
+    next(new Error('Invalid Login'));
+  }
+};

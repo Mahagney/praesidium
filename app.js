@@ -19,12 +19,12 @@ app.use('/auth', auth);
 app.use('/users', usersRouter);
 app.use('/', indexRouter);
 
-app.use(function(err, req, res, next){
-    res.status(err.status || 500);
-    res.json({
-        message: err.message,
-        error: req.app.get('env') === 'development' ? err : {}
-    });
-})
+app.use(function(err, req, res, next) {
+  res.status(err.status || 500);
+  res.json({
+    message: err.message,
+    error: req.app.get('env') === 'development' ? err : {},
+  });
+});
 
 module.exports = app;
