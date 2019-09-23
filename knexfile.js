@@ -5,9 +5,9 @@ module.exports = {
     client: 'pg',
     connection: {
       host: '127.0.0.1',
-      user: 'me',
-      password: 'password',
-      database: 'postgres',
+      user: 'postgres',
+      password: 'admin',
+      database: 'praesidium',
     },
     migrations: {
       directory: './knex/migrations',
@@ -20,9 +20,9 @@ module.exports = {
   staging: {
     client: 'postgresql',
     connection: {
-      database: 'my_db',
-      user: 'username',
-      password: 'password',
+      user: 'postgres',
+      password: 'admin',
+      database: 'praesidium',
     },
     pool: {
       min: 2,
@@ -36,9 +36,9 @@ module.exports = {
   production: {
     client: 'postgresql',
     connection: {
-      database: 'my_db',
-      user: 'username',
-      password: 'password',
+      user: 'postgres',
+      password: 'admin',
+      database: 'praesidium',
     },
     pool: {
       min: 2,

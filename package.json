@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "debug": "SET DEBUG=praesidium:* & npm run devstart",
     "start": "node ./bin/www",
     "devstart": "nodemon ./bin/www",
     "migrate:latest": "knex migrate:latest",
@@ -11,6 +12,7 @@
   "dependencies": {
     "bcrypt": "^3.0.6",
     "cookie-parser": "~1.4.4",
+    "cors": "^2.8.5",
     "debug": "~2.6.9",
     "dotenv": "^8.1.0",
     "express": "~4.16.1",
