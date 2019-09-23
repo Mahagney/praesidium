@@ -9,6 +9,8 @@ var usersRouter = require('./routes/users');
 var auth = require('./routes/auth.js');
 var app = express();
 
+app.set('port', process.env.PORT || 3000);
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
