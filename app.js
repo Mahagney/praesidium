@@ -11,8 +11,19 @@ var usersRouter = require('./routes/users');
 var auth = require('./routes/auth.js');
 var app = express();
 
+//TO DO
+
+const CORS_OPTIONS = {
+  origin: 'http://localhost:3000',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  exposedHeaders: ['Set-Cookie'],
+  preflightContinue: false,
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(CORS_OPTIONS));
 app.set('port', process.env.PORT || 3000);
-app.use(cors(process.env.CORS_OPTIONS));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

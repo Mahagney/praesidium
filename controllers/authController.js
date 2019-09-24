@@ -25,15 +25,21 @@ exports.signIn = function(req, res, next) {
   if (Auth.validateUser(req.body)) {
     Users.getUserByEmail(req.body.email).then((user) => {
       if (user) {
-        bcrypt.compare(req.body.password, user.password).then((result) => {
-          const isSecure = req.app.get('env') != 'development';
-          res.cookie('user_id', user.id, {
-            httpOnly: true,
-            secure: isSecure,
-            signed: true,
+        bcrypt
+          .compare(req.body.password, user.password)
+          .then((bcryptResult) => {
+            const isSecure = req.app.get('env') != 'development';
+            res.cookie('user_id', user.id, {
+              httpOnly: false,
+              secure: isSecure,
+              signed: true,
+            });
+            if (bcryptResult) {
+              res.json({ userId: user.id, message: 'log in' });
+            } else {
+              res.json({ message: 'failed log in ' });
+            }
           });
-          res.json({ result, message: 'signed in' });
-        });
       } else {
         next(new Error('Invalid Login'));
       }
