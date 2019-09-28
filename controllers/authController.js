@@ -30,7 +30,7 @@ exports.signIn = function(req, res, next) {
           .then((bcryptResult) => {
             const isSecure = req.app.get('env') != 'development';
             res.cookie('user_id', user.id, {
-              httpOnly: false,
+              httpOnly: true,
               secure: isSecure,
               signed: true,
             });

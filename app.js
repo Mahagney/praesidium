@@ -1,17 +1,16 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 const cors = require('cors');
 
 require('dotenv').config();
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var auth = require('./routes/auth.js');
-var app = express();
-
-//TO DO
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const auth = require('./routes/auth.js');
+const authMiddleware = require('./middleware/authMiddleware');
+const app = express();
 
 const CORS_OPTIONS = {
   origin: 'http://localhost:3000',
@@ -31,7 +30,7 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/auth', auth);
-app.use('/users', usersRouter);
+app.use('/users', authMiddleware, usersRouter);
 app.use('/', indexRouter);
 
 app.use(function(err, req, res, next) {
