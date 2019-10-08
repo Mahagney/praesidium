@@ -10,6 +10,7 @@ exports.signUp = (req, res, next) => {
           const user = { ...req.body };
           user.password = hash;
           const id = Users.create(user);
+          // if register             setUserIdCookie(req, res, user.id);
           res.json({ hash, message: 'signed up' });
         });
       } else {
@@ -28,16 +29,11 @@ exports.signIn = function(req, res, next) {
         bcrypt
           .compare(req.body.password, user.password)
           .then((bcryptResult) => {
-            const isSecure = req.app.get('env') != 'development';
-            res.cookie('user_id', user.id, {
-              httpOnly: true,
-              secure: isSecure,
-              signed: true,
-            });
+            setUserIdCookie(req, res, user.id);
             if (bcryptResult) {
               res.json({ userId: user.id, message: 'log in' });
             } else {
-              res.json({ message: 'failed log in ' });
+              res.json(new Error('failed log in ' ));
             }
           });
       } else {
@@ -48,3 +44,19 @@ exports.signIn = function(req, res, next) {
     next(new Error('Invalid Login'));
   }
 };
+
+exports.signOut = function(req, res) {
+    res.clearCookie('user_id');
+    res.json({
+      message: 'logged out'
+    })
+}
+
+function setUserIdCookie(req, res, id) {
+    const isSecure = req.app.get('env') != 'development';
+    res.cookie('user_id', id, {
+        httpOnly: true,
+        secure: isSecure,
+        signed: true,
+    });
+}
