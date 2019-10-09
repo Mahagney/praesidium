@@ -19,6 +19,7 @@ const usersRouter = require('./routes/users');
 const auth = require('./routes/auth.js');
 const authMiddleware = require('./middleware/authMiddleware');
 const app = express();
+const isSecure = app.get('env') != 'development';
 
 const CORS_OPTIONS = {
   origin: 'http://localhost:3000',
@@ -32,8 +33,12 @@ const CORS_OPTIONS = {
 app.use(session({
   secret: process.env.COOKIE_SECRET,
   resave: false,
-  saveUninitialized: true,
-  cookie: { secure: true },
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    secure: isSecure,
+    signed: true,
+  },
   store: store
 }))
 
