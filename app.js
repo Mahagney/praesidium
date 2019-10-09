@@ -5,6 +5,7 @@ const cors = require('cors');
 const session = require('express-session')
 var knex = require('./knex/knex');
 const KnexSessionStore = require('connect-session-knex')(session);
+const config = require('./config/default')
 
 
 require('dotenv').config();
@@ -21,26 +22,13 @@ const authMiddleware = require('./middleware/authMiddleware');
 const app = express();
 const isSecure = app.get('env') != 'development';
 
-const CORS_OPTIONS = {
-  origin: 'http://localhost:3000',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
-  exposedHeaders: ['Set-Cookie'],
-  preflightContinue: false,
-  optionsSuccessStatus: 200,
-};
+const CORS_OPTIONS = config.corsOptions;
+const SESSION_OPTION = config.session;
+SESSION_OPTION.secret = process.env.COOKIE_SECRET;
+SESSION_OPTION.secure = isSecure;
+SESSION_OPTION.store = store;
 
-app.use(session({
-  secret: process.env.COOKIE_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    httpOnly: true,
-    secure: isSecure,
-    signed: true,
-  },
-  store: store
-}))
+app.use(session(SESSION_OPTION))
 
 app.use(cors(CORS_OPTIONS));
 app.set('port', process.env.PORT || 3000);
