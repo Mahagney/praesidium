@@ -1,0 +1,18 @@
+{
+  "corsOptions" : {
+    "origin": "http://localhost:3000",
+    "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+    "credentials": true,
+    "exposedHeaders": ["Set-Cookie"],
+    "preflightContinue": false,
+    "optionsSuccessStatus": 200
+  },
+  "session": {
+    "resave": false,
+    "saveUninitialized": false,
+    "cookie": {
+      "httpOnly": true,
+      "signed": true
+    }
+  }
+}

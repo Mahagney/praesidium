@@ -29,8 +29,8 @@ exports.signIn = function(req, res, next) {
         bcrypt
           .compare(req.body.password, user.password)
           .then((bcryptResult) => {
-            setUserIdCookie(req, res, user.id);
             if (bcryptResult) {
+                req.session.userId = user.id;
               res.json({ userId: user.id, message: 'log in' });
             } else {
               res.json(new Error('failed log in ' ));
@@ -46,17 +46,11 @@ exports.signIn = function(req, res, next) {
 };
 
 exports.signOut = function(req, res) {
-    res.clearCookie('user_id');
-    res.json({
-      message: 'logged out'
-    })
-}
-
-function setUserIdCookie(req, res, id) {
-    const isSecure = req.app.get('env') != 'development';
-    res.cookie('user_id', id, {
-        httpOnly: true,
-        secure: isSecure,
-        signed: true,
+    req.session.destroy(function(){
+        res.clearCookie('connect.sid');
+        res.json({
+            message: 'logged out'
+        })
     });
 }
+

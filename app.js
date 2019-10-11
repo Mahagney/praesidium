@@ -1,32 +1,37 @@
 const express = require('express');
 const path = require('path');
-const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
+const session = require('express-session')
+var knex = require('./knex/knex');
+const KnexSessionStore = require('connect-session-knex')(session);
+const config = require('./config/default')
+
 
 require('dotenv').config();
+
+const store = new KnexSessionStore({knex: knex});
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const auth = require('./routes/auth.js');
 const authMiddleware = require('./middleware/authMiddleware');
 const app = express();
+const isSecure = app.get('env') != 'development';
 
-const CORS_OPTIONS = {
-  origin: 'http://localhost:3000',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
-  exposedHeaders: ['Set-Cookie'],
-  preflightContinue: false,
-  optionsSuccessStatus: 200,
-};
+const CORS_OPTIONS = config.corsOptions;
+const SESSION_OPTION = config.session;
 
-app.use(cors(CORS_OPTIONS));
+SESSION_OPTION.secret = process.env.COOKIE_SECRET;
+SESSION_OPTION.secure = isSecure;
+SESSION_OPTION.store = store;
+
 app.set('port', process.env.PORT || 3000);
+app.use(session(SESSION_OPTION))
+app.use(cors(CORS_OPTIONS));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/auth', auth);
