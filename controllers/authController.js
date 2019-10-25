@@ -1,6 +1,7 @@
 let bcrypt = require('bcrypt');
 let Auth = require('../services/authService');
-let Users = require('../services/usersService');
+const container = require('../container/container')
+const Users = container.resolve('userService');
 
 exports.signUp = (req, res, next) => {
   if (Auth.validateUser(req.body)) {

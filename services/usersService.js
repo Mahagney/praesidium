@@ -1,5 +1,10 @@
 var User = require('../models/userModel');
 
-exports.getUserByEmail = (email) => User.getUserByEmail(email);
+const makeUserService = ({ userModel }) => {
+    return {
+        getUserByEmail : (email) => userModel.getUserByEmail(email),
+        create : (user) => userModel.create(user)
+    }
+}
 
-exports.create = (user) => User.create(user);
+module.exports = makeUserService;

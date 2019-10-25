@@ -6,7 +6,7 @@ const session = require('express-session')
 var knex = require('./knex/knex');
 const KnexSessionStore = require('connect-session-knex')(session);
 const config = require('./config/default')
-
+const container = require('./container/container')
 
 require('dotenv').config();
 
@@ -15,7 +15,6 @@ const store = new KnexSessionStore({knex: knex});
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const auth = require('./routes/auth.js');
-const authMiddleware = require('./middleware/authMiddleware');
 const app = express();
 const isSecure = app.get('env') != 'development';
 
