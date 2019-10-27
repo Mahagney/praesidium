@@ -1,5 +1,5 @@
 const ensureLoggedIn = (req, res, next) => {
-  if (req.session.user_id) {
+  if (req.session.userId) {
     next();
   } else {
     res.status(401);
@@ -8,7 +8,7 @@ const ensureLoggedIn = (req, res, next) => {
 };
 
 function allowAccess(req, res, next){
-  if (req.session.user_id == req.params.id) {
+  if (req.session.userId == req.params.id) {
     next();
   } else {
     res.status(401);
