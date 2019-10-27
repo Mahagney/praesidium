@@ -1,4 +1,3 @@
-var User = require('../models/userModel');
 
 const makeUserService = ({ userModel }) => {
     return {

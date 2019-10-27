@@ -7,6 +7,8 @@ var knex = require('./knex/knex');
 const KnexSessionStore = require('connect-session-knex')(session);
 const config = require('./config/default')
 const container = require('./container/container')
+const { scopePerRequest } = require('awilix-express')
+const {ensureLoggedIn} = require('./middleware/authMiddleware')
 
 require('dotenv').config();
 
@@ -32,9 +34,10 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(scopePerRequest(container))
 
 app.use('/auth', auth);
-app.use('/users', usersRouter);
+app.use('/users', ensureLoggedIn, usersRouter);
 app.use('/', indexRouter);
 
 app.use(function(err, req, res, next) {

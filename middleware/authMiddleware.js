@@ -1,6 +1,5 @@
 const ensureLoggedIn = (req, res, next) => {
-  console.log(req.signedCookies);
-  if (req.signedCookies.user_id) {
+  if (req.session.user_id) {
     next();
   } else {
     res.status(401);
