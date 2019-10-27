@@ -1,8 +1,10 @@
 var express = require('express');
 var router = express.Router();
-var Auth = require('../controllers/authController');
-const { makeInvoker } =  require('awilix-express')
-const api = makeInvoker(Auth.makeAuthApi)
+var makeAuthController = require('../controllers/authController')
+  .makeAuthController;
+const { makeInvoker } = require('awilix-express');
+
+const api = makeInvoker(makeAuthController);
 
 router.get('/', function(req, res, next) {
   res.json({ message: 'auth' });
