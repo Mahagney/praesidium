@@ -6,7 +6,8 @@ const session = require('express-session')
 var knex = require('./knex/knex');
 const KnexSessionStore = require('connect-session-knex')(session);
 const config = require('./config/default')
-
+const containerMiddleware = require('./container/container').resolve('containerMiddleware')
+const {ensureLoggedIn} = require('./middleware/authMiddleware')
 
 require('dotenv').config();
 
@@ -15,7 +16,6 @@ const store = new KnexSessionStore({knex: knex});
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const auth = require('./routes/auth.js');
-const authMiddleware = require('./middleware/authMiddleware');
 const app = express();
 const isSecure = app.get('env') != 'development';
 
@@ -33,9 +33,10 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(containerMiddleware)
 
 app.use('/auth', auth);
-app.use('/users', usersRouter);
+app.use('/users', ensureLoggedIn, usersRouter);
 app.use('/', indexRouter);
 
 app.use(function(err, req, res, next) {

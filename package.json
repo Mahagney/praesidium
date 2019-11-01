@@ -10,6 +10,8 @@
     "seed:run": "knex seed:run"
   },
   "dependencies": {
+    "awilix": "^4.2.2",
+    "awilix-express": "^3.0.0",
     "bcrypt": "^3.0.6",
     "connect-session-knex": "^1.4.0",
     "cookie-parser": "~1.4.4",
