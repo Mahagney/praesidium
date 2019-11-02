@@ -1,7 +1,6 @@
-var express = require('express');
-var router = express.Router();
-var makeAuthController = require('../controllers/authController')
-  .makeAuthController;
+const express = require('express');
+const router = express.Router();
+const makeAuthController = require('../controllers/authController');
 const { makeInvoker } = require('awilix-express');
 
 const api = makeInvoker(makeAuthController);
