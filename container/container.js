@@ -3,7 +3,7 @@ const awilix = require('awilix');
 const knex = require('../knex/knex');
 const { scopePerRequest } = require('awilix-express');
 const makeUserService = require('../services/usersService');
-const authService = require('../services/authService');
+const makeAuthService = require('../services/authService');
 const makeUserModel = require('../models/userModel');
 //#endregion
 
@@ -21,7 +21,7 @@ container.register({
   // the `userService` is resolved by
   // invoking the function.
   userService: awilix.asFunction(makeUserService),
-  authService: awilix.asValue(authService),
+  authService: awilix.asFunction(makeAuthService),
 });
 
 container.register({

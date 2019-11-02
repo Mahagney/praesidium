@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 
-exports.makeAuthController = ({ userService, authService }) => {
+const makeAuthController = ({ userService, authService }) => {
   return {
     signUp: (req, res, next) => {
       if (authService.validateUser(req.body)) {
@@ -55,3 +55,5 @@ exports.makeAuthController = ({ userService, authService }) => {
     },
   };
 };
+
+module.exports = makeAuthController;

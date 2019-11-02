@@ -1,9 +1,8 @@
-
 const makeUserService = ({ userModel }) => {
-    return {
-        getUserByEmail : (email) => userModel.getUserByEmail(email),
-        create : (user) => userModel.create(user)
-    }
-}
+  return {
+    getUserByEmail: (email) => userModel.getUserByEmail(email),
+    create: (user) => userModel.create(user),
+  };
+};
 
 module.exports = makeUserService;
