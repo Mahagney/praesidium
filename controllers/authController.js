@@ -33,10 +33,12 @@ const makeAuthController = ({ userService, authService }) => {
                   req.session.userId = user.id;
                   res.json({ userId: user.id, message: 'log in' });
                 } else {
-                  res.json(new Error('failed log in '));
+                  res.status(401);
+                  next(new Error('Failed log in '));
                 }
               });
           } else {
+            res.status(401);
             next(new Error('Invalid Login'));
           }
         });
