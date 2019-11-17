@@ -9,9 +9,16 @@ const makeAuthController = ({ userService, authService }) => {
             bcrypt.hash(req.body.password, 10).then((hash) => {
               const user = { ...req.body };
               user.password = hash;
-              const id = userService.create(user);
+              const userDbFormat = {
+                FIRST_NAME: user.firstName,
+                LAST_NAME: user.lastName,
+                CNP: user.cnp,
+                EMAIL: user.email,
+                PASSWORD: user.password
+              };
+              const id = userService.create(userDbFormat);
               // if register             setUserIdCookie(req, res, user.id);
-              res.json({ hash, message: 'signed up' });
+              res.json({ hash, message: 'Signed up' });
             });
           } else {
             next(new Error('Email in use'));
@@ -27,20 +34,23 @@ const makeAuthController = ({ userService, authService }) => {
         userService.getUserByEmail(req.body.email).then((user) => {
           if (user) {
             bcrypt
-              .compare(req.body.password, user.password)
+              .compare(req.body.password, user.PASSWORD)
               .then((bcryptResult) => {
                 if (bcryptResult) {
-                  req.session.userId = user.id;
-                  res.json({ userId: user.id, message: 'log in' });
+                  req.session.userId = user.ID;
+                  res.json({ userId: user.ID, message: 'Logged in' });
                 } else {
-                  res.json(new Error('failed log in '));
+                  res.status(401);
+                  res.json(new Error('Invalid log in '));
                 }
               });
           } else {
+            res.status(401);
             next(new Error('Invalid Login'));
           }
         });
       } else {
+        res.status(401);
         next(new Error('Invalid Login'));
       }
     },
@@ -49,10 +59,10 @@ const makeAuthController = ({ userService, authService }) => {
       req.session.destroy(function() {
         res.clearCookie('connect.sid');
         res.json({
-          message: 'logged out',
+          message: 'Logged out'
         });
       });
-    },
+    }
   };
 };
 

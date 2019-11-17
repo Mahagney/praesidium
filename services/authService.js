@@ -9,7 +9,7 @@ const makeAuthService = () => {
         user.password.trim().length >= 6;
 
       return validEmail && validPassword;
-    },
+    }
   };
 };
 
