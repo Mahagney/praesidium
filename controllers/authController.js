@@ -9,7 +9,14 @@ const makeAuthController = ({ userService, authService }) => {
             bcrypt.hash(req.body.password, 10).then((hash) => {
               const user = { ...req.body };
               user.password = hash;
-              const id = userService.create(user);
+              const userDbFormat = {
+                FIRST_NAME: user.firstName,
+                LAST_NAME: user.lastName,
+                CNP: user.cnp,
+                EMAIL: user.email,
+                PASSWORD: user.password,
+              };
+              const id = userService.create(userDbFormat);
               // if register             setUserIdCookie(req, res, user.id);
               res.json({ hash, message: 'signed up' });
             });

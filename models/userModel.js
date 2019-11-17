@@ -1,15 +1,17 @@
 const makeUserModel = ({ ormInstance }) => {
   return {
     getUserByEmail: (email) =>
-      ormInstance('users')
-        .where('email', email)
+      ormInstance('USER')
+        .where('EMAIL', email)
         .first(),
-    create: (user) =>
-      ormInstance('users')
-        .insert(user, 'id')
+    create: (user) => {
+      ormInstance('USER')
+        .insert(user, 'ID')
         .then((ids) => {
+          console.log(ids[0]);
           return ids[0];
-        }),
+        });
+    },
   };
 };
 module.exports = makeUserModel;
