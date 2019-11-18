@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 
-const makeAuthController = ({ userService, authService }) => {
+const makeAuthController = ({ userService, authService, emailService }) => {
   return {
     signUp: (req, res, next) => {
       if (authService.validateUser(req.body)) {
@@ -18,6 +18,7 @@ const makeAuthController = ({ userService, authService }) => {
               };
               const id = userService.create(userDbFormat);
               // if register             setUserIdCookie(req, res, user.id);
+              emailService.sendEmail(user);
               res.json({ hash, message: 'Signed up' });
             });
           } else {
