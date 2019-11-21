@@ -2,10 +2,10 @@
 const awilix = require('awilix');
 const knex = require('../knex/knex');
 const { scopePerRequest } = require('awilix-express');
-const makeUserService = require('../services/usersService');
-const makeAuthService = require('../services/authService');
-const makeEmailService = require('../services/emailService');
-const makeUserModel = require('../models/userModel');
+const makeUserService = require('../app/services/usersService');
+const makeAuthService = require('../app/services/authService');
+const makeEmailService = require('../app/services/emailService');
+const makeUserModel = require('../app/models/userModel');
 //#endregion
 
 // Create the container and set the injectionMode to PROXY (which is also the default).
