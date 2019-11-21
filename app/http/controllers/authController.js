@@ -17,7 +17,6 @@ const makeAuthController = ({ userService, authService, emailService }) => {
                 PASSWORD: user.password
               };
               const id = userService.create(userDbFormat);
-              // if register             setUserIdCookie(req, res, user.id);
               emailService.sendEmail(user);
               res.json({ hash, message: 'Signed up' });
             });
@@ -29,6 +28,8 @@ const makeAuthController = ({ userService, authService, emailService }) => {
         next(new Error('Invalid user'));
       }
     },
+
+    signUpWithFile: (req, res, next) => {},
 
     signIn: (req, res, next) => {
       if (authService.validateUser(req.body)) {
