@@ -1,5 +1,8 @@
 require('dotenv').config();
+//#region 'NPM DEP'
+const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
+//#endregion
 
 // Step 1
 const transporter = nodemailer.createTransport({
@@ -15,16 +18,21 @@ const sendEmail = (user) => {
   // Step 2
   const mailOptions = {
     from: process.env.EMAIL, // email sender
-    to: user.email, //  email receiver
-    subject: 'Nodemailer - Test',
-    text: 'Wooohooo it works!!'
+    to: user.EMAIL, //  email receiver
+    subject: 'Praesidium Email - Test',
+    text: 'Utilizator: ' + user.EMAIL + '\r\n' + 'Parola: ' + user.PASSWORD
   };
   // Step 3
-  transporter.sendMail(mailOptions, (err, data) => {
-    if (err) {
-      return console.log(err);
-    }
-    return console.log('Email sent!!!');
-  });
+  return transporter
+    .sendMail(mailOptions)
+    .then((info) => {
+      return info;
+    })
+    .catch((error) => {
+      let err = new Error(error);
+      err.statusCode = 502;
+      err.customMessage = 'Sending email -> EMAIL SERVICE ERROR';
+      throw err;
+    });
 };
 module.exports = { sendEmail };

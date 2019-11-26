@@ -19,7 +19,7 @@ class User extends Model {
         LAST_NAME: { type: 'string', minLength: 3, maxLength: 50 },
         CNP: { type: 'string', minLength: 13, maxLength: 13 },
         EMAIL: { type: 'string', maxLength: 50 },
-        PASSWORD: { type: 'string', minLength: 10, maxLength: 60 }
+        PASSWORD: { type: 'string', minLength: 10, maxLength: 64 }
       }
     };
   }

@@ -1,4 +1,10 @@
+//#region 'NPM DEP'
+const passGenerator = require('generate-password');
+//#endregion
+
+//#region 'LOCAL DEP'
 const userModel = require('../models/User');
+//#endregion
 
 const getUserByEmail = (email) => {
   return userModel
@@ -13,11 +19,18 @@ const getUserByEmail = (email) => {
     });
 };
 
-const createUser = (user) => {
+const createUser = (jsonUser) => {
+  const userPassword = passGenerator.generate({
+    length: 10,
+    numbers: true
+  });
+
+  user = JSON.parse(jsonUser);
+  user.PASSWORD = userPassword;
+
   return userModel
     .query()
     .insert(user)
-    .returning('ID')
     .catch((error) => {
       let err = new Error(error);
       err.statusCode = 500;
