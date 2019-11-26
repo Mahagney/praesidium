@@ -1,40 +1,17 @@
 //#region 'NPM DEP'
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-const csv = require('fast-csv');
-const fs = require('fs');
-const passGenerator = require('generate-password');
 //#endregion
 
-//#region 'IMPORTED SERVICES'
+//#region 'LOCAL DEP'
 const authService = require('../../services/authService');
 const userService = require('../../services/userService');
 const emailService = require('../../services/emailService');
+const fileService = require('../../services/fileService');
 //#endregion
 
 //#region 'PRIVATE'
-const readFilePromise = (filePath) => {
-  const users = [];
-  return new Promise((resolve, reject) => {
-    fs.createReadStream(filePath)
-      .pipe(
-        csv.parse({ headers: true }).transform((data) => ({
-          FIRST_NAME: data.FirstName,
-          LAST_NAME: data.LastName,
-          CNP: data.Cnp,
-          EMAIL: data.Email,
-          PASSWORD: null
-        }))
-      )
-      .on('data', (row) => {
-        const user = JSON.stringify(row);
-        users.push(user);
-      })
-      .on('end', (rowCount) => resolve(users))
-      .on('error', (error) => reject(error));
-  });
-};
-const hashPassPromise = (jsonUser) => {
+const hashPasswordPromise = (jsonUser) => {
   const user = JSON.parse(jsonUser);
   return new Promise((resolve, reject) => {
     const userPassword = passGenerator.generate({
@@ -50,18 +27,6 @@ const hashPassPromise = (jsonUser) => {
       .catch((error) => reject(error));
   });
 };
-const createUserPromise = (user) => {
-  return new Promise((resolve, reject) => {
-    userService
-      .createUser(user)
-      .then((newUserId) => {
-        resolve(newUserId);
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
-};
 //#endregion
 
 //#region 'INTERFACE'
@@ -70,24 +35,27 @@ const register = (req, res, next) => {
   if (!file) {
     return res.status(422).json('Attached file is not CSV type!');
   }
-  readFilePromise(file.path)
+
+  fileService
+    .readFilePromise(file.path)
     .then((jsonUsers) => {
       return Promise.all(
         jsonUsers.map((jsonUser) => {
-          return hashPassPromise(jsonUser);
+          return userService.createUser(jsonUser);
         })
       );
     })
-    .then((users) => {
+    .then((createdUsers) => {
+      console.log(createdUsers);
       return Promise.all(
-        users.map((user) => {
-          return createUserPromise(user);
+        createdUsers.map((createUser) => {
+          return emailService.sendEmail(createUser);
         })
       );
     })
-    .then((usersIds) => {
-      console.log(usersIds);
-      return res.status(200).send('Users registered.');
+    .then((emails) => {
+      console.log(emails);
+      return res.status(200).json('Users registered.');
     })
     .catch((error) => {
       console.log('MY PROMISE FLOW ERROR');
