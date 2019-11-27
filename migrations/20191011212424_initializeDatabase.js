@@ -9,6 +9,7 @@ exports.up = function(knex) {
         table.string('CNP', 13).notNullable();
         table.string('EMAIL', 50).notNullable();
         table.string('PASSWORD', 60).notNullable();
+        table.boolean('ONE_TIME_AUTH').notNullable();
       })
       .createTable('EMPLOYEE_TYPE', function(table) {
         table.bigIncrements('ID');
@@ -144,7 +145,7 @@ exports.up = function(knex) {
           .index()
           .references('ID')
           .inTable('ANSWER');
-      }),
+      })
   ]);
 };
 
@@ -161,6 +162,6 @@ exports.down = function(knex) {
       .dropTable('COURSE_TYPE')
       .dropTable('USER_EMPLOYEE_TYPE')
       .dropTable('EMPLOYEE_TYPE')
-      .dropTable('USER'),
+      .dropTable('USER')
   ]);
 };

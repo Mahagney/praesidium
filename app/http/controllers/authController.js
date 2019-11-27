@@ -1,10 +1,10 @@
 //#region 'NPM DEP'
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const jwt = require('jsonwebtoken');
 //#endregion
 
 //#region 'LOCAL DEP'
-const authService = require('../../services/authService');
 const userService = require('../../services/userService');
 const emailService = require('../../services/emailService');
 const fileService = require('../../services/fileService');
@@ -55,48 +55,68 @@ const register = (req, res, next) => {
     })
     .then((emails) => {
       console.log(emails);
-      return res.status(200).json('Users registered.');
+      res.status(201).json('Users created.');
     })
     .catch((error) => {
-      console.log('MY PROMISE FLOW ERROR');
-      console.log(error);
-      return res.status(500).send('Register has failed!');
+      let err = new Error(error);
+      err.statusCode = 500;
+      err.customMessage = 'Register has failed!';
+      next(err);
     });
 };
 
 const logIn = (req, res, next) => {
-  if (authService.validateUser(req.body)) {
-    userService.getUserByEmail(req.body.email).then((user) => {
-      if (user) {
-        bcrypt
-          .compare(req.body.password, user.PASSWORD)
-          .then((bcryptResult) => {
-            if (bcryptResult) {
-              req.session.userId = user.ID;
-              res.json({ userId: user.ID, message: 'Logged in' });
-            } else {
-              res.status(401);
-              res.json(new Error('Invalid log in '));
-            }
-          });
-      } else {
-        res.status(401);
-        next(new Error('Invalid Login'));
-      }
-    });
-  } else {
-    res.status(401);
-    next(new Error('Invalid Login'));
+  const email = req.body.email;
+  const password = req.body.password;
+  if (!email || !password) {
+    const err = new Error('Authentication failed!');
+    err.statusCode = 401;
+    throw err;
   }
+  let loadedUser;
+  userService
+    .getUserByEmail(email)
+    .then((user) => {
+      if (!user) {
+        const err = new Error('Authentication failed!');
+        err.statusCode = 401;
+        throw err;
+      }
+      loadedUser = user;
+      if (user.ONE_TIME_AUTH) {
+        return bcrypt.compare(password, user.PASSWORD);
+      } else if (user.PASSWORD === password) {
+        return true;
+      }
+    })
+    .then((isAuth) => {
+      if (!isAuth) {
+        const err = new Error('Authentication failed!');
+        err.statusCode = 401;
+        throw err;
+      }
+
+      const token = jwt.sign(
+        {
+          id: loadedUser.ID,
+          email: loadedUser.EMAIL
+        },
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: '1h' }
+      );
+
+      res.status(200).json({ token: token, userId: loadedUser.ID });
+    })
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
 };
 
 const logOut = (req, res, next) => {
-  req.session.destroy(function() {
-    res.clearCookie('connect.sid');
-    res.json({
-      message: 'Logged out'
-    });
-  });
+  res.status(200).json('Logged out.');
 };
 
 //#endregion
