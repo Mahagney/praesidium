@@ -4,20 +4,16 @@ const express = require('express');
 const logger = require('morgan');
 const multer = require('multer');
 const path = require('path');
-const session = require('express-session');
-const KnexSessionStore = require('connect-session-knex')(session);
 //#endregion
 
 //#region 'LOCAL DEP'
 const knex = require('./knex/knex');
 const config = require('./config/default');
-const authRouter = require('./app/http/routes/auth');
-const indexRouter = require('./app/http/routes/index');
-const usersRouter = require('./app/http/routes/users');
-const { ensureLoggedIn } = require('./app/http/middleware/authMiddleware');
+const authRoutes = require('./app/http/routes/auth');
+const feedRoutes = require('./app/http/routes/feed');
 //#endregion
 
-require('dotenv').config();
+require('dotenv').config(); // loading env variables to process.env
 
 //#region 'INITS'
 const fileStorage = multer.diskStorage({
@@ -38,16 +34,11 @@ const filter = (req, file, cb) => {
     cb(null, false);
   }
 };
-const store = new KnexSessionStore({ knex: knex });
+
 const app = express();
 const isSecure = app.get('env') != 'development';
 
 const CORS_OPTIONS = config.corsOptions;
-const SESSION_OPTION = config.session;
-
-SESSION_OPTION.secret = process.env.COOKIE_SECRET;
-SESSION_OPTION.secure = isSecure;
-SESSION_OPTION.store = store;
 //#endregion
 
 //#region 'MIDDLEWARES'
@@ -57,20 +48,18 @@ app.use(express.json()); //it includes body-parser
 app.use(express.urlencoded({ extended: true }));
 app.use(logger('dev'));
 app.use(multer({ storage: fileStorage, fileFilter: filter }).single('csvFile'));
-app.use(session(SESSION_OPTION));
 //#endregion
 
 //ROUTES
-app.use('/auth', authRouter);
-app.use('/users', ensureLoggedIn, usersRouter);
-app.use('/', indexRouter);
+app.use('/auth', authRoutes);
+app.use('/feed', feedRoutes);
 
 //global error handler for the app
 app.use((error, req, res, next) => {
   console.log('APP CATCH');
   console.log(error);
   const status = error.statusCode || 500;
-  const message = error.message;
+  const message = error.customMessage;
   res.status(status).json({ message: message });
 });
 

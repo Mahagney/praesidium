@@ -11,8 +11,8 @@ const readFilePromise = (filePath) => {
         csv.parse({ headers: true }).transform((data) => ({
           FIRST_NAME: data.FirstName,
           LAST_NAME: data.LastName,
-          CNP: data.Cnp,
-          EMAIL: data.Email
+          CNP: data.Cnp
+          //EMAIL: data.Email
         }))
       )
       .on('data', (row) => {

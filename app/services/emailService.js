@@ -1,4 +1,3 @@
-require('dotenv').config();
 //#region 'NPM DEP'
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
