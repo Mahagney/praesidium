@@ -3,9 +3,10 @@ const passGenerator = require('generate-password');
 //#endregion
 
 //#region 'LOCAL DEP'
-const { User } = require('../../database/models');
+const { User, Course, EmployeeType } = require('../../database/models');
 //#endregion
 
+//#region 'INTERFACE'
 const getUserByEmail = (email) => {
   return User.findOne({
     where: { EMAIL: email }
@@ -34,4 +35,37 @@ const createUser = (jsonUser) => {
   });
 };
 
-module.exports = { getUserByEmail, createUser };
+const getUserCourses = (userId) => {
+  return User.findByPk(userId, {
+    include: [
+      {
+        model: EmployeeType,
+        as: 'employeeTypes',
+        include: [
+          {
+            model: Course,
+            as: 'courses',
+            attributes: ['NAME'],
+            through: { attributes: [] }
+          }
+        ]
+      }
+    ]
+  })
+    .then((user) => {
+      let courses = [];
+      user.employeeTypes.map((employeeType) => {
+        courses.push(...employeeType.courses);
+      });
+      return courses;
+    })
+    .catch((error) => {
+      let err = new Error(error);
+      err.statusCode = 500;
+      err.customMessage = 'Get user courses -> COURSE SERVICE ERROR';
+      throw err;
+    });
+};
+//#endregion
+
+module.exports = { getUserByEmail, createUser, getUserCourses };

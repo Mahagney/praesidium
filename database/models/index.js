@@ -1,53 +1,18 @@
-//#region 'comment'
-/*var fs = require('fs');
-var path = require('path');
-var Sequelize = require('sequelize');
-var basename = path.basename(__filename);
-var db = {};
-
-const sequelize = require('../config/sequelizeConfig');
-fs.readdirSync(__dirname)
-  .filter((file) => {
-    return (
-      file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js'
-    );
-  })
-  .forEach((file) => {
-    var model = sequelize['import'](path.join(__dirname, file));
-    db[model.name] = model;
-  });
-
-Object.keys(db).forEach((modelName) => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
-  }
-});
-
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
-
-module.exports = db;
-*/
-//#endregion
-
-// const sequelize = require('../config/sequelizeConfig');
-
-// const User = sequelize.import(__dirname + '/user.js');
-// const Course = sequelize.import(__dirname + '/course.js');
-// const EmployeeType = sequelize.import(__dirname + '/employeeType.js');
-// const CourseType = sequelize.import(__dirname + '/courseType.js');
-
+//#region 'LOCAL DEP'
 const User = require('./user.js');
 const Course = require('./course.js');
 const EmployeeType = require('./employeeType.js');
 const CourseType = require('./courseType.js');
+const UserEmployeeType = require('./userEmployeeType');
+//#endregion
 
 //#region 'Association: USER'
 //-> USER_EMPLOYEE_TYPE
 User.belongsToMany(EmployeeType, {
-  through: 'USER_EMPLOYEE_TYPE',
+  through: UserEmployeeType,
   foreignKey: 'ID_USER',
-  otherKey: 'ID_EMPLOYEE_TYPE'
+  otherKey: 'ID_EMPLOYEE_TYPE',
+  as: 'employeeTypes'
 });
 //#endregion
 
@@ -63,17 +28,19 @@ Course.belongsToMany(EmployeeType, {
 //#region 'Association: EMPLOYEE_TYPE'
 //-> USER_EMPLOYEE_TYPE
 EmployeeType.belongsToMany(User, {
-  through: 'USER_EMPLOYEE_TYPE',
+  through: UserEmployeeType,
   foreignKey: 'ID_EMPLOYEE_TYPE',
-  otherKey: 'ID_USER'
+  otherKey: 'ID_USER',
+  as: 'users'
 });
 
 //-> EMPLOYEE_TYPE_COURSE
 EmployeeType.belongsToMany(Course, {
   through: 'EMPLOYEE_TYPE_COURSE',
   foreignKey: 'ID_EMPLOYEE_TYPE',
-  otherKey: 'ID_COURSE'
+  otherKey: 'ID_COURSE',
+  as: 'courses'
 });
 //#endregion
 
-module.exports = { User, Course, EmployeeType, CourseType };
+module.exports = { User, Course, EmployeeType, CourseType, UserEmployeeType };

@@ -11,6 +11,7 @@ router.post('/login', authController.logIn);
 
 router.get('/logout', authController.logOut);
 
+//todo : put auth middleware here
 router.post('/register', authController.register);
 
 module.exports = router;
