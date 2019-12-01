@@ -86,6 +86,7 @@ const logIn = (req, res, next) => {
       if (user.ONE_TIME_AUTH) {
         return bcrypt.compare(password, user.PASSWORD);
       } else if (user.PASSWORD === password) {
+        //to do: update ONE_TIME_AUTH = true for this user
         return true;
       }
     })
@@ -99,13 +100,14 @@ const logIn = (req, res, next) => {
       const token = jwt.sign(
         {
           id: loadedUser.ID,
+          employeeTypes: loadedUser.employeeTypes,
           email: loadedUser.EMAIL
         },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: '1h' }
+        { expiresIn: '5min' }
       );
 
-      res.status(200).json({ token: token, userId: loadedUser.ID });
+      res.status(200).json({ token: token });
     })
     .catch((error) => {
       if (!error.statusCode) {

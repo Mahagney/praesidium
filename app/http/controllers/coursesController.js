@@ -6,8 +6,8 @@ const courseService = require('./../../services/courseService');
 
 //TEMPORARY LOGIC
 const getCourses = (req, res, next) => {
-  courseService.getUsers().then((users) => {
-    res.status(200).json(users);
+  courseService.getCourses(req.employeeTypes).then((courses) => {
+    res.status(200).json(courses);
   });
 };
 

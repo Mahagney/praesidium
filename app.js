@@ -7,10 +7,9 @@ const path = require('path');
 //#endregion
 
 //#region 'LOCAL DEP'
-const knex = require('./knex/knex');
 const config = require('./config/default');
 const authRoutes = require('./app/http/routes/auth');
-const feedRoutes = require('./app/http/routes/feed');
+const coursesRoutes = require('./app/http/routes/courses');
 //#endregion
 
 require('dotenv').config(); // loading env variables to process.env
@@ -52,7 +51,7 @@ app.use(multer({ storage: fileStorage, fileFilter: filter }).single('csvFile'));
 
 //ROUTES
 app.use('/auth', authRoutes);
-app.use('/feed', feedRoutes);
+app.use('/courses', coursesRoutes);
 
 //global error handler for the app
 app.use((error, req, res, next) => {
