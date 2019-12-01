@@ -44,7 +44,9 @@ const getUserCourses = (userId) => {
         include: [
           {
             model: Course,
-            as: 'courses'
+            as: 'courses',
+            attributes: ['NAME'],
+            through: { attributes: [] }
           }
         ]
       }
