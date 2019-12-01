@@ -1,15 +1,21 @@
 //#region 'LOCAL DEP'
-const userModel = require('../models/User');
+//const courseModel = require('../models/Course');
+const models = require('../../database/models');
 //#endregion
 
 //TEMPORARY LOGIC
-const getUsers = () => {
-  return userModel.query().catch((error) => {
-    let err = new Error(error);
-    err.statusCode = 500;
-    err.customMessage = 'Getting user by email -> COURSE SERVICE ERROR';
-    throw err;
-  });
+const getCourses = (employeeTypes) => {
+  return true;
+  // return EmployeeType.findAll({
+  //   where: {
+  //     [Op.or]: [{authorId: 12}, {authorId: 13}]
+  //   }.catch((error) => {
+  //   let err = new Error(error);
+  //   err.statusCode = 500;
+  //   err.customMessage =
+  //     'Getting courses by employee types -> COURSE SERVICE ERROR';
+  //   throw err;
+  // });
 };
 
-module.exports = { getUsers };
+module.exports = { getCourses };
