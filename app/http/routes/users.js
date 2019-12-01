@@ -5,9 +5,13 @@ const router = express.Router();
 
 //#region 'LOCAL DEP'
 const authenticateToken = require('./../middleware/authenticateToken');
-const coursesController = require('./../controllers/coursesController');
+const usersController = require('./../controllers/usersController');
 //#endregion
 
-router.get('/', authenticateToken, coursesController.getCourse);
+router.get(
+  '/:userId/courses',
+  authenticateToken,
+  usersController.getUserCourses
+);
 
 module.exports = router;

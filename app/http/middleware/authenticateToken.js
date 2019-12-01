@@ -23,6 +23,6 @@ module.exports = (req, res, next) => {
     throw error;
   }
 
-  req.employeeTypes = decodedToken.employeeTypes;
+  req.userId = decodedToken.id;
   next();
 };

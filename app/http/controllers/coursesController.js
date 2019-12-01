@@ -5,12 +5,12 @@ const courseService = require('./../../services/courseService');
 //#region 'INTERFACE'
 
 //TEMPORARY LOGIC
-const getCourses = (req, res, next) => {
-  courseService.getCourses(req.employeeTypes).then((courses) => {
-    res.status(200).json(courses);
+const getCourse = (req, res, next) => {
+  courseService.getCourse(req.courseId).then((course) => {
+    res.status(200).json(course);
   });
 };
 
 //#endregion
 
-module.exports = { getCourses };
+module.exports = { getCourse };

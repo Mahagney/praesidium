@@ -100,11 +100,10 @@ const logIn = (req, res, next) => {
       const token = jwt.sign(
         {
           id: loadedUser.ID,
-          employeeTypes: loadedUser.employeeTypes,
           email: loadedUser.EMAIL
         },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: '5min' }
+        { expiresIn: '10min' }
       );
 
       res.status(200).json({ token: token });
