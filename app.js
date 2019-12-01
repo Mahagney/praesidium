@@ -9,6 +9,7 @@ const path = require('path');
 //#region 'LOCAL DEP'
 const config = require('./config/default');
 const authRoutes = require('./app/http/routes/auth');
+const usersRoutes = require('./app/http/routes/users');
 const coursesRoutes = require('./app/http/routes/courses');
 //#endregion
 
@@ -51,6 +52,7 @@ app.use(multer({ storage: fileStorage, fileFilter: filter }).single('csvFile'));
 
 //ROUTES
 app.use('/auth', authRoutes);
+app.use('/users', usersRoutes);
 app.use('/courses', coursesRoutes);
 
 //global error handler for the app
