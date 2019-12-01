@@ -8,6 +8,6 @@ const authenticateToken = require('./../middleware/authenticateToken');
 const coursesController = require('./../controllers/coursesController');
 //#endregion
 
-router.get('/', authenticateToken, coursesController.getCourses);
+router.get('/', authenticateToken, coursesController.getCourse);
 
 module.exports = router;
