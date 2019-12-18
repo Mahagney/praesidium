@@ -45,7 +45,7 @@ const getUserCourses = (userId) => {
           {
             model: Course,
             as: 'courses',
-            attributes: ['NAME'],
+            attributes: ['ID', 'NAME'],
             through: { attributes: [] }
           }
         ]
