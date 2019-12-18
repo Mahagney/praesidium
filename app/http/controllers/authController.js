@@ -103,10 +103,12 @@ const logIn = (req, res, next) => {
           email: loadedUser.EMAIL
         },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: '10min' }
+        { expiresIn: '1min' }
       );
 
-      res.status(200).json({ token: token });
+      res.status(200).json({
+        token: token
+      });
     })
     .catch((error) => {
       if (!error.statusCode) {
