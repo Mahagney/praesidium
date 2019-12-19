@@ -103,7 +103,7 @@ const logIn = (req, res, next) => {
           email: loadedUser.EMAIL
         },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: '1min' }
+        { expiresIn: '1h' }
       );
 
       res.status(200).json({

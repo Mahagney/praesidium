@@ -14,7 +14,7 @@ module.exports = (req, res, next) => {
   try {
     decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
   } catch (error) {
-    error.statusCode = 500;
+    error.statusCode = 403;
     throw error;
   }
   if (!decodedToken) {
