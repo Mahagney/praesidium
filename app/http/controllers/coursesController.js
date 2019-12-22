@@ -1,5 +1,6 @@
 //#region 'LOCAL DEP'
 const courseService = require('./../../services/courseService');
+const awsService = require('./../../services/awsService');
 //#endregion
 
 //#region 'INTERFACE'
@@ -11,6 +12,12 @@ const getCourse = (req, res, next) => {
   });
 };
 
+const getVideo = (req, res, next) => {
+  let videoName="video/videoplayback.mp4";
+  const url = awsService.getSignedUrl(videoName)
+  res.status(200).json(url);
+};
+
 //#endregion
 
-module.exports = { getCourse };
+module.exports = { getCourse, getVideo};

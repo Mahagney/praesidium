@@ -9,5 +9,7 @@ const coursesController = require('./../controllers/coursesController');
 //#endregion
 
 router.get('/', authenticateToken, coursesController.getCourse);
+router.get('/:id/video', coursesController.getVideo);
+
 
 module.exports = router;
