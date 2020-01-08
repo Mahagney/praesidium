@@ -1,9 +1,15 @@
 //#region 'NPM DEP'
 const passGenerator = require('generate-password');
+const sequelize = require('../../database/config/sequelizeConfig');
 //#endregion
 
 //#region 'LOCAL DEP'
-const { User, Course, EmployeeType } = require('../../database/models');
+const {
+  User,
+  Course,
+  EmployeeType,
+  UserEmployeeType
+} = require('../../database/models');
 //#endregion
 
 //#region 'INTERFACE'
@@ -19,20 +25,64 @@ const getUserByEmail = (email) => {
 };
 
 const createUser = (jsonUser) => {
-  const userPassword = passGenerator.generate({
-    length: 10,
-    numbers: true
-  });
+  let seqTransaction = null;
+  let employeeTypeDb = null;
+  let createdUser = null;
+  const user = JSON.parse(jsonUser);
 
-  user = JSON.parse(jsonUser);
-  user.PASSWORD = userPassword;
+  return sequelize
+    .transaction()
+    .then((t) => {
+      return (seqTransaction = t);
+    })
+    .then(() => {
+      return EmployeeType.findOne({
+        where: {
+          NAME:
+            user.EmployeeType.charAt(0).toUpperCase() +
+            user.EmployeeType.slice(1)
+        }
+      });
+    })
+    .then((employeeType) => {
+      employeeTypeDb = employeeType;
+      let newUser = {
+        FIRST_NAME: user.FIRST_NAME,
+        LAST_NAME: user.LAST_NAME,
+        CNP: user.CNP,
+        EMAIL: user.EMAIL
+      };
+      const userPassword = passGenerator.generate({
+        length: 10,
+        numbers: true
+      });
+      newUser.PASSWORD = userPassword;
 
-  return User.create(user).catch((error) => {
-    let err = new Error(error);
-    err.statusCode = 500;
-    err.customMessage = 'Creating user -> USER SERVICE ERROR';
-    throw err;
-  });
+      return User.create(newUser, { transaction: seqTransaction });
+    })
+    .then((userDb) => {
+      createdUser = userDb;
+      const newUserEmployeeType = {
+        ID_USER: userDb.ID,
+        ID_EMPLOYEE_TYPE: employeeTypeDb.ID
+      };
+      return UserEmployeeType.create(newUserEmployeeType, {
+        transaction: seqTransaction
+      });
+    })
+    .then(() => {
+      return seqTransaction.commit();
+    })
+    .then(() => {
+      return createdUser;
+    })
+    .catch((error) => {
+      return seqTransaction.rollback();
+      // let err = new Error(error);
+      // err.statusCode = 500;
+      // err.customMessage = 'Creating user -> USER SERVICE ERROR';
+      // throw err;
+    });
 };
 
 const getUserCourses = (userId) => {

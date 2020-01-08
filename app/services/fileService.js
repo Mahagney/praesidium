@@ -12,7 +12,8 @@ const readFilePromise = (filePath) => {
           FIRST_NAME: data.FirstName,
           LAST_NAME: data.LastName,
           CNP: data.Cnp,
-          EMAIL: data.Email
+          EMAIL: data.Email,
+          EmployeeType: data.EmployeeType
         }))
       )
       .on('data', (row) => {
