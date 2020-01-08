@@ -41,6 +41,7 @@ const register = (req, res, next) => {
     .then((jsonUsers) => {
       return Promise.all(
         jsonUsers.map((jsonUser) => {
+          console.log(jsonUser);
           return userService.createUser(jsonUser);
         })
       );
