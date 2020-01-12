@@ -1,18 +1,47 @@
+const awsSDK = require("aws-sdk");
 const cfsign = require("aws-cloudfront-sign");
+const fs = require("fs");
 
 var signingParams = {
-    keypairId: process.env.AWS_KEY_PAIR_ID,
-    privateKeyPath: process.env.AWS_PRIVATE_KEY_PATH,
-    expireTime: (new Date().getTime() + 999999999)
+  keypairId: process.env.AWS_KEY_PAIR_ID,
+  privateKeyPath: process.env.AWS_PRIVATE_KEY_PATH,
+  expireTime: new Date().getTime() + 999999999
 };
 
 // Generating a signed URL
-let getSignedUrl = (fileName) => {
+const getSignedUrl = fileName => {
+  return cfsign.getSignedUrl(
+    process.env.AWS_DISTRIBUTION + "/" + fileName,
+    signingParams
+  );
+};
 
-    return cfsign.getSignedUrl(
-        process.env.AWS_DISTRIBUTION + "/" + fileName,
-        signingParams
-    );
-}
+const uploadFileToS3 = (filename, fileDirectoryPath) => {
+  awsSDK.config.update({
+    accessKeyId: process.env.S3_ACCESS_KEY_ID,
+    secretAccessKey: process.env.S3_SECRET_ACCESS_KEY
+  });
+  const s3 = new awsSDK.S3();
 
-module.exports = { getSignedUrl }
+  return new Promise((resolve, reject) => {
+    fs.readFile(fileDirectoryPath.toString(), function(err, data) {
+      console.log(filename, fileDirectoryPath, data.length);
+      if (err) {
+        reject(err);
+      }
+      s3.putObject(
+        {
+          Bucket: "" + process.env.S3_BUCKET_NAME,
+          Key: filename,
+          Body: data
+        },
+        function(err, data) {
+          if (err) reject(err);
+          resolve("succesfully uploaded");
+        }
+      );
+    });
+  });
+};
+
+module.exports = { getSignedUrl, uploadFileToS3 };

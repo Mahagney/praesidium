@@ -1,34 +1,38 @@
 //#region 'NPM DEP'
-const cors = require('cors');
-const express = require('express');
-const logger = require('morgan');
-const multer = require('multer');
-const path = require('path');
+const cors = require("cors");
+const express = require("express");
+const logger = require("morgan");
+const multer = require("multer");
+const path = require("path");
 //#endregion
 
 //#region 'LOCAL DEP'
-const config = require('./config/default');
-const authRoutes = require('./app/http/routes/auth');
-const usersRoutes = require('./app/http/routes/users');
-const coursesRoutes = require('./app/http/routes/courses');
+const config = require("./config/default");
+const authRoutes = require("./app/http/routes/auth");
+const usersRoutes = require("./app/http/routes/users");
+const coursesRoutes = require("./app/http/routes/courses");
 //#endregion
 
-require('dotenv').config(); // loading env variables to process.env
+require("dotenv").config(); // loading env variables to process.env
 
 //#region 'INITS'
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads');
+    cb(null, "uploads");
   },
   filename: (req, file, cb) => {
     cb(
       null,
-      new Date().toISOString().replace(/:/g, '-') + '_' + file.originalname
+      new Date().toISOString().replace(/:/g, "-") + "_" + file.originalname
     );
   }
 });
 const filter = (req, file, cb) => {
-  if (file.mimetype === 'text/csv') {
+  if (
+    file.mimetype === "text/csv" ||
+    file.mimetype === "application/pdf" ||
+    file.mimetype === "audio/mpeg"
+  ) {
     cb(null, true);
   } else {
     cb(null, false);
@@ -36,28 +40,30 @@ const filter = (req, file, cb) => {
 };
 
 const app = express();
-const isSecure = app.get('env') != 'development';
+const isSecure = app.get("env") != "development";
 
 const CORS_OPTIONS = config.corsOptions;
 //#endregion
 
 //#region 'MIDDLEWARES'
-app.set('port', process.env.PORT || 3000);
+app.set("port", process.env.PORT || 3000);
 app.use(cors(CORS_OPTIONS));
 app.use(express.json()); //it includes body-parser
 app.use(express.urlencoded({ extended: true }));
-app.use(logger('dev'));
-app.use(multer({ storage: fileStorage, fileFilter: filter }).single('csvFile'));
+app.use(logger("dev"));
+app.use(
+  multer({ storage: fileStorage, fileFilter: filter }).single("uploadData")
+);
 //#endregion
 
 //ROUTES
-app.use('/auth', authRoutes);
-app.use('/users', usersRoutes);
-app.use('/courses', coursesRoutes);
+app.use("/auth", authRoutes);
+app.use("/users", usersRoutes);
+app.use("/courses", coursesRoutes);
 
 //global error handler for the app
 app.use((error, req, res, next) => {
-  console.log('APP CATCH');
+  console.log("APP CATCH");
   console.log(error);
   const status = error.statusCode || 500;
   const message = error.customMessage;
