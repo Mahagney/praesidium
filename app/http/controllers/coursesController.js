@@ -39,6 +39,22 @@ const getCourseWithSignedUrls = (req, res, next) => {
     .catch((err) => res.send(err));
 };
 
+const getQuizForCourse = (req, res, next) => {
+  const courseId = req.params.id;
+  courseService
+    .getQuizForCourse(courseId)
+    .then((quiz) => {
+      res.send(quiz);
+    })
+    .catch((err) => res.send(err));
+};
+
 //#endregion
 
-module.exports = { getCourse, getFile, uploadFile, getCourseWithSignedUrls };
+module.exports = {
+  getCourse,
+  getFile,
+  uploadFile,
+  getCourseWithSignedUrls,
+  getQuizForCourse
+};

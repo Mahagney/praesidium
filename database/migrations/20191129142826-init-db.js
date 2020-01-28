@@ -180,6 +180,66 @@ module.exports = {
           allowNull: false,
           type: Sequelize.DATE
         }
+      }),
+      queryInterface.createTable('QUESTION', {
+        ID: {
+          allowNull: false,
+          autoIncrement: true,
+          primaryKey: true,
+          type: Sequelize.BIGINT
+        },
+        TEXT: {
+          allowNull: false,
+          type: Sequelize.STRING(500)
+        },
+        ID_COURSE: {
+          allowNull: false,
+          type: Sequelize.BIGINT,
+          references: {
+            model: 'COURSE',
+            key: 'ID'
+          },
+          createdAt: {
+            allowNull: false,
+            type: Sequelize.DATE
+          },
+          updatedAt: {
+            allowNull: false,
+            type: Sequelize.DATE
+          }
+        }
+      }),
+      queryInterface.createTable('ANSWER', {
+        ID: {
+          allowNull: false,
+          autoIncrement: true,
+          primaryKey: true,
+          type: Sequelize.BIGINT
+        },
+        ID_QUESTION: {
+          allowNull: false,
+          type: Sequelize.BIGINT,
+          references: {
+            model: 'QUESTION',
+            key: 'ID'
+          }
+        },
+        TEXT: {
+          allowNull: false,
+          type: Sequelize.STRING(250)
+        },
+        IS_CORRECT: {
+          allowNull: false,
+          type: Sequelize.BOOLEAN
+        },
+        createdAt: {
+          allowNull: false,
+          type: Sequelize.DATE
+        },
+        updatedAt: {
+          allowNull: false,
+          type: Sequelize.DATE
+        }
       })
     ]);
   },
@@ -191,96 +251,9 @@ module.exports = {
       queryInterface.dropTable('USER'),
       queryInterface.dropTable('EMPLOYEE_TYPE'),
       queryInterface.dropTable('COURSE'),
-      queryInterface.dropTable('COURSE_TYPE')
+      queryInterface.dropTable('COURSE_TYPE'),
+      queryInterface.dropTable('QUESTION'),
+      queryInterface.dropTable('ANSWER')
     ]);
   }
 };
-
-//#region 'COMMENT'
-/*
- queryInterface.createTable('QUESTION', {
-        ID: {
-          allowNull: false,
-          autoIncrement: true,
-          primaryKey: true,
-          type: Sequelize.BIGINT
-        },
-        TEXT: {
-          allowNull: false,
-          type: Sequelize.STRING(500)
-        },
-        createdAt: {
-          allowNull: false,
-          type: Sequelize.DATE
-        },
-        updatedAt: {
-          allowNull: false,
-          type: Sequelize.DATE
-        }
-      }),
-      queryInterface.createTable('COURSE_QUESTION', {
-        ID: {
-          allowNull: false,
-          autoIncrement: true,
-          primaryKey: true,
-          type: Sequelize.BIGINT
-        },
-        ID_COURSE: {
-          allowNull: false,
-          type: Sequelize.BIGINT,
-          references: {
-            model: 'COURSE',
-            key: 'ID'
-          }
-        },
-        ID_QUESTION: {
-          allowNull: false,
-          type: Sequelize.BIGINT,
-          references: {
-            model: 'QUESTION',
-            key: 'ID'
-          }
-        },
-        createdAt: {
-          allowNull: false,
-          type: Sequelize.DATE
-        },
-        updatedAt: {
-          allowNull: false,
-          type: Sequelize.DATE
-        }
-      }),
-      queryInterface.createTable('ANSWER',{
-        ID: {
-          allowNull: false,
-          autoIncrement: true,
-          primaryKey: true,
-          type: Sequelize.BIGINT
-        },
-        ID_QUESTION:{
-          allowNull: false,
-          type: Sequelize.BIGINT,
-          references: {
-            model: 'QUESTION',
-            key: 'ID'
-          }
-        },
-        TEXT: {
-          allowNull: false,
-          type:Sequelize.STRING(250)
-        },
-        IS_CORRECT: {
-          allowNull: false,
-          type:Sequelize.BOOLEAN
-        },
-        createdAt: {
-          allowNull: false,
-          type: Sequelize.DATE
-        },
-        updatedAt: {
-          allowNull: false,
-          type: Sequelize.DATE
-        }
-      })
-*/
-//#endregion

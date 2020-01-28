@@ -126,8 +126,8 @@ module.exports = {
           {
             ID: 1,
             NAME: 'Cum sa folosesti un stingator',
-            PDF_URL: 'pdfUrl1',
-            VIDEO_URL: 'videoUrl1',
+            PDF_URL: 'pdf/Fiipregatit_Ghid_Alunecare-de-teren.pdf',
+            VIDEO_URL: 'video/videoplayback.mp4',
             ID_COURSE_TYPE: 1,
             createdAt: new Date(),
             updatedAt: new Date()
@@ -135,8 +135,8 @@ module.exports = {
           {
             ID: 2,
             NAME: 'Evacuarea de urgenta',
-            PDF_URL: 'pdfUrl2',
-            VIDEO_URL: 'videoUrl2',
+            PDF_URL: 'pdf/Fiipregatit_Ghid_Alunecare-de-teren.pdf',
+            VIDEO_URL: 'video/videoplayback.mp4',
             ID_COURSE_TYPE: 1,
             createdAt: new Date(),
             updatedAt: new Date()
@@ -144,8 +144,8 @@ module.exports = {
           {
             ID: 3,
             NAME: 'Comportament in caz de cutremur',
-            PDF_URL: 'pdfUrl3',
-            VIDEO_URL: 'videoUrl3',
+            PDF_URL: 'pdf/Fiipregatit_Ghid_Alunecare-de-teren.pdf',
+            VIDEO_URL: 'video/videoplayback.mp4',
             ID_COURSE_TYPE: 2,
             createdAt: new Date(),
             updatedAt: new Date()
@@ -153,8 +153,8 @@ module.exports = {
           {
             ID: 4,
             NAME: 'Comportament in caz de incendiu',
-            PDF_URL: 'pdfUrl4',
-            VIDEO_URL: 'videoUrl4',
+            PDF_URL: 'pdf/Fiipregatit_Ghid_Alunecare-de-teren.pdf',
+            VIDEO_URL: 'video/videoplayback.mp4',
             ID_COURSE_TYPE: 2,
             createdAt: new Date(),
             updatedAt: new Date()
@@ -162,8 +162,8 @@ module.exports = {
           {
             ID: 5,
             NAME: 'Alunecarile si impiedicarile',
-            PDF_URL: 'pdfUrl5',
-            VIDEO_URL: 'videoUrl5',
+            PDF_URL: 'pdf/Fiipregatit_Ghid_Alunecare-de-teren.pdf',
+            VIDEO_URL: 'video/videoplayback.mp4',
             ID_COURSE_TYPE: 3,
             createdAt: new Date(),
             updatedAt: new Date()
@@ -171,8 +171,8 @@ module.exports = {
           {
             ID: 6,
             NAME: 'Cum sa nu treci strada pe rosu',
-            PDF_URL: 'pdfUrl6',
-            VIDEO_URL: 'videoUrl6',
+            PDF_URL: 'pdf/Fiipregatit_Ghid_Alunecare-de-teren.pdf',
+            VIDEO_URL: 'video/videoplayback.mp4',
             ID_COURSE_TYPE: 3,
             createdAt: new Date(),
             updatedAt: new Date()
@@ -180,6 +180,258 @@ module.exports = {
         ],
         {}
       ),
+      queryInterface.bulkInsert('QUESTION', [
+        {
+          ID: 1,
+          TEXT: 'Ce faci in caz de cutremur?',
+          ID_COURSE: 1,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          ID: 2,
+          TEXT: 'Ce faci in caz de incendiu?',
+          ID_COURSE: 1,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          ID: 3,
+          TEXT: 'Ce faci in caz de scurtcircuit?',
+          ID_COURSE: 1,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          ID: 4,
+          TEXT: 'Ce faci in caz de inundatie?',
+          ID_COURSE: 1,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          ID: 5,
+          TEXT: 'Ce faci in caz de cutremur?',
+          ID_COURSE: 2,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          ID: 6,
+          TEXT: 'Ce faci in caz de incendiu?',
+          ID_COURSE: 2,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          ID: 7,
+          TEXT: 'Ce faci in caz de scurtcircuit?',
+          ID_COURSE: 2,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          ID: 8,
+          TEXT: 'Ce faci in caz de inundatie?',
+          ID_COURSE: 3,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        }
+      ]),
+      queryInterface.bulkInsert('ANSWER', [
+        {
+          ID: 1,
+          ID_QUESTION: 1,
+          TEXT: 'Fug cat pot.',
+          IS_CORRECT: false,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          ID: 2,
+          ID_QUESTION: 1,
+          TEXT: 'Stau sub masa.',
+          IS_CORRECT: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          ID: 3,
+          ID_QUESTION: 1,
+          TEXT: 'Cobor cu liftul.',
+          IS_CORRECT: false,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          ID: 4,
+          ID_QUESTION: 1,
+          TEXT: 'Cobor pe scari.',
+          IS_CORRECT: false,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          ID: 5,
+          ID_QUESTION: 2,
+          TEXT: 'Fug cat pot.',
+          IS_CORRECT: false,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          ID: 6,
+          ID_QUESTION: 2,
+          TEXT: 'Stau sub masa.',
+          IS_CORRECT: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          ID: 7,
+          ID_QUESTION: 2,
+          TEXT: 'Cobor cu liftul.',
+          IS_CORRECT: false,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          ID: 8,
+          ID_QUESTION: 2,
+          TEXT: 'Cobor pe scari.',
+          IS_CORRECT: false,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          ID: 9,
+          ID_QUESTION: 3,
+          TEXT: 'Fug cat pot.',
+          IS_CORRECT: false,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          ID: 10,
+          ID_QUESTION: 3,
+          TEXT: 'Stau sub masa.',
+          IS_CORRECT: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          ID: 11,
+          ID_QUESTION: 3,
+          TEXT: 'Cobor cu liftul.',
+          IS_CORRECT: false,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          ID: 12,
+          ID_QUESTION: 3,
+          TEXT: 'Cobor pe scari.',
+          IS_CORRECT: false,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          ID: 13,
+          ID_QUESTION: 4,
+          TEXT: 'Fug cat pot.',
+          IS_CORRECT: false,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          ID: 14,
+          ID_QUESTION: 4,
+          TEXT: 'Stau sub masa.',
+          IS_CORRECT: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          ID: 15,
+          ID_QUESTION: 4,
+          TEXT: 'Cobor cu liftul.',
+          IS_CORRECT: false,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          ID: 16,
+          ID_QUESTION: 5,
+          TEXT: 'Fug cat pot.',
+          IS_CORRECT: false,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          ID: 17,
+          ID_QUESTION: 5,
+          TEXT: 'Stau sub masa.',
+          IS_CORRECT: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          ID: 18,
+          ID_QUESTION: 5,
+          TEXT: 'Cobor cu liftul.',
+          IS_CORRECT: false,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          ID: 19,
+          ID_QUESTION: 6,
+          TEXT: 'Stau sub masa.',
+          IS_CORRECT: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          ID: 20,
+          ID_QUESTION: 6,
+          TEXT: 'Cobor cu liftul.',
+          IS_CORRECT: false,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          ID: 21,
+          ID_QUESTION: 7,
+          TEXT: 'Stau sub masa.',
+          IS_CORRECT: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          ID: 22,
+          ID_QUESTION: 7,
+          TEXT: 'Cobor cu liftul.',
+          IS_CORRECT: false,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          ID: 23,
+          ID_QUESTION: 8,
+          TEXT: 'Stau sub masa.',
+          IS_CORRECT: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          ID: 24,
+          ID_QUESTION: 8,
+          TEXT: 'Cobor cu liftul.',
+          IS_CORRECT: false,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        }
+      ]),
       queryInterface.bulkInsert(
         'EMPLOYEE_TYPE_COURSE',
         [
@@ -280,7 +532,9 @@ module.exports = {
       queryInterface.bulkDelete('USER_EMPLOYEE_TYPE', null, {}),
       queryInterface.bulkDelete('COURSE_TYPE', null, {}),
       queryInterface.bulkDelete('COURSE', null, {}),
-      queryInterface.bulkDelete('EMPLOYEE_TYPE_COURSE', null, {})
+      queryInterface.bulkDelete('EMPLOYEE_TYPE_COURSE', null, {}),
+      queryInterface.bulkDelete('QUESTION', null, {}),
+      queryInterface.bulkDelete('ANSWER', null, {})
     ]);
   }
 };

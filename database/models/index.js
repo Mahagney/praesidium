@@ -4,6 +4,8 @@ const Course = require('./course.js');
 const EmployeeType = require('./employeeType.js');
 const CourseType = require('./courseType.js');
 const UserEmployeeType = require('./userEmployeeType');
+const Question = require('./question');
+const Answer = require('./answer');
 //#endregion
 
 //#region 'Association: USER'
@@ -41,6 +43,19 @@ EmployeeType.belongsToMany(Course, {
   otherKey: 'ID_COURSE',
   as: 'courses'
 });
+
+Question.belongsTo(Course, { foreignKey: 'ID_COURSE', targetKey: 'ID' });
+Question.hasMany(Answer, { foreignKey: 'ID_QUESTION' });
+Answer.belongsTo(Question, { foreignKey: 'ID_QUESTION', targetKey: 'ID' });
+
 //#endregion
 
-module.exports = { User, Course, EmployeeType, CourseType, UserEmployeeType };
+module.exports = {
+  User,
+  Course,
+  EmployeeType,
+  CourseType,
+  UserEmployeeType,
+  Question,
+  Answer
+};
