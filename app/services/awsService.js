@@ -9,12 +9,11 @@ const signingParams = {
 };
 
 // Generating a signed URL
-const getSignedUrl = (fileName) => {
-  return cfsign.getSignedUrl(
+const getSignedUrl = (fileName) =>
+  cfsign.getSignedUrl(
     process.env.AWS_DISTRIBUTION + '/' + fileName,
     signingParams
   );
-};
 
 const uploadFileToS3 = (filename, fileDirectoryPath) => {
   awsSDK.config.update({
@@ -24,19 +23,21 @@ const uploadFileToS3 = (filename, fileDirectoryPath) => {
   const s3 = new awsSDK.S3();
 
   return new Promise((resolve, reject) => {
-    fs.readFile(fileDirectoryPath.toString(), function(err, data) {
+    fs.readFile(fileDirectoryPath.toString(), (err, data) => {
       if (err) {
         reject(err);
       }
       s3.putObject(
         {
-          Bucket: '' + process.env.S3_BUCKET_NAME,
+          Bucket: `${process.env.S3_BUCKET_NAME}`,
           Key: filename,
           Body: data
         },
-        function(err, data) {
-          if (err) reject(err);
-          console.log(data);
+        (s3error) => {
+          fs.unlink(fileDirectoryPath.toString(), (error) => {
+            if (error) console.log(error);
+          });
+          if (s3error) reject(s3error);
           resolve('succesfully uploaded');
         }
       );

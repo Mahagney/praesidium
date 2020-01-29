@@ -4,3 +4,4 @@
 AWS_PRIVATE_KEY.pem
 knexfile.js
 .env
+./AWS_PRIVATE_KEY.pem

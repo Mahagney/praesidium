@@ -31,7 +31,8 @@ const filter = (req, file, cb) => {
   if (
     file.mimetype === 'text/csv' ||
     file.mimetype === 'application/pdf' ||
-    file.mimetype === 'audio/mpeg'
+    file.mimetype === 'audio/mpeg' ||
+    file.mimetype === 'video/mp4'
   ) {
     cb(null, true);
   } else {

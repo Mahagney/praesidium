@@ -13,7 +13,6 @@ const getCourse = (req, res, next) => {
 };
 
 const getFile = (req, res, next) => {
-  let filePath = 'video/videoplayback.mp4';
   const url = awsService.getSignedUrl(filePath);
   res.status(200).json(url);
 };
