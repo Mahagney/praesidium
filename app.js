@@ -28,7 +28,12 @@ const fileStorage = multer.diskStorage({
   }
 });
 const filter = (req, file, cb) => {
-  if (file.mimetype === 'text/csv') {
+  if (
+    file.mimetype === 'text/csv' ||
+    file.mimetype === 'application/pdf' ||
+    file.mimetype === 'audio/mpeg' ||
+    file.mimetype === 'video/mp4'
+  ) {
     cb(null, true);
   } else {
     cb(null, false);
@@ -47,7 +52,9 @@ app.use(cors(CORS_OPTIONS));
 app.use(express.json()); //it includes body-parser
 app.use(express.urlencoded({ extended: true }));
 app.use(logger('dev'));
-app.use(multer({ storage: fileStorage, fileFilter: filter }).single('csvFile'));
+app.use(
+  multer({ storage: fileStorage, fileFilter: filter }).single('uploadData')
+);
 //#endregion
 
 //ROUTES
