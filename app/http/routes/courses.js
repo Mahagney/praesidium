@@ -13,5 +13,6 @@ router.get('/:id/video', coursesController.getFile);
 router.post('/:id/video', coursesController.uploadFile);
 router.get('/:id', coursesController.getCourseWithSignedUrls);
 router.get('/:id/quiz', coursesController.getQuizForCourse);
+router.post('/:id/user/:userId', coursesController.completeCourse);
 
 module.exports = router;

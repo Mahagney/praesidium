@@ -6,6 +6,7 @@ const CourseType = require('./courseType.js');
 const UserEmployeeType = require('./userEmployeeType');
 const Question = require('./question');
 const Answer = require('./answer');
+const CourseUser = require('./courseUser');
 //#endregion
 
 //#region 'Association: USER'
@@ -48,6 +49,9 @@ Question.belongsTo(Course, { foreignKey: 'ID_COURSE', targetKey: 'ID' });
 Question.hasMany(Answer, { foreignKey: 'ID_QUESTION' });
 Answer.belongsTo(Question, { foreignKey: 'ID_QUESTION', targetKey: 'ID' });
 
+CourseUser.belongsTo(User, { foreignKey: 'ID_USER', targetKey: 'ID' });
+CourseUser.belongsTo(Course, { foreignKey: 'ID_COURSE', targetKey: 'ID' });
+
 //#endregion
 
 module.exports = {
@@ -57,5 +61,6 @@ module.exports = {
   CourseType,
   UserEmployeeType,
   Question,
-  Answer
+  Answer,
+  CourseUser
 };

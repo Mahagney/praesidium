@@ -9,11 +9,14 @@ const signingParams = {
 };
 
 // Generating a signed URL
-const getSignedUrl = (fileName) =>
-  cfsign.getSignedUrl(
+const getSignedUrl = (fileName) => {
+  if (!fileName) return '';
+
+  return cfsign.getSignedUrl(
     process.env.AWS_DISTRIBUTION + '/' + fileName,
     signingParams
   );
+};
 
 const uploadFileToS3 = (filename, fileDirectoryPath) => {
   awsSDK.config.update({
