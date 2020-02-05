@@ -6,7 +6,7 @@ const userService = require('./../../services/userService');
 
 const getUserCourses = (req, res, next) => {
   userService
-    .getUserCourses(req.userId)
+    .getUncompletedUserCourses(req.userId)
     .then((courses) => {
       res.status(200).json(courses);
     })
