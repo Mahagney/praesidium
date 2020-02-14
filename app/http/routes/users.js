@@ -14,4 +14,9 @@ router.get(
   usersController.getUserCourses
 );
 
+router.get(
+  '/:userId/courses/uncompleted',
+  authenticateToken,
+  usersController.getUncompletedUserCourses
+);
 module.exports = router;
