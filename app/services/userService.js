@@ -8,7 +8,8 @@ const {
   User,
   Course,
   EmployeeType,
-  UserEmployeeType
+  UserEmployeeType,
+  CourseUser
 } = require('../../database/models');
 //#endregion
 
@@ -116,6 +117,51 @@ const getUserCourses = (userId) => {
       throw err;
     });
 };
+
+const getUncompletedUserCourses = (userId) => {
+  return Course.findAll({
+    attributes: ['ID', 'NAME'],
+    include: [
+      {
+        model: EmployeeType,
+        include: [
+          {
+            model: User,
+            as: 'users',
+            attributes: ['ID'],
+            through: { attributes: ['ID'] },
+            where: { ID: userId }
+          }
+        ]
+      },
+      {
+        required: false,
+        model: CourseUser,
+        attributes: ['ID', 'SCORE'],
+        where: { ID_USER: userId }
+      }
+    ]
+  })
+    .then((courses) =>
+      courses
+        .filter((currentCourse) => currentCourse.COURSE_USERs.length === 0)
+        .map((currentCourse) => ({
+          ID: currentCourse.ID,
+          NAME: currentCourse.NAME
+        }))
+    )
+    .catch((error) => {
+      let err = new Error(error);
+      err.statusCode = 500;
+      err.customMessage = 'Get user courses -> COURSE SERVICE ERROR';
+      throw err;
+    });
+};
 //#endregion
 
-module.exports = { getUserByEmail, createUser, getUserCourses };
+module.exports = {
+  getUserByEmail,
+  createUser,
+  getUserCourses,
+  getUncompletedUserCourses
+};

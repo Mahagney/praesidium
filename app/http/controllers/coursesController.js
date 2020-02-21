@@ -48,6 +48,14 @@ const getQuizForCourse = (req, res, next) => {
     .catch((err) => res.send(err));
 };
 
+const completeCourse = (req, res, next) => {
+  courseService
+    .completeCourse(req.params.id, req.params.userId, req.body.score)
+    .then((result) => {
+      res.json({ courseId: result.dataValues.ID_COURSE });
+    })
+    .catch((err) => next(err));
+};
 //#endregion
 
 module.exports = {
@@ -55,5 +63,6 @@ module.exports = {
   getFile,
   uploadFile,
   getCourseWithSignedUrls,
-  getQuizForCourse
+  getQuizForCourse,
+  completeCourse
 };
