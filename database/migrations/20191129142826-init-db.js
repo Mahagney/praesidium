@@ -273,6 +273,51 @@ module.exports = {
             }
           },
           { transaction: t }
+        ),
+        queryInterface.createTable(
+          'COURSE_USER',
+          {
+            ID: {
+              allowNull: false,
+              autoIncrement: true,
+              primaryKey: true,
+              type: Sequelize.BIGINT
+            },
+            ID_COURSE: {
+              allowNull: false,
+              type: Sequelize.BIGINT,
+              references: {
+                model: 'COURSE',
+                key: 'ID'
+              }
+            },
+            ID_USER: {
+              allowNull: false,
+              type: Sequelize.BIGINT,
+              references: {
+                model: 'USER',
+                key: 'ID'
+              }
+            },
+            SCORE: {
+              allowNull: false,
+              type: Sequelize.INTEGER,
+              defaultValue: 0,
+              validate: {
+                min: 0,
+                max: 100
+              }
+            },
+            createdAt: {
+              allowNull: false,
+              type: Sequelize.DATE
+            },
+            updatedAt: {
+              allowNull: false,
+              type: Sequelize.DATE
+            }
+          },
+          { transaction: t }
         )
       ]);
     });
@@ -281,14 +326,15 @@ module.exports = {
   down: (queryInterface, Sequelize) => {
     return queryInterface.sequelize.transaction((t) => {
       return Promise.all([
+        queryInterface.dropTable('COURSE_USER', { transaction: t }),
         queryInterface.dropTable('USER_EMPLOYEE_TYPE', { transaction: t }),
         queryInterface.dropTable('EMPLOYEE_TYPE_COURSE', { transaction: t }),
         queryInterface.dropTable('USER', { transaction: t }),
         queryInterface.dropTable('EMPLOYEE_TYPE', { transaction: t }),
         queryInterface.dropTable('ANSWER', { transaction: t }),
         queryInterface.dropTable('QUESTION', { transaction: t }),
-        queryInterface.dropTable('COURSE_TYPE', { transaction: t }),
-        queryInterface.dropTable('COURSE', { transaction: t })
+        queryInterface.dropTable('COURSE', { transaction: t }),
+        queryInterface.dropTable('COURSE_TYPE', { transaction: t })
       ]);
     });
   }
