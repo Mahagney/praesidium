@@ -9,6 +9,7 @@ const coursesController = require('./../controllers/coursesController');
 //#endregion
 
 router.get('/', authenticateToken, coursesController.getCourse);
+router.post('/', authenticateToken, coursesController.addCourse);
 router.get('/:id/video', authenticateToken, coursesController.getFile);
 router.post('/:id/video', authenticateToken, coursesController.uploadFile);
 router.get(

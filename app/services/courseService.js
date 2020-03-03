@@ -12,6 +12,20 @@ const getCourse = (courseId) => {
   return Course.findByPk(courseId);
 };
 
+const addCourse = (course) => {
+  return Course.create({
+    NAME: course.name,
+    ID_COURSE_TYPE: course.idCourseType,
+    PDF_URL: course.pdfUrl,
+    VIDEO_URL: course.videoUrl
+  }).catch((error) => {
+    let err = new Error(error);
+    err.statusCode = 400;
+    err.customMessage = 'Invalid course data';
+    throw err;
+  });
+};
+
 const getQuizForCourse = (courseId) => {
   return Question.findAll({
     attributes: ['ID', 'TEXT'],
@@ -36,4 +50,4 @@ const completeCourse = (courseID, userId, score) => {
   });
 };
 
-module.exports = { getCourse, getQuizForCourse, completeCourse };
+module.exports = { getCourse, getQuizForCourse, completeCourse, addCourse };

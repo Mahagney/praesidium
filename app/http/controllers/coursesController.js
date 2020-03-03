@@ -12,6 +12,15 @@ const getCourse = (req, res, next) => {
   });
 };
 
+const addCourse = (req, res, next) => {
+  courseService
+    .addCourse(req.query)
+    .then((course) => {
+      res.status(200).json(course);
+    })
+    .catch((error) => next(error));
+};
+
 const getFile = (req, res, next) => {
   const url = awsService.getSignedUrl(filePath);
   res.status(200).json(url);
@@ -60,6 +69,7 @@ const completeCourse = (req, res, next) => {
 
 module.exports = {
   getCourse,
+  addCourse,
   getFile,
   uploadFile,
   getCourseWithSignedUrls,
