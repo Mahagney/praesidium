@@ -23,5 +23,6 @@ router.put(
   authenticateToken,
   coursesController.completeCourse
 );
+router.post('/:id/video', coursesController.uploadVideoToCourse);
 
 module.exports = router;

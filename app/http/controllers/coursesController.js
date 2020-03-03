@@ -33,6 +33,21 @@ const uploadFile = (req, res, next) => {
     .catch((err) => res.send(err));
 };
 
+const uploadVideoToCourse = (req, res, next) => {
+  const courseId = req.params.id;
+  awsService
+    .uploadFileToS3(req.file.originalname, req.file.path, req.body.pathInBucket)
+    .then((response) => {
+      courseService
+        .assignVideoToCourse(
+          courseId,
+          req.body.pathInBucket + '/' + req.file.originalname
+        )
+        .then(() => res.send(response));
+    })
+    .catch((err) => res.send(err));
+};
+
 const getCourseWithSignedUrls = (req, res, next) => {
   const courseId = req.params.id;
   courseService
@@ -74,5 +89,6 @@ module.exports = {
   uploadFile,
   getCourseWithSignedUrls,
   getQuizForCourse,
-  completeCourse
+  completeCourse,
+  uploadVideoToCourse
 };

@@ -26,6 +26,13 @@ const addCourse = (course) => {
   });
 };
 
+const assignVideoToCourse = (courseId, videoUrl) => {
+  return Course.update(
+    { VIDEO_URL: videoUrl },
+    { where: { ID: courseId }, returning: true, plain: true }
+  );
+};
+
 const getQuizForCourse = (courseId) => {
   return Question.findAll({
     attributes: ['ID', 'TEXT'],
@@ -50,4 +57,10 @@ const completeCourse = (courseID, userId, score) => {
   });
 };
 
-module.exports = { getCourse, getQuizForCourse, completeCourse, addCourse };
+module.exports = {
+  getCourse,
+  getQuizForCourse,
+  completeCourse,
+  addCourse,
+  assignVideoToCourse
+};

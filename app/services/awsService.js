@@ -18,7 +18,7 @@ const getSignedUrl = (fileName) => {
   );
 };
 
-const uploadFileToS3 = (filename, fileDirectoryPath) => {
+const uploadFileToS3 = (filename, fileDirectoryPath, pathInBucket) => {
   awsSDK.config.update({
     accessKeyId: process.env.S3_ACCESS_KEY_ID,
     secretAccessKey: process.env.S3_SECRET_ACCESS_KEY
@@ -32,7 +32,7 @@ const uploadFileToS3 = (filename, fileDirectoryPath) => {
       }
       s3.putObject(
         {
-          Bucket: `${process.env.S3_BUCKET_NAME}`,
+          Bucket: `${process.env.S3_BUCKET_NAME + '/' + pathInBucket}`,
           Key: filename,
           Body: data
         },
