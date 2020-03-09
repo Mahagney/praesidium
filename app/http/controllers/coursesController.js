@@ -80,6 +80,13 @@ const completeCourse = (req, res, next) => {
     })
     .catch((err) => next(err));
 };
+
+const getCourseTypes = (req, res, next) => {
+  courseService
+    .getCourseTypes()
+    .then((result) => res.json({ courseTypes: result }))
+    .catch((err) => next(err));
+};
 //#endregion
 
 module.exports = {
@@ -90,5 +97,6 @@ module.exports = {
   getCourseWithSignedUrls,
   getQuizForCourse,
   completeCourse,
-  uploadVideoToCourse
+  uploadVideoToCourse,
+  getCourseTypes
 };

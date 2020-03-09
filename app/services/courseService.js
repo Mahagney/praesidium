@@ -3,7 +3,8 @@ const {
   Course,
   Question,
   Answer,
-  CourseUser
+  CourseUser,
+  CourseType
 } = require('../../database/models');
 //#endregion
 
@@ -57,10 +58,15 @@ const completeCourse = (courseID, userId, score) => {
   });
 };
 
+const getCourseTypes = () => {
+  return CourseType.findAll({ attributes: ['ID', 'NAME', 'MONTHS_NUMBER'] });
+};
+
 module.exports = {
   getCourse,
   getQuizForCourse,
   completeCourse,
   addCourse,
-  assignVideoToCourse
+  assignVideoToCourse,
+  getCourseTypes
 };

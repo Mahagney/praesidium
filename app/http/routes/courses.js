@@ -12,6 +12,7 @@ router.get('/', authenticateToken, coursesController.getCourse);
 router.post('/', authenticateToken, coursesController.addCourse);
 router.get('/:id/video', authenticateToken, coursesController.getFile);
 router.post('/:id/video', authenticateToken, coursesController.uploadFile);
+router.get('/types', coursesController.getCourseTypes);
 router.get(
   '/:id',
   authenticateToken,
@@ -24,5 +25,4 @@ router.put(
   coursesController.completeCourse
 );
 router.post('/:id/video', coursesController.uploadVideoToCourse);
-
 module.exports = router;
