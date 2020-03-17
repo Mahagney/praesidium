@@ -6,6 +6,7 @@ const {
   CourseUser,
   CourseType
 } = require('../../database/models');
+const fileService = require('./fileService');
 //#endregion
 
 //TEMPORARY LOGIC
@@ -14,12 +15,7 @@ const getCourse = (courseId) => {
 };
 
 const addCourse = (course) => {
-  return Course.create({
-    NAME: course.name,
-    ID_COURSE_TYPE: course.idCourseType,
-    PDF_URL: course.pdfUrl,
-    VIDEO_URL: course.videoUrl
-  }).catch((error) => {
+  return Course.create(course).catch((error) => {
     let err = new Error(error);
     err.statusCode = 400;
     err.customMessage = 'Invalid course data';

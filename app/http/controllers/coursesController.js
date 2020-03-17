@@ -13,12 +13,25 @@ const getCourse = (req, res, next) => {
 };
 
 const addCourse = (req, res, next) => {
-  courseService
-    .addCourse(req.query)
-    .then((course) => {
-      res.status(200).json(course);
-    })
-    .catch((error) => next(error));
+  const pdfFile = req.files.pdf[0];
+  if (pdfFile) {
+    awsService
+      .uploadFileToS3(pdfFile.originalname, pdfFile.path, 'pdf')
+      .then((result) => {
+        courseService
+          .addCourse({
+            NAME: req.query.name,
+            ID_COURSE_TYPE: req.query.idCourseType,
+            PDF_URL: result.path,
+            VIDEO_URL: ''
+          })
+          .then((course) => {
+            res.status(200).json(course);
+          })
+          .catch((error) => next(error));
+      })
+      .catch((error) => next(error));
+  } else res.status(400).json({ message: 'No pdf file' });
 };
 
 const getFile = (req, res, next) => {
@@ -35,14 +48,12 @@ const uploadFile = (req, res, next) => {
 
 const uploadVideoToCourse = (req, res, next) => {
   const courseId = req.params.id;
+  const video = req.files.video[0];
   awsService
-    .uploadFileToS3(req.file.originalname, req.file.path, req.body.pathInBucket)
+    .uploadFileToS3(video.originalname, video.path, 'video')
     .then((response) => {
       courseService
-        .assignVideoToCourse(
-          courseId,
-          req.body.pathInBucket + '/' + req.file.originalname
-        )
+        .assignVideoToCourse(courseId, 'video/' + video.originalname)
         .then(() => res.send(response));
     })
     .catch((err) => res.send(err));
