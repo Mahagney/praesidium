@@ -84,7 +84,10 @@ const getQuizForCourse = (req, res, next) => {
 };
 
 const setQuizForCourse = (req, res, next) => {
-  courseService.setQuizForCourse(req.params.id, req.body.quiz);
+  courseService
+    .setQuizForCourse(req.params.id, req.body.quiz)
+    .then((result) => res.status(200).send('quiz added'))
+    .catch((error) => next(error));
 };
 
 const completeCourse = (req, res, next) => {

@@ -47,20 +47,22 @@ const getQuizForCourse = (courseId) => {
 };
 
 const setQuizForCourse = (courseId, quiz) => {
-  quiz.forEach((element) => {
+  const questionActions = quiz.map((element) => {
     Question.create({
       TEXT: element.TEXT,
       ID_COURSE: courseId
-    }).then((question) =>
-      element.ANSWERS.forEach((answer) =>
+    }).then((question) => {
+      const answerActions = element.ANSWERS.map((answer) =>
         Answer.create({
           TEXT: answer.TEXT,
           IS_CORRECT: answer.IS_CORRECT,
           ID_QUESTION: question.ID
         })
-      )
-    );
+      );
+      return Promise.all(answerActions);
+    });
   });
+  return Promise.all(questionActions);
 };
 
 const completeCourse = (courseID, userId, score) => {
