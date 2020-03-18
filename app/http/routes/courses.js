@@ -15,6 +15,7 @@ router.post('/:id/video', coursesController.uploadVideoToCourse);
 router.get('/types', coursesController.getCourseTypes);
 router.get('/:id', coursesController.getCourseWithSignedUrls);
 router.get('/:id/quiz', authenticateToken, coursesController.getQuizForCourse);
+router.post('/:id/quiz', coursesController.setQuizForCourse);
 router.put(
   '/:id/user/:userId/complete',
   authenticateToken,

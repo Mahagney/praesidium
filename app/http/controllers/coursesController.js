@@ -20,8 +20,8 @@ const addCourse = (req, res, next) => {
       .then((result) => {
         courseService
           .addCourse({
-            NAME: req.query.name,
-            ID_COURSE_TYPE: req.query.idCourseType,
+            NAME: req.body.name,
+            ID_COURSE_TYPE: req.body.idCourseType,
             PDF_URL: result.path,
             VIDEO_URL: ''
           })
@@ -83,6 +83,10 @@ const getQuizForCourse = (req, res, next) => {
     .catch((err) => res.send(err));
 };
 
+const setQuizForCourse = (req, res, next) => {
+  courseService.setQuizForCourse(req.params.id, req.body.quiz);
+};
+
 const completeCourse = (req, res, next) => {
   courseService
     .completeCourse(req.params.id, req.params.userId, req.body.score)
@@ -107,6 +111,7 @@ module.exports = {
   uploadFile,
   getCourseWithSignedUrls,
   getQuizForCourse,
+  setQuizForCourse,
   completeCourse,
   uploadVideoToCourse,
   getCourseTypes

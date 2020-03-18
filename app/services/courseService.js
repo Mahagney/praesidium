@@ -46,6 +46,23 @@ const getQuizForCourse = (courseId) => {
   });
 };
 
+const setQuizForCourse = (courseId, quiz) => {
+  quiz.forEach((element) => {
+    Question.create({
+      TEXT: element.TEXT,
+      ID_COURSE: courseId
+    }).then((question) =>
+      element.ANSWERS.forEach((answer) =>
+        Answer.create({
+          TEXT: answer.TEXT,
+          IS_CORRECT: answer.IS_CORRECT,
+          ID_QUESTION: question.ID
+        })
+      )
+    );
+  });
+};
+
 const completeCourse = (courseID, userId, score) => {
   return CourseUser.create({
     ID_COURSE: courseID,
@@ -61,6 +78,7 @@ const getCourseTypes = () => {
 module.exports = {
   getCourse,
   getQuizForCourse,
+  setQuizForCourse,
   completeCourse,
   addCourse,
   assignVideoToCourse,
