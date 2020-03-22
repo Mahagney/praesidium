@@ -190,10 +190,9 @@ const updateUserPassword = (email, newPassword) => {
       }
     })
     .then((resultUpdateOneTimeAuth) => {
-      // if (resultUpdateOneTimeAuth[0]) {
-      //   return seqTransaction.commit();
-      // }
-      throw new Error('test eroare');
+      if (resultUpdateOneTimeAuth[0]) {
+        return seqTransaction.commit();
+      }
     })
     .then((result) => {
       if (typeof result !== 'undefined') {
