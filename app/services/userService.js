@@ -157,11 +157,62 @@ const getUncompletedUserCourses = (userId) => {
       throw err;
     });
 };
+
+const updateUserPassword = (email, newPassword) => {
+  let seqTransaction = null;
+  return sequelize
+    .transaction()
+    .then((t) => {
+      return (seqTransaction = t);
+    })
+    .then(() => {
+      return User.update(
+        { PASSWORD: newPassword },
+        {
+          where: {
+            EMAIL: email
+          },
+          transaction: seqTransaction
+        }
+      );
+    })
+    .then((resultUpdatePassword) => {
+      if (resultUpdatePassword[0]) {
+        return User.update(
+          { ONE_TIME_AUTH: 'true' },
+          {
+            where: {
+              EMAIL: email
+            },
+            transaction: seqTransaction
+          }
+        );
+      }
+    })
+    .then((resultUpdateOneTimeAuth) => {
+      // if (resultUpdateOneTimeAuth[0]) {
+      //   return seqTransaction.commit();
+      // }
+      throw new Error('test eroare');
+    })
+    .then((result) => {
+      if (typeof result !== 'undefined') {
+        return true;
+      }
+    })
+    .catch((error) => {
+      seqTransaction.rollback();
+      error.customMessage = 'Update user password -> USER SERVICE ERROR';
+      throw error;
+    });
+};
+
 //#endregion
 
 module.exports = {
   getUserByEmail,
   createUser,
+  updateUserPassword,
   getUserCourses,
   getUncompletedUserCourses
 };
