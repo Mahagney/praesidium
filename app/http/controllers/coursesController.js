@@ -53,7 +53,7 @@ const uploadVideoToCourse = (req, res, next) => {
     .uploadFileToS3(video.originalname, video.path, 'video')
     .then((response) => {
       courseService
-        .assignVideoToCourse(courseId, 'video/' + video.originalname)
+        .assignVideoToCourse(courseId, response.path)
         .then(() => res.send(response));
     })
     .catch((err) => res.send(err));
