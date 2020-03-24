@@ -2,31 +2,13 @@
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const jwt = require('jsonwebtoken');
+
 //#endregion
 
 //#region 'LOCAL DEP'
 const userService = require('../../services/userService');
 const emailService = require('../../services/emailService');
 const fileService = require('../../services/fileService');
-//#endregion
-
-//#region 'PRIVATE'
-const hashPasswordPromise = (jsonUser) => {
-  const user = JSON.parse(jsonUser);
-  return new Promise((resolve, reject) => {
-    const userPassword = passGenerator.generate({
-      length: 10,
-      numbers: true
-    });
-    bcrypt
-      .hash(userPassword, 10)
-      .then((hash) => {
-        user.PASSWORD = hash;
-        resolve(user);
-      })
-      .catch((error) => reject(error));
-  });
-};
 //#endregion
 
 //#region 'INTERFACE'
@@ -87,7 +69,6 @@ const logIn = (req, res, next) => {
       if (user.ONE_TIME_AUTH) {
         return bcrypt.compare(password, user.PASSWORD);
       } else if (user.PASSWORD === password) {
-        //to do: update ONE_TIME_AUTH = true for this user
         return true;
       }
     })
@@ -101,7 +82,8 @@ const logIn = (req, res, next) => {
       const token = jwt.sign(
         {
           id: loadedUser.ID,
-          email: loadedUser.EMAIL
+          email: loadedUser.EMAIL,
+          one_time_auth: loadedUser.ONE_TIME_AUTH
         },
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: '1h' }
@@ -123,6 +105,38 @@ const logOut = (req, res, next) => {
   res.status(200).json('Logged out.');
 };
 
+const updatePassword = (req, res, next) => {
+  const email = req.body.email;
+  const currentPassword = req.body.currentPassword;
+  const newPassword = req.body.newPassword;
+
+  userService
+    .getUserByEmail(email)
+    .then((user) => {
+      if (!user) {
+        const err = new Error();
+        err.statusCode = 401;
+        err.customMessage = 'User not found!';
+        throw err;
+      }
+      return currentPassword === user.PASSWORD ? true : false;
+    })
+    .then((isValid) => {
+      if (isValid) {
+        return bcrypt.hash(newPassword, 12);
+      }
+    })
+    .then((hashedPassword) => {
+      return userService.updateUserPassword(email, hashedPassword);
+    })
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((error) => {
+      next(error);
+    });
+};
+
 //#endregion
 
-module.exports = { register, logIn, logOut };
+module.exports = { register, logIn, logOut, updatePassword };

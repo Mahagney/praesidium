@@ -44,6 +44,12 @@ User.init(
       }
     },
 
+    ONE_TIME_AUTH: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
+    },
+
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE
