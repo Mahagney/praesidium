@@ -8,15 +8,14 @@ const authenticateToken = require('./../middleware/authenticateToken');
 const coursesController = require('./../controllers/coursesController');
 //#endregion
 
-router.get('/', authenticateToken, coursesController.getCourse);
+router.get('/', coursesController.getCourse);
+router.post('/', coursesController.addCourse);
 router.get('/:id/video', authenticateToken, coursesController.getFile);
-router.post('/:id/video', authenticateToken, coursesController.uploadFile);
-router.get(
-  '/:id',
-  authenticateToken,
-  coursesController.getCourseWithSignedUrls
-);
+router.post('/:id/video', coursesController.uploadVideoToCourse);
+router.get('/types', coursesController.getCourseTypes);
+router.get('/:id', coursesController.getCourseWithSignedUrls);
 router.get('/:id/quiz', authenticateToken, coursesController.getQuizForCourse);
+router.post('/:id/quiz', coursesController.setQuizForCourse);
 router.put(
   '/:id/user/:userId/complete',
   authenticateToken,
