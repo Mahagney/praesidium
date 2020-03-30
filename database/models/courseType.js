@@ -40,6 +40,5 @@ CourseType.init(
 );
 
 // //Association
-// CourseType.belongsTo(Course, { foreignKey: 'ID_COURSE_TYPE', targetKey: 'ID' });
 
 module.exports = CourseType;

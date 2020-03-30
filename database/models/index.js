@@ -53,6 +53,7 @@ CourseUser.belongsTo(User, { foreignKey: 'ID_USER', targetKey: 'ID' });
 CourseUser.belongsTo(Course, { foreignKey: 'ID_COURSE', targetKey: 'ID' });
 Course.hasMany(CourseUser, { foreignKey: 'ID_COURSE' });
 User.hasMany(CourseUser, { foreignKey: 'ID_USER' });
+CourseType.belongsTo(Course, { foreignKey: 'ID', targetKey: 'ID_COURSE_TYPE' });
 
 //#endregion
 

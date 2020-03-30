@@ -53,7 +53,10 @@ app.use(express.json()); //it includes body-parser
 app.use(express.urlencoded({ extended: true }));
 app.use(logger('dev'));
 app.use(
-  multer({ storage: fileStorage, fileFilter: filter }).single('uploadData')
+  multer({ storage: fileStorage, fileFilter: filter }).fields([
+    { name: 'video', maxCount: 1 },
+    { name: 'pdf', maxCount: 1 }
+  ])
 );
 //#endregion
 
