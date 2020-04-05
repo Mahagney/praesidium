@@ -7,6 +7,7 @@ const UserEmployeeType = require('./userEmployeeType');
 const Question = require('./question');
 const Answer = require('./answer');
 const CourseUser = require('./courseUser');
+const Company = require('./company');
 //#endregion
 
 //#region 'Association: USER'
@@ -65,5 +66,6 @@ module.exports = {
   UserEmployeeType,
   Question,
   Answer,
-  CourseUser
+  CourseUser,
+  Company
 };

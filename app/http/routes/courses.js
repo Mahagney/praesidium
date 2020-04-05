@@ -10,6 +10,7 @@ const coursesController = require('./../controllers/coursesController');
 
 router.get('/', coursesController.getCourse);
 router.post('/', coursesController.addCourse);
+//TO DO: remove ID,unused
 router.get('/:id/video', authenticateToken, coursesController.getFile);
 router.post('/:id/video', coursesController.uploadVideoToCourse);
 router.get('/types', coursesController.getCourseTypes);
