@@ -11,4 +11,6 @@ router.get('/', companiesController.getAll);
 
 router.get('/:companyId', companiesController.getCompany);
 
+router.post('/', companiesController.addCompany);
+
 module.exports = router;

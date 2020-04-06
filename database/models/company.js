@@ -31,7 +31,10 @@ Company.init(
             allowNull: false,
             type: Sequelize.STRING(20)
         },
-
+        PHONE_NUMBER: {
+            allowNull: false,
+            type: Sequelize.STRING(20)
+        },
         createdAt: {
             allowNull: false,
             type: Sequelize.DATE
