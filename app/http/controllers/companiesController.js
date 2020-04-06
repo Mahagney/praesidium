@@ -21,8 +21,26 @@ const addCompany = (req, res, next) => {
         ).catch(err => next(err));
 }
 
+const deleteCompany = (req, res, next) => {
+    companyService.deleteCompany(req.params.companyId)
+        .then(result => {
+            res.status(200).json({ "result": result })
+        })
+        .catch(error => next(error))
+}
+
+const updateCompany = (req, res, next) => {
+    companyService.updateCompany(req.params.companyId, req.body)
+        .then(result =>
+            res.status(200).json(result)
+        )
+        .catch(err => next(err));
+}
+
 module.exports = {
     getCompany,
     getAll,
-    addCompany
+    addCompany,
+    deleteCompany,
+    updateCompany
 }

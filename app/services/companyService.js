@@ -17,8 +17,28 @@ const addCompany = (company) => {
     });
 }
 
+const deleteCompany = (companyId) => {
+    return Company.destroy({
+        where: {
+            ID: companyId
+        }
+    });
+}
+
+const updateCompany = (companyId, company) => {
+    return Company.findByPk(companyId)
+        .then(currentCompany => {
+            // Check if record exists in db
+            if (currentCompany) {
+                return currentCompany.update(company)
+            }
+        })
+}
+
 module.exports = {
     getCompany,
     getAll,
-    addCompany
+    addCompany,
+    deleteCompany,
+    updateCompany
 }
