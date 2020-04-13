@@ -14,6 +14,10 @@ const {
 //#endregion
 
 //#region 'INTERFACE'
+const getUsers = () => {
+  return User.findAll();
+}
+
 const getUserByEmail = (email) => {
   return User.findOne({
     where: { EMAIL: email }
@@ -213,5 +217,6 @@ module.exports = {
   createUser,
   updateUserPassword,
   getUserCourses,
-  getUncompletedUserCourses
+  getUncompletedUserCourses,
+  getUsers
 };

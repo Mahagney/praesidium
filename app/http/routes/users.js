@@ -19,4 +19,10 @@ router.get(
   authenticateToken,
   usersController.getUncompletedUserCourses
 );
+
+router.get(
+  '/',
+  authenticateToken,
+  usersController.getUsers
+);
 module.exports = router;

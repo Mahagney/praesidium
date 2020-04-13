@@ -31,6 +31,18 @@ module.exports = {
             ONE_TIME_AUTH: {
               type: Sequelize.BOOLEAN
             },
+            ID_COMPANY: {
+              allowNull: false,
+              type: Sequelize.BIGINT,
+              references: {
+                model: 'COMPANY',
+                key: 'ID'
+              }
+            },
+            deletedAt: {
+              allowNull: true,
+              type: Sequelize.DATE
+            },
             createdAt: {
               allowNull: false,
               type: Sequelize.DATE

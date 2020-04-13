@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 
 const sequelize = require('../config/sequelizeConfig');
 
-class UserEmployeeType extends Sequelize.Model {}
+class UserEmployeeType extends Sequelize.Model { }
 UserEmployeeType.init(
   {
     ID: {
