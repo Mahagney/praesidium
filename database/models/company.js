@@ -19,7 +19,8 @@ Company.init(
 
         CUI: {
             type: Sequelize.STRING(10),
-            allowNull: false
+            allowNull: false,
+            unique: true
         },
 
         DOMAIN: {

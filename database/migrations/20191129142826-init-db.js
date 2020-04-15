@@ -23,7 +23,8 @@ module.exports = {
               type: Sequelize.STRING(13)
             },
             EMAIL: {
-              type: Sequelize.STRING(40)
+              type: Sequelize.STRING(40),
+              unique: true
             },
             PASSWORD: {
               type: Sequelize.STRING(60)

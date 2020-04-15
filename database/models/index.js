@@ -18,6 +18,8 @@ User.belongsToMany(EmployeeType, {
   otherKey: 'ID_EMPLOYEE_TYPE',
   as: 'employeeTypes'
 });
+
+User.belongsTo(Company, { foreignKey: 'ID_COMPANY', targetKey: 'ID' });
 //#endregion
 
 //#region 'Association: COURSE'

@@ -9,13 +9,22 @@ const {
   Course,
   EmployeeType,
   UserEmployeeType,
-  CourseUser
+  CourseUser,
+  Company
 } = require('../../database/models');
 //#endregion
 
 //#region 'INTERFACE'
 const getUsers = () => {
-  return User.findAll();
+  return User.findAll({
+    where: {
+      deletedAt: null
+    },
+    include: [{
+      model: Company,
+      attributes: ['NAME']
+    }]
+  });
 }
 
 const getUserByEmail = (email) => {
@@ -210,6 +219,27 @@ const updateUserPassword = (email, newPassword) => {
     });
 };
 
+const updateUser = (userId, user) => {
+  return User.findByPk(userId)
+    .then(currentUser => {
+      // Check if record exists in db
+      if (currentUser) {
+        return currentUser.update(user)
+      }
+    })
+}
+
+const deleteUser = (userId) => {
+  return User.findByPk(userId)
+    .then(currentUser => {
+      // Check if record exists in db
+      if (currentUser) {
+        let newUser = { ...currentUser };
+        newUser.deletedAt = new Date();
+        return currentUser.update(newUser)
+      }
+    })
+}
 //#endregion
 
 module.exports = {
@@ -218,5 +248,7 @@ module.exports = {
   updateUserPassword,
   getUserCourses,
   getUncompletedUserCourses,
-  getUsers
+  getUsers,
+  updateUser,
+  deleteUser
 };
