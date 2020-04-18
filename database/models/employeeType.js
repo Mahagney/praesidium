@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 
 const sequelize = require('../config/sequelizeConfig');
 
-class EmployeeType extends Sequelize.Model {}
+class EmployeeType extends Sequelize.Model { }
 EmployeeType.init(
   {
     ID: {
@@ -16,16 +16,23 @@ EmployeeType.init(
       type: Sequelize.STRING(50),
       allowNull: false
     },
-
+    CODE: {
+      type: Sequelize.STRING(50),
+      allowNull: false,
+      unique: true
+    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE
     },
-
     updatedAt: {
       allowNull: false,
       type: Sequelize.DATE
-    }
+    },
+    deletedAt: {
+      allowNull: true,
+      type: Sequelize.DATE
+    },
   },
   {
     sequelize,

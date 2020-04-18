@@ -59,16 +59,19 @@ module.exports = {
           [
             {
               NAME: 'Programator',
+              CODE: '1234',
               createdAt: new Date(),
               updatedAt: new Date()
             },
             {
               NAME: 'Sofer',
+              CODE: '1235',
               createdAt: new Date(),
               updatedAt: new Date()
             },
             {
               NAME: 'Manager',
+              CODE: '1236',
               createdAt: new Date(),
               updatedAt: new Date()
             }

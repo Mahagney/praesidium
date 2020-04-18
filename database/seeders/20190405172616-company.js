@@ -27,7 +27,7 @@ module.exports = {
             },
             {
               NAME: 'Company3',
-              CUI: 'RO4030ewqeqw',
+              CUI: 'RO4030ewqeqx',
               EMAIL: 'Company3@gmail.com',
               PHONE_NUMBER: '0273754373737',
               DOMAIN: 'IT',

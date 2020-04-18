@@ -12,6 +12,7 @@ const authRoutes = require('./app/http/routes/auth');
 const usersRoutes = require('./app/http/routes/users');
 const coursesRoutes = require('./app/http/routes/courses');
 const companiesRouter = require('./app/http/routes/companies');
+const employeeTypesRouter = require('./app/http/routes/employeeTypes');
 //#endregion
 
 require('dotenv').config(); // loading env variables to process.env
@@ -66,6 +67,7 @@ app.use('/auth', authRoutes);
 app.use('/users', usersRoutes);
 app.use('/courses', coursesRoutes);
 app.use('/companies', companiesRouter);
+app.use('/employeeTypes', employeeTypesRouter);
 
 //global error handler for the app
 app.use((error, req, res, next) => {

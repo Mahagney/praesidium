@@ -68,6 +68,11 @@ module.exports = {
               allowNull: false,
               type: Sequelize.STRING(50)
             },
+            CODE: {
+              allowNull: false,
+              type: Sequelize.STRING(50),
+              unique: true
+            },
             createdAt: {
               allowNull: false,
               type: Sequelize.DATE
@@ -75,7 +80,11 @@ module.exports = {
             updatedAt: {
               allowNull: false,
               type: Sequelize.DATE
-            }
+            },
+            deletedAt: {
+              allowNull: true,
+              type: Sequelize.DATE
+            },
           },
           { transaction: t }
         ),
