@@ -6,10 +6,29 @@ const sequelize = require('../../database/config/sequelizeConfig');
 //#region 'LOCAL DEP'
 const {
     EmployeeType,
+    EmployeeTypeCourse
 } = require('../../database/models');
 //#endregion
 
-const getEmployeeTypes = () => EmployeeType.findAll({ where: { deletedAt: null } });
+const getEmployeeTypes = () => EmployeeType.findAll({ 
+    where: { deletedAt: null }
+});
+
+const getEmployeeTypesWithCourse = (courseId) => {
+    console.log(courseId);
+
+    return EmployeeType.findAll({ 
+    where: { deletedAt: null },
+    attributes: ['ID','NAME','CODE',[sequelize.fn('max', sequelize.col('EMPLOYEE_TYPE_COURSEs.createdAt')),'LAST_SENT']],
+    include: { 
+        model: EmployeeTypeCourse,
+        attributes:[],
+        where: { ID_COURSE: courseId},
+        required:false
+    },
+    group : ['EMPLOYEE_TYPE.ID']
+    });
+};
 
 const deleteEmployeeTypes = (id) => {
     return EmployeeType.findByPk(id)
@@ -28,6 +47,7 @@ const addEmployeeType = (newEmployeeType) => EmployeeType.create(newEmployeeType
 module.exports = {
     getEmployeeTypes,
     deleteEmployeeTypes,
-    addEmployeeType
+    addEmployeeType,
+    getEmployeeTypesWithCourse
 }
 

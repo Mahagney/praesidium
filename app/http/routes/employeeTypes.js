@@ -11,6 +11,8 @@ router.get('/', employeeTypesController.getEmployeeTypes);
 
 router.post('/', employeeTypesController.addEmployeeType);
 
+router.get('/course/:courseId', employeeTypesController.getEmployeeTypesForCourse);
+
 router.delete('/:employeeTypeId', employeeTypesController.deleteEmployeeType);
 
 

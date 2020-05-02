@@ -8,6 +8,7 @@ const Question = require('./question');
 const Answer = require('./answer');
 const CourseUser = require('./courseUser');
 const Company = require('./company');
+const EmployeeTypeCourse = require('./employeeTypeCourse');
 //#endregion
 
 //#region 'Association: USER'
@@ -57,7 +58,10 @@ CourseUser.belongsTo(Course, { foreignKey: 'ID_COURSE', targetKey: 'ID' });
 Course.hasMany(CourseUser, { foreignKey: 'ID_COURSE' });
 User.hasMany(CourseUser, { foreignKey: 'ID_USER' });
 CourseType.belongsTo(Course, { foreignKey: 'ID', targetKey: 'ID_COURSE_TYPE' });
-
+//UserEmployeeType.belongsTo(EmployeeType, { foreignKey: 'ID_EMPLOYEE_TYPE', targetKey: 'ID' });
+// EmployeeType.hasMany(UserEmployeeType, { foreignKey: 'ID_EMPLOYEE_TYPE' });
+// Course.hasMany(EmployeeTypeCourse, {foreignKey: 'ID_COURSE'});
+EmployeeType.hasMany(EmployeeTypeCourse, {foreignKey: 'ID_EMPLOYEE_TYPE'});
 //#endregion
 
 module.exports = {
@@ -69,5 +73,6 @@ module.exports = {
   Question,
   Answer,
   CourseUser,
-  Company
+  Company,
+  EmployeeTypeCourse
 };

@@ -8,6 +8,10 @@ const getEmployeeTypes = (req, res, next) => employeeTypeService.getEmployeeType
     types => res.status(200).json(types)
 ).catch(error => next(error));
 
+const getEmployeeTypesForCourse = (req, res, next) => employeeTypeService.getEmployeeTypesWithCourse(req.params.courseId).then(
+    types => res.status(200).json(types)
+).catch(error => next(error));
+
 const deleteEmployeeType = (req, res, next) => employeeTypeService.deleteEmployeeTypes(req.params.employeeTypeId)
     .then(() => res.status(200).json("employeeType deleted"))
     .catch(error => next(error));
@@ -19,4 +23,4 @@ const addEmployeeType = (req, res, next) => {
         .catch(err => next(err));
 }
 
-module.exports = { getEmployeeTypes, deleteEmployeeType, addEmployeeType };
+module.exports = { getEmployeeTypes, deleteEmployeeType, addEmployeeType, getEmployeeTypesForCourse };
