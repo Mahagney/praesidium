@@ -5,15 +5,23 @@ const router = express.Router();
 
 //#region 'LOCAL DEP'
 const employeeTypesController = require('../controllers/employeeTypesController');
+const authenticateToken = require('./../middleware/authenticateToken');
 
 //#endregion
-router.get('/', employeeTypesController.getEmployeeTypes);
+router.get('/', authenticateToken, employeeTypesController.getEmployeeTypes);
 
-router.post('/', employeeTypesController.addEmployeeType);
+router.post('/', authenticateToken, employeeTypesController.addEmployeeType);
 
-router.get('/course/:courseId', employeeTypesController.getEmployeeTypesForCourse);
+router.get(
+  '/course/:courseId',
+  authenticateToken,
+  employeeTypesController.getEmployeeTypesForCourse
+);
 
-router.delete('/:employeeTypeId', employeeTypesController.deleteEmployeeType);
-
+router.delete(
+  '/:employeeTypeId',
+  authenticateToken,
+  employeeTypesController.deleteEmployeeType
+);
 
 module.exports = router;

@@ -17,7 +17,7 @@ User.belongsToMany(EmployeeType, {
   through: UserEmployeeType,
   foreignKey: 'ID_USER',
   otherKey: 'ID_EMPLOYEE_TYPE',
-  as: 'employeeTypes'
+  as: 'employeeTypes',
 });
 
 User.belongsTo(Company, { foreignKey: 'ID_COMPANY', targetKey: 'ID' });
@@ -28,7 +28,7 @@ User.belongsTo(Company, { foreignKey: 'ID_COMPANY', targetKey: 'ID' });
 Course.belongsToMany(EmployeeType, {
   through: 'EMPLOYEE_TYPE_COURSE',
   foreignKey: 'ID_COURSE',
-  otherKey: 'ID_EMPLOYEE_TYPE'
+  otherKey: 'ID_EMPLOYEE_TYPE',
 });
 //#endregion
 
@@ -38,7 +38,7 @@ EmployeeType.belongsToMany(User, {
   through: UserEmployeeType,
   foreignKey: 'ID_EMPLOYEE_TYPE',
   otherKey: 'ID_USER',
-  as: 'users'
+  as: 'users',
 });
 
 //-> EMPLOYEE_TYPE_COURSE
@@ -46,7 +46,7 @@ EmployeeType.belongsToMany(Course, {
   through: 'EMPLOYEE_TYPE_COURSE',
   foreignKey: 'ID_EMPLOYEE_TYPE',
   otherKey: 'ID_COURSE',
-  as: 'courses'
+  as: 'courses',
 });
 
 Question.belongsTo(Course, { foreignKey: 'ID_COURSE', targetKey: 'ID' });
@@ -61,7 +61,8 @@ CourseType.belongsTo(Course, { foreignKey: 'ID', targetKey: 'ID_COURSE_TYPE' });
 //UserEmployeeType.belongsTo(EmployeeType, { foreignKey: 'ID_EMPLOYEE_TYPE', targetKey: 'ID' });
 // EmployeeType.hasMany(UserEmployeeType, { foreignKey: 'ID_EMPLOYEE_TYPE' });
 // Course.hasMany(EmployeeTypeCourse, {foreignKey: 'ID_COURSE'});
-EmployeeType.hasMany(EmployeeTypeCourse, {foreignKey: 'ID_EMPLOYEE_TYPE'});
+EmployeeType.hasMany(EmployeeTypeCourse, { foreignKey: 'ID_EMPLOYEE_TYPE' });
+
 //#endregion
 
 module.exports = {
@@ -74,5 +75,5 @@ module.exports = {
   Answer,
   CourseUser,
   Company,
-  EmployeeTypeCourse
+  EmployeeTypeCourse,
 };

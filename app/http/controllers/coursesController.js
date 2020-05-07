@@ -1,6 +1,7 @@
 //#region 'LOCAL DEP'
 const courseService = require('./../../services/courseService');
 const awsService = require('./../../services/awsService');
+const employeeTypeService = require('./../../services/employeeTypeService');
 //#endregion
 
 //#region 'INTERFACE'
@@ -23,7 +24,7 @@ const addCourse = (req, res, next) => {
             NAME: req.body.name,
             ID_COURSE_TYPE: req.body.idCourseType,
             PDF_URL: result.path,
-            VIDEO_URL: ''
+            VIDEO_URL: '',
           })
           .then((course) => {
             res.status(200).json(course);
@@ -105,17 +106,41 @@ const getCourseTypes = (req, res, next) => {
     .then((result) => res.json({ courseTypes: result }))
     .catch((err) => next(err));
 };
+
+const assignCourse = (req, res, next) => {
+  const courseId = req.params.id;
+  const employeeTypeId = req.params.employeeTypeId;
+
+  return employeeTypeService
+    .getUsersWithAssignementsByCourseIdForEmployeeType(employeeTypeId, courseId)
+    .then((result) => {
+      let usersToAssign = result.users
+        .filter((current) => (current.COURSE_USERs.length ? false : true))
+        .map((current) => current.ID);
+
+      courseService
+        .assignCourseToEmployeeType(courseId, employeeTypeId)
+        .then((res1) => {
+          courseService
+            .assignCourseToUsers(courseId, usersToAssign)
+            .then((results) => res.json(results));
+        });
+    })
+    .catch((err) => next(err));
+};
+
 //#endregion
 
 module.exports = {
   getCourse,
   addCourse,
   getFile,
+  assignCourse,
   uploadFile,
   getCourseWithSignedUrls,
   getQuizForCourse,
   setQuizForCourse,
   completeCourse,
   uploadVideoToCourse,
-  getCourseTypes
+  getCourseTypes,
 };

@@ -5,16 +5,21 @@ const router = express.Router();
 
 //#region 'LOCAL DEP'
 const companiesController = require('../controllers/companiesController');
+const authenticateToken = require('./../middleware/authenticateToken');
 
 //#endregion
-router.get('/', companiesController.getAll);
+router.get('/', authenticateToken, companiesController.getAll);
 
-router.get('/:companyId', companiesController.getCompany);
+router.get('/:companyId', authenticateToken, companiesController.getCompany);
 
-router.post('/', companiesController.addCompany);
+router.post('/', authenticateToken, companiesController.addCompany);
 
-router.delete('/:companyId', companiesController.deleteCompany);
+router.delete(
+  '/:companyId',
+  authenticateToken,
+  companiesController.deleteCompany
+);
 
-router.put('/:companyId', companiesController.updateCompany);
+router.put('/:companyId', authenticateToken, companiesController.updateCompany);
 
 module.exports = router;
