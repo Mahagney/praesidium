@@ -14,6 +14,7 @@ router.post('/', authenticateToken, coursesController.addCourse);
 router.get('/:id/video', authenticateToken, coursesController.getFile);
 router.post(
   '/:id/employeeType/:employeeTypeId',
+  authenticateToken,
   coursesController.assignCourse
 );
 router.post(
