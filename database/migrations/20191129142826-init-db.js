@@ -23,13 +23,26 @@ module.exports = {
               type: Sequelize.STRING(13)
             },
             EMAIL: {
-              type: Sequelize.STRING(40)
+              type: Sequelize.STRING(40),
+              unique: true
             },
             PASSWORD: {
               type: Sequelize.STRING(60)
             },
             ONE_TIME_AUTH: {
               type: Sequelize.BOOLEAN
+            },
+            ID_COMPANY: {
+              allowNull: false,
+              type: Sequelize.BIGINT,
+              references: {
+                model: 'COMPANY',
+                key: 'ID'
+              }
+            },
+            deletedAt: {
+              allowNull: true,
+              type: Sequelize.DATE
             },
             createdAt: {
               allowNull: false,
@@ -55,6 +68,11 @@ module.exports = {
               allowNull: false,
               type: Sequelize.STRING(50)
             },
+            CODE: {
+              allowNull: false,
+              type: Sequelize.STRING(50),
+              unique: true
+            },
             createdAt: {
               allowNull: false,
               type: Sequelize.DATE
@@ -62,7 +80,11 @@ module.exports = {
             updatedAt: {
               allowNull: false,
               type: Sequelize.DATE
-            }
+            },
+            deletedAt: {
+              allowNull: true,
+              type: Sequelize.DATE
+            },
           },
           { transaction: t }
         ),

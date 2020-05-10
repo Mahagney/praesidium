@@ -14,9 +14,23 @@ router.get(
   usersController.getUserCourses
 );
 
+router.put('/:userId',
+  authenticateToken,
+  usersController.updateUser);
+
+router.delete('/:userId',
+  authenticateToken,
+  usersController.deleteUser);
+
 router.get(
   '/:userId/courses/uncompleted',
   authenticateToken,
   usersController.getUncompletedUserCourses
+);
+
+router.get(
+  '/',
+  authenticateToken,
+  usersController.getUsers
 );
 module.exports = router;

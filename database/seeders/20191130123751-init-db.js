@@ -14,6 +14,7 @@ module.exports = {
               EMAIL: 'robert@gmail.com',
               PASSWORD: 'password',
               ONE_TIME_AUTH: false,
+              ID_COMPANY: 1,
               createdAt: new Date(),
               updatedAt: new Date()
             },
@@ -24,6 +25,7 @@ module.exports = {
               EMAIL: 'ovidiu@gmail.com',
               PASSWORD: 'password',
               ONE_TIME_AUTH: false,
+              ID_COMPANY: 1,
               createdAt: new Date(),
               updatedAt: new Date()
             },
@@ -34,6 +36,18 @@ module.exports = {
               EMAIL: 'saleh@gmail.com',
               PASSWORD: 'password',
               ONE_TIME_AUTH: false,
+              ID_COMPANY: 2,
+              createdAt: new Date(),
+              updatedAt: new Date()
+            },
+            {
+              FIRST_NAME: 'fake',
+              LAST_NAME: 'user c3',
+              CNP: '1921212001445',
+              EMAIL: 'fake@gmail.com',
+              PASSWORD: 'password',
+              ONE_TIME_AUTH: false,
+              ID_COMPANY: 3,
               createdAt: new Date(),
               updatedAt: new Date()
             }
@@ -45,16 +59,19 @@ module.exports = {
           [
             {
               NAME: 'Programator',
+              CODE: '1234',
               createdAt: new Date(),
               updatedAt: new Date()
             },
             {
               NAME: 'Sofer',
+              CODE: '1235',
               createdAt: new Date(),
               updatedAt: new Date()
             },
             {
               NAME: 'Manager',
+              CODE: '1236',
               createdAt: new Date(),
               updatedAt: new Date()
             }

@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 
 const sequelize = require('../config/sequelizeConfig');
 
-class User extends Sequelize.Model {}
+class User extends Sequelize.Model { }
 User.init(
   {
     ID: {
@@ -50,6 +50,15 @@ User.init(
       defaultValue: false
     },
 
+    ID_COMPANY: {
+      allowNull: false,
+      type: Sequelize.BIGINT,
+      references: {
+        model: 'COMPANY',
+        key: 'ID'
+      }
+    },
+
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE
@@ -57,6 +66,12 @@ User.init(
 
     updatedAt: {
       allowNull: false,
+      type: Sequelize.DATE
+    },
+
+    deletedAt: {
+      allowNull: true,
+      defaultValue: null,
       type: Sequelize.DATE
     }
   },

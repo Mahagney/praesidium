@@ -12,7 +12,8 @@ module.exports = {
         type: Sequelize.STRING
       },
       CUI: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: true
       },
       EMAIL: {
         type: Sequelize.STRING
