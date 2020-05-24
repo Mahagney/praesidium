@@ -116,7 +116,7 @@ const updatePassword = (req, res, next) => {
       if (!user) {
         const err = new Error();
         err.statusCode = 401;
-        err.customMessage = 'User not found!';
+        err.customMessage = 'Credentiale gresite!';
         throw err;
       }
       return currentPassword === user.PASSWORD ? true : false;
@@ -124,6 +124,13 @@ const updatePassword = (req, res, next) => {
     .then((isValid) => {
       if (isValid) {
         return bcrypt.hash(newPassword, 12);
+      }
+      else
+      {
+        const err = new Error();
+        err.statusCode = 401;
+        err.customMessage = 'Credentiale gresite!';
+        throw err;
       }
     })
     .then((hashedPassword) => {

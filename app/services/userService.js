@@ -31,9 +31,10 @@ const getUserByEmail = (email) => {
   return User.findOne({
     where: { EMAIL: email }
   }).catch((error) => {
-    let err = new Error(error);
+    let err = new Error();
     err.statusCode = 500;
-    err.customMessage = 'Getting user by email -> USER SERVICE ERROR';
+    //to do logging error object
+    //err.customMessage = 'Getting user by email -> USER SERVICE ERROR';
     throw err;
   });
 };
@@ -204,7 +205,8 @@ const updateUserPassword = (email, newPassword) => {
     })
     .then((resultUpdateOneTimeAuth) => {
       if (resultUpdateOneTimeAuth[0]) {
-        return seqTransaction.commit();
+        //return seqTransaction.commit();
+        throw new Error()
       }
     })
     .then((result) => {
@@ -214,7 +216,7 @@ const updateUserPassword = (email, newPassword) => {
     })
     .catch((error) => {
       seqTransaction.rollback();
-      error.customMessage = 'Update user password -> USER SERVICE ERROR';
+      //LOG ERROR on server -> error.customMessage = 'Update user password -> USER SERVICE ERROR';
       throw error;
     });
 };
