@@ -20,20 +20,30 @@ router.put(
   [
     body(
       'currentPassword',
-      'Introduceti o parola intre 8 - 50 caractere. Aceasta poate sa contina doar litere si cifre.'
-    ),
+      'Parola curenta depaseste lungimea maxima permisa!'
+    )
+    .trim()
+    .isLength({max:50}),
+
     body(
       'newPassword',
-      'Introduceti o parola intre 8 - 50 caractere. Aceasta poate sa contina doar litere si cifre.'
+      'Introduceti o parola care sa contina minim 8 caractere!'
     )
-      .isLength({ min: 8, max: 50 })
-      .isAlphanumeric()
-      .trim(),
-    body('confirmPassword')
+    .trim()
+    .isLength({ min: 8 }),
+
+    body(
+      'newPassword',
+      'Noua parola depaseste lungimea maxima permisa!'
+    )
+    .trim()
+    .isLength({ max: 50 }),
+
+    body('confirmNewPassword')
       .trim()
       .custom((value, { req }) => {
         if (value !== req.body.newPassword) {
-          throw new Error('Parolele trebuie sa coincida!');
+          throw new Error('Este gresita confirmarea parolei!');
         }
         return true;
       })
