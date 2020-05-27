@@ -205,8 +205,7 @@ const updateUserPassword = (email, newPassword) => {
     })
     .then((resultUpdateOneTimeAuth) => {
       if (resultUpdateOneTimeAuth[0]) {
-        //return seqTransaction.commit();
-        throw new Error()
+        return seqTransaction.commit();
       }
     })
     .then((result) => {
