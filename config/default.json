@@ -1,6 +1,6 @@
 {
   "corsOptions": {
-    "origin": "http://localhost:3000",
+    "origin": ["http://localhost:3000","http://praesidium.s3-website.eu-central-1.amazonaws.com/"],
     "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
     "credentials": true,
     "exposedHeaders": ["Set-Cookie"],
