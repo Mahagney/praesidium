@@ -28,14 +28,14 @@ pm2 status
 cd /home/ubuntu/praesidium
 
 #create .env
-DEPLOY_SERVERS=$DEPLOY_SERVERS
+echo "params=" $0 $1 
 
 touch .env
-printf "%s" "$DEPLOY_SERVERS" > .env
+printf "%s" "$1" > .env
 
 #install npm packages
 echo "Running npm install"
 npm install
 
 #Restart the node server
-npm start
+pm2 start ./bin/www

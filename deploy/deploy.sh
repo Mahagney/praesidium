@@ -15,6 +15,7 @@ echo "$PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
 
 # disable the host key checking.
 chmod +x ./deploy/disableHostKeyChecking.sh
+chmod +x ./deploy/updateAndRestart.sh
 
 ./deploy/disableHostKeyChecking.sh
 echo "disableHostKeyChecking"
@@ -36,5 +37,5 @@ echo "ALL_SERVERS ${ALL_SERVERS}"
 for server in "${ALL_SERVERS[@]}"
 do
   echo "deploying to ${server}"
-  ssh ubuntu@${server} 'bash' < ./deploy/updateAndRestart.sh
+  ssh ubuntu@${server} 'bash' < ./deploy/updateAndRestart.sh $ENV
 done

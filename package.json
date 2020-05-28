@@ -6,7 +6,8 @@
     "debug": "SET DEBUG=praesidium:* & npm run devstart",
     "start": "node ./bin/www",
     "prod": "node ./bin/www --port 3000",
-    "devstart": "nodemon ./bin/www "
+    "devstart": "nodemon ./bin/www ",
+    "start-server": "pm2 start ./bin/www"
   },
   "dependencies": {
     "aws-cloudfront-sign": "^2.2.0",
