@@ -14,6 +14,8 @@ echo "$PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
 # ** End of alternative approach
 
 # disable the host key checking.
+chmod +x ./deploy/disableHostKeyChecking.sh
+
 ./deploy/disableHostKeyChecking.sh
 echo "disableHostKeyChecking"
 
