@@ -11,7 +11,7 @@ stages:
 
 deployToAWS:
   only:
-    - CI/CD
+    - master
   stage: deploy
   script:
     - bash deploy/deploy.sh
