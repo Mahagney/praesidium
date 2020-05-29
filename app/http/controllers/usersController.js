@@ -23,7 +23,7 @@ const deleteUser = (req, res, next) => {
 
 const getUserCourses = (req, res, next) => {
   userService
-    .getUserCourses(req.userId)
+    .getUserCourses(req.params.userId)
     .then((courses) => {
       res.status(200).json(courses);
     })

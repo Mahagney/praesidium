@@ -47,9 +47,8 @@ const isSecure = app.get('env') != 'development';
 
 const CORS_OPTIONS = config.corsOptions;
 //#endregion
-
 //#region 'MIDDLEWARES'
-app.set('port', process.env.PORT || 3000);
+
 app.use(cors(CORS_OPTIONS));
 app.use(express.json()); //it includes body-parser
 app.use(express.urlencoded({ extended: true }));
@@ -68,6 +67,8 @@ app.use('/users', usersRoutes);
 app.use('/courses', coursesRoutes);
 app.use('/companies', companiesRouter);
 app.use('/employeeTypes', employeeTypesRouter);
+
+app.get('/health', (req,res,next) => res.send("Running"));
 
 //global error handler for the app
 app.use((error, req, res, next) => {
