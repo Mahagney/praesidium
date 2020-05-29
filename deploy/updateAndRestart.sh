@@ -28,7 +28,10 @@ pm2 status
 cd /home/ubuntu/praesidium
 
 #create .env
-echo "params=" $0 $1 
+echo "param0=" $0
+echo "param1=" $1
+echo "param2=" $2
+echo "param3=" $3
 
 touch .env
 printf "%s" "$1" > .env

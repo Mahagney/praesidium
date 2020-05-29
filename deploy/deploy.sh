@@ -37,5 +37,5 @@ echo "ALL_SERVERS ${ALL_SERVERS}"
 for server in "${ALL_SERVERS[@]}"
 do
   echo "deploying to ${server}"
-  ssh ubuntu@${server} 'bash -s $ENV' < ./deploy/updateAndRestart.sh
+  ssh ubuntu@${server} 'bash -s ' -- < ./deploy/updateAndRestart.sh "$ENV"
 done
