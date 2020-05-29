@@ -31,8 +31,8 @@ ALL_SERVERS=(${DEPLOY_SERVERS//,/ })
 echo "ALL_SERVERS ${ALL_SERVERS}"
 
 echo "private key ${AWS_PRIVATE_KEY}"
-NEW_KEY = '"${AWS_PRIVATE_KEY}"'
-NEW_KEY_2 = "\"${AWS_PRIVATE_KEY}\""
+NEW_KEY='"${AWS_PRIVATE_KEY}"'
+NEW_KEY_2="\"${AWS_PRIVATE_KEY}\""
 echo "new key ${NEW_KEY}"
 echo "new key 2 ${NEW_KEY2}" 
 
