@@ -31,10 +31,9 @@ ALL_SERVERS=(${DEPLOY_SERVERS//,/ })
 echo "ALL_SERVERS ${ALL_SERVERS}"
 
 echo "private key ${AWS_PRIVATE_KEY}"
-NEW_KEY='"${AWS_PRIVATE_KEY}"'
+
 NEW_KEY_2="\"${AWS_PRIVATE_KEY}\""
-echo "new key ${NEW_KEY}"
-echo "new key 2 ${NEW_KEY2}" 
+
 
 
 # Lets iterate over this array and ssh into each EC2 instance
@@ -42,5 +41,5 @@ echo "new key 2 ${NEW_KEY2}"
 for server in "${ALL_SERVERS[@]}"
 do
   echo "deploying to ${server}"
-  ssh ubuntu@${server} 'bash -s ' -- < ./deploy/updateAndRestart.sh "${ENV}" "${NEW_KEY}" "${NEW_KEY_2}"
+  ssh ubuntu@${server} 'bash -s ' -- < ./deploy/updateAndRestart.sh "${ENV}" "${NEW_KEY_2}"
 done

@@ -28,9 +28,6 @@ pm2 status
 cd /home/ubuntu/praesidium
 
 echo "arg2 " $2
-echo "arg3 " $3
-
-echo $3
 
 #create AWS_PRIVATE_KEY
 touch AWS_PRIVATE_KEY.pem
