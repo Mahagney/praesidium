@@ -27,13 +27,12 @@ pm2 status
 
 cd /home/ubuntu/praesidium
 
-#create .env
-echo "param0=" $0
-echo "param1=" $1
-echo "param2=" $2
-echo "param3=" $3
+#create AWS_PRIVATE_KEY
+touch AWS_PRIVATE_KEY.pem
+printf "%s" "$2" > AWS_PRIVATE_KEY.pem
 
-touch .env
+#create.env
+touch .env.pem
 printf "%s" "$1" > .env
 
 #install npm packages
