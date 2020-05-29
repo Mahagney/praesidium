@@ -5,12 +5,14 @@
   "scripts": {
     "debug": "SET DEBUG=praesidium:* & npm run devstart",
     "start": "node ./bin/www",
-    "devstart": "nodemon ./bin/www"
+    "prod": "node ./bin/www --port 3000",
+    "devstart": "nodemon ./bin/www ",
+    "start-server": "pm2 start ./bin/www"
   },
   "dependencies": {
     "aws-cloudfront-sign": "^2.2.0",
     "aws-sdk": "^2.601.0",
-    "bcrypt": "^3.0.6",
+    "bcryptjs": "^2.4.3",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
