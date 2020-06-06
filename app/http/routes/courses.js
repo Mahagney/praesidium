@@ -11,8 +11,6 @@ const coursesController = require('./../controllers/coursesController');
 router.get('/', coursesController.getCoursesList);
 router.post('/',  coursesController.addCourse);
 
-router.get('/:id', coursesController.getCourse);
-
 //TO DO: remove ID,unused
 router.get('/:id/video', authenticateToken, coursesController.getFile);
 router.post(
