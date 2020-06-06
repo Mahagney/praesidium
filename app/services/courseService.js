@@ -78,7 +78,7 @@ const setQuizForCourse = (courseId, quiz) => {
 const completeCourse = (courseId, userId, score) => {
   return CourseUser.update(
     { SCORE: score },
-    { where: { ID_USER: userId, ID_USER: courseId }, returning: true, plain: true }
+    { where: { ID_USER: userId, ID_COURSE: courseId }, returning: true, plain: true }
   );
 };
 

@@ -101,7 +101,7 @@ const completeCourse = (req, res, next) => {
   courseService
     .completeCourse(req.params.id, req.params.userId, req.body.score)
     .then((result) => {
-      res.json({ courseId: result.dataValues.ID_COURSE });
+      res.json("done");
     })
     .catch((err) => next(err));
 };
