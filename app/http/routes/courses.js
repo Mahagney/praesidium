@@ -8,8 +8,11 @@ const authenticateToken = require('./../middleware/authenticateToken');
 const coursesController = require('./../controllers/coursesController');
 //#endregion
 
-router.get('/', authenticateToken, coursesController.getCourse);
-router.post('/', authenticateToken, coursesController.addCourse);
+router.get('/', coursesController.getCoursesList);
+router.post('/',  coursesController.addCourse);
+
+router.get('/:id', coursesController.getCourse);
+
 //TO DO: remove ID,unused
 router.get('/:id/video', authenticateToken, coursesController.getFile);
 router.post(

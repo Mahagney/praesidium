@@ -1,6 +1,7 @@
 //#region 'NPM DEP'
 const passGenerator = require('generate-password');
 const sequelize = require('../../database/config/sequelizeConfig');
+const { Op } = require("sequelize");
 //#endregion
 
 //#region 'LOCAL DEP'
@@ -132,36 +133,22 @@ const getUserCourses = (userId) => {
     });
 };
 
-const getUncompletedUserCourses = (userId) => {
-  return Course.findAll({
-    attributes: ['ID', 'NAME'],
+const getUncompletedUserCourses = (userId, minScore) => {
+  return CourseUser.findAll({
+    attributes: ['ID_COURSE'],
+    where: { ID_USER: userId, SCORE: { [Op.lt]: 5 } },
     include: [
       {
-        model: EmployeeType,
-        include: [
-          {
-            model: User,
-            as: 'users',
-            attributes: ['ID'],
-            through: { attributes: ['ID'] },
-            where: { ID: userId }
-          }
-        ]
-      },
-      {
-        required: false,
-        model: CourseUser,
-        attributes: ['ID', 'SCORE'],
-        where: { ID_USER: userId }
+        model: Course,
+        attributes: ['ID','NAME']
       }
     ]
   })
     .then((courses) =>
       courses
-        .filter((currentCourse) => currentCourse.COURSE_USERs.length === 0)
         .map((currentCourse) => ({
-          ID: currentCourse.ID,
-          NAME: currentCourse.NAME
+          ID: currentCourse.COURSE.ID,
+          NAME: currentCourse.COURSE.NAME
         }))
     )
     .catch((error) => {

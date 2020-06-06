@@ -8,8 +8,14 @@ const employeeTypeService = require('./../../services/employeeTypeService');
 
 //TEMPORARY LOGIC
 const getCourse = (req, res, next) => {
-  courseService.getCourse(req.courseId).then((course) => {
+  courseService.getCourse(req.params.id).then((course) => {
     res.status(200).json(course);
+  });
+};
+
+const getCoursesList = (req, res, next) => {
+  courseService.getCoursesList().then((courses) => {
+    res.status(200).json(courses);
   });
 };
 
@@ -143,4 +149,5 @@ module.exports = {
   completeCourse,
   uploadVideoToCourse,
   getCourseTypes,
+  getCoursesList
 };
