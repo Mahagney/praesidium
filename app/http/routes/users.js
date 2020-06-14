@@ -8,6 +8,8 @@ const authenticateToken = require('./../middleware/authenticateToken');
 const usersController = require('./../controllers/usersController');
 //#endregion
 
+//!!!! keep in mind the order of the endpoints
+
 router.get(
   '/:userId/courses',
   authenticateToken,

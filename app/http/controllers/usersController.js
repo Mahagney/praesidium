@@ -40,22 +40,26 @@ const getUserCourses = (req, res, next) => {
 const getUserCourse = async (req, res, next) => {
   try {
     const course = await userService.getUserCourse(req.params.userId, req.params.courseId)
-    res.status(200).json(
-      {
+    if (course != null) {
+      res.status(200).json({
         ID: course.ID,
         NAME: course.NAME,
         PDF_URL: awsService.getSignedUrl(course.PDF_URL),
         VIDEO_URL: awsService.getSignedUrl(course.VIDEO_URL)
-      }
-    )
+      })
+    }
+    else
+    {
+      res.status(404).json(null)
+    }
   } catch (error) {
-    throw error
+    next(error)
   }
-};
+}
 
 const getUncompletedUserCourses = (req, res, next) => {
   userService
-    .getUncompletedUserCourses(req.userId,course.MIN_SCORE)
+    .getUncompletedUserCourses(req.userId, course.MIN_SCORE)
     .then((courses) => {
       res.status(200).json(courses);
     })

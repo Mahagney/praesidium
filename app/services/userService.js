@@ -147,11 +147,17 @@ const getUserCourse = async (userId, courseId) => {
       }]
     })
 
-    return {
-      ID: userCourse.COURSE.ID,
-      NAME: userCourse.COURSE.NAME,
-      PDF_URL: userCourse.COURSE.PDF_URL,
-      VIDEO_URL: userCourse.COURSE.VIDEO_URL
+    if (userCourse != null) {
+      return {
+        ID: userCourse.COURSE.ID,
+        NAME: userCourse.COURSE.NAME,
+        PDF_URL: userCourse.COURSE.PDF_URL,
+        VIDEO_URL: userCourse.COURSE.VIDEO_URL
+      }
+    }
+    else
+    {
+      return null
     }
   } catch (error) {
     error.statusCode = 500;

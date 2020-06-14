@@ -10,6 +10,8 @@ const coursesController = require('./../controllers/coursesController')
 const role = require('./../../utils/constants').role
 //#endregion
 
+//!!!! keep in mind the order of the endpoints
+
 router.get('/', authenticateToken, authorization(role.ADMIN), coursesController.getCoursesList)
 router.get('/types', authenticateToken, authorization(role.ADMIN), coursesController.getCourseTypes)
 router.get(
