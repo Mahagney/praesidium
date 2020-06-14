@@ -4,12 +4,22 @@ const router = express.Router();
 //#endregion
 
 //#region 'LOCAL DEP'
-const authenticateToken = require('./../middleware/authenticateToken');
-const coursesController = require('./../controllers/coursesController');
+const authenticateToken = require('./../middleware/authenticateToken')
+const authorization = require('./../middleware/authorization')
+const coursesController = require('./../controllers/coursesController')
+const role = require('./../../utils/constants').role
 //#endregion
 
-router.get('/', coursesController.getCoursesList);
-router.post('/',  coursesController.addCourse);
+router.get('/', authenticateToken, authorization(role.ADMIN), coursesController.getCoursesList)
+router.get('/types', authenticateToken, authorization(role.ADMIN), coursesController.getCourseTypes)
+router.get(
+  '/:id',
+  authenticateToken,
+  authorization(role.ADMIN),
+  coursesController.getCourseWithSignedUrls
+);
+router.post('/', authenticateToken, authorization(role.ADMIN), coursesController.addCourse)
+
 
 //TO DO: remove ID,unused
 router.get('/:id/video', authenticateToken, coursesController.getFile);
@@ -23,12 +33,8 @@ router.post(
   authenticateToken,
   coursesController.uploadVideoToCourse
 );
-router.get('/types', authenticateToken, coursesController.getCourseTypes);
-router.get(
-  '/:id',
-  authenticateToken,
-  coursesController.getCourseWithSignedUrls
-);
+
+
 router.get('/:id/quiz', authenticateToken, coursesController.getQuizForCourse);
 router.post('/:id/quiz', authenticateToken, coursesController.setQuizForCourse);
 router.put(

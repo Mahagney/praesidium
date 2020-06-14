@@ -82,8 +82,9 @@ const completeCourse = (courseId, userId, score) => {
   );
 };
 
-const getCourseTypes = () => {
-  return CourseType.findAll({ attributes: ['ID', 'NAME', 'MONTHS_NUMBER'] });
+const getCourseTypes = async () => {
+  coursesTypes = await CourseType.findAll({ attributes: ['ID', 'NAME', 'MONTHS_NUMBER'] })
+  return coursesTypes
 };
 
 const assignCourseToUsers = (courseId, userIds) => {

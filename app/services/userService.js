@@ -133,10 +133,36 @@ const getUserCourses = (userId) => {
     });
 };
 
+const getUserCourse = async (userId, courseId) => {
+  try {
+    const userCourse = await CourseUser.findOne({
+      attributes: ['ID_COURSE'],
+      where: {
+        ID_USER: userId,
+        ID_COURSE: courseId
+      },
+      include: [{
+        model: Course,
+        attributes: ['ID', 'NAME', 'VIDEO_URL', 'PDF_URL']
+      }]
+    })
+
+    return {
+      ID: userCourse.COURSE.ID,
+      NAME: userCourse.COURSE.NAME,
+      PDF_URL: userCourse.COURSE.PDF_URL,
+      VIDEO_URL: userCourse.COURSE.VIDEO_URL
+    }
+  } catch (error) {
+    error.statusCode = 500;
+    throw err;
+  }
+}
+
 const getUncompletedUserCourses = (userId, minScore) => {
   return CourseUser.findAll({
     attributes: ['ID_COURSE'],
-    where: { ID_USER: userId, SCORE: { [Op.lt]: 5 } },
+    where: { ID_USER: userId, SCORE: { [Op.lt]: minScore } },
     include: [
       {
         model: Course,
@@ -235,6 +261,7 @@ module.exports = {
   createUser,
   updateUserPassword,
   getUserCourses,
+  getUserCourse,
   getUncompletedUserCourses,
   getUsers,
   updateUser,

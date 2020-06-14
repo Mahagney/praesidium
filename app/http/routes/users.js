@@ -14,6 +14,8 @@ router.get(
   usersController.getUserCourses
 );
 
+router.get('/:userId/course/:courseId',authenticateToken,usersController.getUserCourse)
+
 router.put('/:userId',
   authenticateToken,
   usersController.updateUser);
