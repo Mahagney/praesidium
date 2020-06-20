@@ -9,6 +9,7 @@ const jwt = require('jsonwebtoken');
 const userService = require('../../services/userService');
 const emailService = require('../../services/emailService');
 const fileService = require('../../services/fileService');
+const role = require('./../../utils/constants').role
 //#endregion
 
 //#region 'INTERFACE'
@@ -83,7 +84,8 @@ const logIn = (req, res, next) => {
         {
           id: loadedUser.ID,
           email: loadedUser.EMAIL,
-          one_time_auth: loadedUser.ONE_TIME_AUTH
+          one_time_auth: loadedUser.ONE_TIME_AUTH,
+          role: loadedUser.IS_ADMIN ? role.ADMIN : role.USER
         },
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: '1h' }

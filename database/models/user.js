@@ -50,6 +50,12 @@ User.init(
       defaultValue: false
     },
 
+    IS_ADMIN: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
+    },
+
     ID_COMPANY: {
       allowNull: false,
       type: Sequelize.BIGINT,

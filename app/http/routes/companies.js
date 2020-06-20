@@ -8,6 +8,9 @@ const companiesController = require('../controllers/companiesController');
 const authenticateToken = require('./../middleware/authenticateToken');
 
 //#endregion
+
+//!!!! keep in mind the order of the endpoints
+
 router.get('/', authenticateToken, companiesController.getAll);
 
 router.get('/:companyId', authenticateToken, companiesController.getCompany);

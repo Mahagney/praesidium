@@ -15,6 +15,15 @@ const getCourse = (courseId) => {
   return Course.findByPk(courseId);
 };
 
+const getCoursesList = () => {
+  return Course.findAll()    
+    .then((courses) =>
+      courses.map((currentCourse) => ({
+        ID: currentCourse.ID,
+        NAME: currentCourse.NAME
+      })))
+};
+
 const addCourse = (course) => {
   return Course.create(course).catch((error) => {
     let err = new Error(error);
@@ -66,16 +75,16 @@ const setQuizForCourse = (courseId, quiz) => {
   return Promise.all(questionActions);
 };
 
-const completeCourse = (courseID, userId, score) => {
-  return CourseUser.create({
-    ID_COURSE: courseID,
-    ID_USER: userId,
-    SCORE: score,
-  });
+const completeCourse = (courseId, userId, score) => {
+  return CourseUser.update(
+    { SCORE: score },
+    { where: { ID_USER: userId, ID_COURSE: courseId }, returning: true, plain: true }
+  );
 };
 
-const getCourseTypes = () => {
-  return CourseType.findAll({ attributes: ['ID', 'NAME', 'MONTHS_NUMBER'] });
+const getCourseTypes = async () => {
+  coursesTypes = await CourseType.findAll({ attributes: ['ID', 'NAME', 'MONTHS_NUMBER'] })
+  return coursesTypes
 };
 
 const assignCourseToUsers = (courseId, userIds) => {
@@ -108,4 +117,5 @@ module.exports = {
   addCourse,
   assignVideoToCourse,
   getCourseTypes,
+  getCoursesList
 };

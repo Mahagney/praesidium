@@ -8,6 +8,9 @@ const employeeTypesController = require('../controllers/employeeTypesController'
 const authenticateToken = require('./../middleware/authenticateToken');
 
 //#endregion
+
+//!!!! keep in mind the order of the endpoints
+
 router.get('/', authenticateToken, employeeTypesController.getEmployeeTypes);
 
 router.post('/', authenticateToken, employeeTypesController.addEmployeeType);

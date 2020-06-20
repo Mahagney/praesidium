@@ -4,12 +4,10 @@ const awsService = require('./../../services/awsService');
 const employeeTypeService = require('./../../services/employeeTypeService');
 //#endregion
 
-//#region 'INTERFACE'
 
-//TEMPORARY LOGIC
-const getCourse = (req, res, next) => {
-  courseService.getCourse(req.courseId).then((course) => {
-    res.status(200).json(course);
+const getCoursesList = (req, res, next) => {
+  courseService.getCoursesList().then((courses) => {
+    res.status(200).json(courses);
   });
 };
 
@@ -95,7 +93,7 @@ const completeCourse = (req, res, next) => {
   courseService
     .completeCourse(req.params.id, req.params.userId, req.body.score)
     .then((result) => {
-      res.json({ courseId: result.dataValues.ID_COURSE });
+      res.json("done");
     })
     .catch((err) => next(err));
 };
@@ -129,10 +127,8 @@ const assignCourse = (req, res, next) => {
     .catch((err) => next(err));
 };
 
-//#endregion
 
 module.exports = {
-  getCourse,
   addCourse,
   getFile,
   assignCourse,
@@ -143,4 +139,5 @@ module.exports = {
   completeCourse,
   uploadVideoToCourse,
   getCourseTypes,
+  getCoursesList
 };

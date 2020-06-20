@@ -10,6 +10,8 @@ const authenticateToken = require('./../middleware/authenticateToken');
 const showValidationResult = require('./../middleware/showValidationResult');
 //#endregion
 
+//!!!! keep in mind the order of the endpoints
+
 router.post('/login', authController.logIn);
 
 router.get('/logout', authController.logOut);

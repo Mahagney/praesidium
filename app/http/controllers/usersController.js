@@ -1,5 +1,7 @@
 //#region 'LOCAL DEP'
 const userService = require('./../../services/userService');
+const course = require('../../utils/constants').course
+const awsService = require('../../services/awsService')
 //#endregion
 
 //#region 'INTERFACE'
@@ -35,9 +37,29 @@ const getUserCourses = (req, res, next) => {
     });
 };
 
+const getUserCourse = async (req, res, next) => {
+  try {
+    const course = await userService.getUserCourse(req.params.userId, req.params.courseId)
+    if (course != null) {
+      res.status(200).json({
+        ID: course.ID,
+        NAME: course.NAME,
+        PDF_URL: awsService.getSignedUrl(course.PDF_URL),
+        VIDEO_URL: awsService.getSignedUrl(course.VIDEO_URL)
+      })
+    }
+    else
+    {
+      res.status(404).json(null)
+    }
+  } catch (error) {
+    next(error)
+  }
+}
+
 const getUncompletedUserCourses = (req, res, next) => {
   userService
-    .getUncompletedUserCourses(req.userId)
+    .getUncompletedUserCourses(req.userId, course.MIN_SCORE)
     .then((courses) => {
       res.status(200).json(courses);
     })
@@ -50,4 +72,11 @@ const getUncompletedUserCourses = (req, res, next) => {
 };
 //#endregion
 
-module.exports = { getUserCourses, getUncompletedUserCourses, getUsers, updateUser, deleteUser };
+module.exports = {
+  getUserCourses,
+  getUserCourse,
+  getUncompletedUserCourses,
+  getUsers,
+  updateUser,
+  deleteUser
+};
