@@ -6,7 +6,11 @@ const {
 
 const getCompany = (companyId) => Company.findByPk(companyId);
 
-const getAll = () => Company.findAll();
+const getAll = () => Company.findAll({   
+    where: {
+        deletedAt: null
+    }
+});
 
 const addCompany = (company) => {
     return Company.create(company).catch((error) => {
@@ -18,12 +22,16 @@ const addCompany = (company) => {
 }
 
 const deleteCompany = (companyId) => {
-    return Company.destroy({
-        where: {
-            ID: companyId
+    return Company.findByPk(companyId)
+      .then(currentCompany => {
+        // Check if record exists in db
+        if (currentCompany) {
+          let newCompany = { ...currentCompany };
+          newCompany.deletedAt = new Date();
+          return currentCompany.update(newCompany)
         }
-    });
-}
+      })
+  }
 
 const updateCompany = (companyId, company) => {
     return Company.findByPk(companyId)
