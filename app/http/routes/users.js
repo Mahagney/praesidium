@@ -6,6 +6,7 @@ const router = express.Router();
 //#region 'LOCAL DEP'
 const authenticateToken = require('./../middleware/authenticateToken');
 const usersController = require('./../controllers/usersController');
+const authController = require('./../controllers/authController');
 //#endregion
 
 //!!!! keep in mind the order of the endpoints
@@ -18,9 +19,15 @@ router.get(
 
 router.get('/:userId/course/:courseId',authenticateToken,usersController.getUserCourse)
 
+router.put('/:userId/employeeType',
+  usersController.updateUserEmployeeType);
+
 router.put('/:userId',
   authenticateToken,
   usersController.updateUser);
+
+router.post('/',
+  authController.createUser);
 
 router.delete('/:userId',
   authenticateToken,
