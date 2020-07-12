@@ -43,6 +43,12 @@ Course.init(
     updatedAt: {
       allowNull: false,
       type: Sequelize.DATE
+    },
+
+    deletedAt: {
+      allowNull: true,
+      defaultValue: null,
+      type: Sequelize.DATE
     }
   },
   {

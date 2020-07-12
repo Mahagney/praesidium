@@ -17,6 +17,12 @@ const updateUser = (req, res, next) => {
     .catch(error => next(error));
 }
 
+const updateUserEmployeeType = (req, res, next) => {
+  userService.changeEmployeeTypeForUser(req.params.userId, req.body.employeeTypeId)
+    .then(users => res.status(200).json(users))
+    .catch(error => next(error));
+}
+
 const deleteUser = (req, res, next) => {
   userService.deleteUser(req.params.userId)
     .then(() => res.status(200).json("User deleted"))
@@ -78,5 +84,6 @@ module.exports = {
   getUncompletedUserCourses,
   getUsers,
   updateUser,
-  deleteUser
+  deleteUser,
+  updateUserEmployeeType
 };

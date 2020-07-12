@@ -48,13 +48,19 @@ CourseUser.init(
     updatedAt: {
       allowNull: false,
       type: Sequelize.DATE
+    },
+    
+    deletedAt: {
+      allowNull: true,
+      defaultValue: null,
+      type: Sequelize.DATE
     }
   },
   {
     sequelize,
     modelName: 'COURSE_USER',
     freezeTableName: true
-  }
+  },
 );
 
 module.exports = CourseUser;

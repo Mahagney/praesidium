@@ -23,9 +23,20 @@ const getUsers = () => {
     },
     include: [{
       model: Company,
-      attributes: ['NAME']
+      attributes: ['ID','NAME']
+    },
+    {
+      model: EmployeeType,
+      through: {
+        where: {
+          deletedAt: null
+        }
+      },
+      as: 'employeeTypes',
+      attributes: ['ID','CODE'],
+      where: { deletedAt: null }
     }]
-  });
+    });
 }
 
 const getUserByEmail = (email) => {
@@ -44,7 +55,7 @@ const createUser = (jsonUser) => {
   let seqTransaction = null;
   let employeeTypeDb = null;
   let createdUser = null;
-  const user = JSON.parse(jsonUser);
+  const user = jsonUser;
 
   return sequelize
     .transaction()
@@ -53,11 +64,7 @@ const createUser = (jsonUser) => {
     })
     .then(() => {
       return EmployeeType.findOne({
-        where: {
-          NAME:
-            user.EmployeeType.charAt(0).toUpperCase() +
-            user.EmployeeType.slice(1)
-        }
+        where: { ID: user.ID_EMPLOYEE_TYPE }
       });
     })
     .then((employeeType) => {
@@ -66,15 +73,16 @@ const createUser = (jsonUser) => {
         FIRST_NAME: user.FIRST_NAME,
         LAST_NAME: user.LAST_NAME,
         CNP: user.CNP,
-        EMAIL: user.EMAIL
+        EMAIL: user.EMAIL,
+        ID_COMPANY: user.ID_COMPANY
       };
       const userPassword = passGenerator.generate({
         length: 10,
         numbers: true
       });
       newUser.PASSWORD = userPassword;
-
-      return User.create(newUser, { transaction: seqTransaction });
+      const userToReturn = User.create(newUser, { transaction: seqTransaction })
+      return userToReturn;
     })
     .then((userDb) => {
       createdUser = userDb;
@@ -260,6 +268,22 @@ const deleteUser = (userId) => {
       }
     })
 }
+
+const changeEmployeeTypeForUser = async (userId, employeeTypeId) => {
+  const t = await sequelize.transaction();
+
+  try{
+    const deletedDate = new Date();
+    await UserEmployeeType.update({ deletedAt: deletedDate},{ where : { deletedAt: null, ID_USER : userId }}, { transaction: t });
+    const result = await UserEmployeeType.create({ID_USER: userId, ID_EMPLOYEE_TYPE: employeeTypeId}, { transaction: t });
+    await t.commit();
+
+    return result
+  } catch (error){
+    await t.rollback();
+  }
+}
+
 //#endregion
 
 module.exports = {
@@ -271,5 +295,6 @@ module.exports = {
   getUncompletedUserCourses,
   getUsers,
   updateUser,
-  deleteUser
+  deleteUser,
+  changeEmployeeTypeForUser
 };
