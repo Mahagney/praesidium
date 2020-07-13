@@ -18,6 +18,7 @@ const {
 //#region 'INTERFACE'
 const getUsers = () => {
   return User.findAll({
+    attributes: ['ID','FIRST_NAME','LAST_NAME','CNP', 'EMAIL','ID_COMPANY','IS_ADMIN'],
     where: {
       deletedAt: null
     },

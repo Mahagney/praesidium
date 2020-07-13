@@ -55,6 +55,6 @@ router.put(
 );
 
 //todo : put auth middleware here
-router.post('/register', authController.register);
+router.post('/register',authenticateToken, authController.register);
 
 module.exports = router;
