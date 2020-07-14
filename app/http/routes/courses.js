@@ -20,8 +20,9 @@ router.get(
   authorization(role.ADMIN),
   coursesController.getCourseWithSignedUrls
 );
-router.post('/', authenticateToken, authorization(role.ADMIN), coursesController.addCourse)
-
+router.post('/', 
+  authenticateToken, 
+  authorization(role.ADMIN), coursesController.addCourse)
 
 //TO DO: remove ID,unused
 router.get('/:id/video', authenticateToken, coursesController.getFile);
@@ -36,9 +37,15 @@ router.post(
   coursesController.uploadVideoToCourse
 );
 
+router.get('/:id/quiz', 
+  authenticateToken,
+  coursesController.getQuizForCourse);
 
-router.get('/:id/quiz', authenticateToken, coursesController.getQuizForCourse);
-router.post('/:id/quiz', authenticateToken, coursesController.setQuizForCourse);
+router.post('/:id/quiz', 
+  authenticateToken, 
+  authorization(role.ADMIN),
+  coursesController.setQuizForCourse);
+
 router.put(
   '/:id/user/:userId/complete',
   authenticateToken,

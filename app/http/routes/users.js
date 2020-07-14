@@ -7,6 +7,8 @@ const router = express.Router();
 const authenticateToken = require('./../middleware/authenticateToken');
 const usersController = require('./../controllers/usersController');
 const authController = require('./../controllers/authController');
+const authorization = require('./../middleware/authorization');
+const role = require('./../../utils/constants').role;
 //#endregion
 
 //!!!! keep in mind the order of the endpoints
@@ -17,20 +19,28 @@ router.get(
   usersController.getUserCourses
 );
 
-router.get('/:userId/course/:courseId',authenticateToken,usersController.getUserCourse)
+router.get('/:userId/course/:courseId',
+  authenticateToken,
+  usersController.getUserCourse)
 
-router.put('/:userId/employeeType',
+router.put('/:userId/employeeType', 
+  authenticateToken,  
+  authorization(role.ADMIN),
   usersController.updateUserEmployeeType);
 
 router.put('/:userId',
-  authenticateToken,
+  authenticateToken,  
+  authorization(role.ADMIN),
   usersController.updateUser);
 
-router.post('/',
+router.post('/', 
+  authenticateToken,  
+  authorization(role.ADMIN),
   authController.createUser);
 
 router.delete('/:userId',
   authenticateToken,
+  authorization(role.ADMIN),
   usersController.deleteUser);
 
 router.get(
