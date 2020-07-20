@@ -51,13 +51,9 @@ const register = (req, res, next) => {
 
 const createUser = (req, res, next) => {
   return userService
-    .createUser(req.body)
+    .createUser(req.body, emailService.sendEmail)
     .then((createdUser) => {
-      return emailService.sendEmail(createdUser)
-    })
-    .then((email) => {
-      console.log(email)
-      res.status(201).json('User created.')
+      res.status(201).json(createdUser)
     })
     .catch((error) => {
       let err = new Error(error)
