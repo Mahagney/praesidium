@@ -14,6 +14,7 @@ const role = require('./../../utils/constants').role
 
 router.get('/', authenticateToken, authorization(role.ADMIN), coursesController.getCoursesList)
 router.get('/types', authenticateToken, authorization(role.ADMIN), coursesController.getCourseTypes)
+router.delete('/:id', coursesController.deleteCourse)
 router.get(
   '/:id',
   authenticateToken,

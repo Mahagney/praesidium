@@ -52,7 +52,7 @@ const getUserByEmail = (email) => {
   });
 };
 
-const createUser = (jsonUser) => {
+const createUser = (jsonUser, sendEmail) => {
   let seqTransaction = null;
   let employeeTypeDb = null;
   let createdUser = null;
@@ -94,6 +94,8 @@ const createUser = (jsonUser) => {
       return UserEmployeeType.create(newUserEmployeeType, {
         transaction: seqTransaction
       });
+    }).then(() => {
+      return sendEmail(createdUser)
     })
     .then(() => {
       return seqTransaction.commit();

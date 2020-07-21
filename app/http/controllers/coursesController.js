@@ -45,6 +45,17 @@ const uploadFile = (req, res, next) => {
     .catch((err) => res.send(err));
 };
 
+const deleteCourse = (req, res, next) => {
+  const courseId = req.params.id;
+  courseService.deleteCourse(courseId)
+  .then((courses) => {
+    res.status(200).json(courses)
+  })    
+  .catch((err) => {
+    res.send(500)}
+    )
+}
+
 const uploadVideoToCourse = (req, res, next) => {
   const courseId = req.params.id;
   const video = req.files.video[0];
@@ -139,5 +150,6 @@ module.exports = {
   completeCourse,
   uploadVideoToCourse,
   getCourseTypes,
-  getCoursesList
+  getCoursesList,
+  deleteCourse
 };

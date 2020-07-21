@@ -8,6 +8,7 @@ const {
   EmployeeTypeCourse,
 } = require('../../database/models');
 const fileService = require('./fileService');
+const sequelize = require('../../database/config/sequelizeConfig');
 //#endregion
 
 //TEMPORARY LOGIC
@@ -16,13 +17,62 @@ const getCourse = (courseId) => {
 };
 
 const getCoursesList = () => {
-  return Course.findAll()    
+  return Course.findAll({
+    where: {
+      deletedAt: null
+    }
+  })    
     .then((courses) =>
       courses.map((currentCourse) => ({
         ID: currentCourse.ID,
         NAME: currentCourse.NAME
       })))
 };
+
+const deleteCourse = async (courseId) => {
+  let seqTransaction = null
+  try{
+    seqTransaction = await sequelize.transaction()
+
+    const resultUpdateCourse = await Course.update(
+      {deletedAt: new Date()},
+      {
+        where: {
+          ID: courseId
+        },
+        transaction: seqTransaction
+      }
+    )
+    
+    if(!resultUpdateCourse[0]) 
+      throw new Error("resultUpdateCourse")
+    const resultCourseUser = await CourseUser.update(
+      {deletedAt: new Date()},
+      {
+        where: {
+          ID_COURSE: courseId
+        },
+        transaction: seqTransaction
+      }
+    )
+    
+    const resultEmployeeTypeCourse = await EmployeeTypeCourse.update(
+      {deletedAt: new Date()},
+      {
+        where: {
+          ID_COURSE: courseId
+        },
+        transaction: seqTransaction
+      }
+    )
+
+    return seqTransaction.commit()
+
+  } catch(err) {
+    await seqTransaction.rollback()
+    throw error
+  }
+}
 
 const addCourse = (course) => {
   return Course.create(course).catch((error) => {
@@ -117,5 +167,6 @@ module.exports = {
   addCourse,
   assignVideoToCourse,
   getCourseTypes,
-  getCoursesList
+  getCoursesList,
+  deleteCourse
 };
