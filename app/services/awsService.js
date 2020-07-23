@@ -18,13 +18,12 @@ const getSignedUrl = (fileName) => {
   );
 };
 
-const uploadFileToS3 = (fileNameParam, fileDirectoryPath, pathInBucket) => {
+const uploadFileToS3 = (fileName, fileDirectoryPath, pathInBucket) => {
   awsSDK.config.update({
     accessKeyId: process.env.S3_ACCESS_KEY_ID,
     secretAccessKey: process.env.S3_SECRET_ACCESS_KEY
   });
   const s3 = new awsSDK.S3();
-  fileName = fileNameParam.replace(/\s/g, '');
   return new Promise((resolve, reject) => {
     fs.readFile(fileDirectoryPath.toString(), (err, data) => {
       if (err) {

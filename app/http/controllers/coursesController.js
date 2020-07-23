@@ -2,6 +2,7 @@
 const courseService = require('./../../services/courseService');
 const awsService = require('./../../services/awsService');
 const employeeTypeService = require('./../../services/employeeTypeService');
+const utilsService = require('./../../services/utilsService')
 //#endregion
 
 
@@ -11,11 +12,13 @@ const getCoursesList = (req, res, next) => {
   });
 };
 
-const addCourse = (req, res, next) => {
-  const pdfFile = req.files.pdf[0];
+const addCourse = async (req, res, next) => {
+  const pdfFile = req.files.pdf[0]
+  const slug = await utilsService.generateSlug(req.body.name)
+  
   if (pdfFile) {
     awsService
-      .uploadFileToS3(pdfFile.originalname, pdfFile.path, 'pdf')
+      .uploadFileToS3(slug, pdfFile.path, 'pdf')
       .then((result) => {
         courseService
           .addCourse({
@@ -23,6 +26,7 @@ const addCourse = (req, res, next) => {
             ID_COURSE_TYPE: req.body.idCourseType,
             PDF_URL: result.path,
             VIDEO_URL: '',
+            SLUG: slug + '.pdf' 
           })
           .then((course) => {
             res.status(200).json(course);

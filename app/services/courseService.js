@@ -7,7 +7,6 @@ const {
   CourseType,
   EmployeeTypeCourse,
 } = require('../../database/models');
-const fileService = require('./fileService');
 const sequelize = require('../../database/config/sequelizeConfig');
 //#endregion
 
@@ -20,11 +19,15 @@ const getCoursesList = () => {
   return Course.findAll({
     where: {
       deletedAt: null
-    }
+    },
+    order: [
+      ['ID', 'DESC']
+    ]
   })    
     .then((courses) =>
       courses.map((currentCourse) => ({
         ID: currentCourse.ID,
+        SLUG: currentCourse.SLUG,
         NAME: currentCourse.NAME
       })))
 };

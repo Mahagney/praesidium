@@ -26,6 +26,12 @@ Course.init(
       allowNull: false
     },
 
+    SLUG: {
+      type: Sequelize.STRING(200),
+      allowNull: false,
+      unique: true
+    },
+
     PDF_URL: {
       type: Sequelize.STRING(200),
       allowNull: false
