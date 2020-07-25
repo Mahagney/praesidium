@@ -9,36 +9,36 @@ CourseType.init(
       type: Sequelize.BIGINT,
       autoIncrement: true,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
     },
 
     NAME: {
       type: Sequelize.STRING(25),
-      allowNull: false
+      allowNull: false,
     },
 
     MONTHS_NUMBER: {
       type: Sequelize.INTEGER,
-      allowNull: false
+      allowNull: false,
     },
 
     createdAt: {
       allowNull: false,
-      type: Sequelize.DATE
+      type: Sequelize.DATE,
     },
 
     updatedAt: {
       allowNull: false,
-      type: Sequelize.DATE
-    }
+      type: Sequelize.DATE,
+    },
   },
   {
     sequelize,
     modelName: 'COURSE_TYPE',
-    freezeTableName: true
-  }
+    freezeTableName: true,
+  },
 );
 
-// //Association
+// Association
 
 module.exports = CourseType;

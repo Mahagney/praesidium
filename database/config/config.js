@@ -7,20 +7,21 @@ module.exports = {
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
     dialect: 'postgres',
-    logging: console.log
+    // eslint-disable-next-line no-console
+    logging: console.log,
   },
   test: {
     username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
-    dialect: 'postgres'
+    dialect: 'postgres',
   },
   production: {
     username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
-    dialect: 'postgres'
-  }
+    dialect: 'postgres',
+  },
 };

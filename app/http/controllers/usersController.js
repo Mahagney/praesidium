@@ -1,33 +1,37 @@
-//#region 'LOCAL DEP'
-const userService = require('./../../services/userService');
-const course = require('../../utils/constants').course
-const awsService = require('../../services/awsService')
-//#endregion
+// #region 'LOCAL DEP'
+const userService = require('../../services/userService');
+const { course } = require('../../utils/constants');
+const awsService = require('../../services/awsService');
+// #endregion
 
-//#region 'INTERFACE'
-const getUsers = (req, res, next) => {
-  userService.getUsers()
-    .then(users => res.status(200).json(users))
-    .catch(error => next(error));
-}
+// #region 'INTERFACE'
+const getUsers = (_req, res, next) => {
+  userService
+    .getUsers()
+    .then((users) => res.status(200).json(users))
+    .catch((error) => next(error));
+};
 
 const updateUser = (req, res, next) => {
-  userService.updateUser(req.params.userId, req.body)
-    .then(users => res.status(200).json(users))
-    .catch(error => next(error));
-}
+  userService
+    .updateUser(req.params.userId, req.body)
+    .then((users) => res.status(200).json(users))
+    .catch((error) => next(error));
+};
 
 const updateUserEmployeeType = (req, res, next) => {
-  userService.changeEmployeeTypeForUser(req.params.userId, req.body.employeeTypeId)
-    .then(users => res.status(200).json(users))
-    .catch(error => next(error));
-}
+  userService
+    .changeEmployeeTypeForUser(req.params.userId, req.body.employeeTypeId)
+    .then((users) => res.status(200).json(users))
+    .catch((error) => next(error));
+};
 
 const deleteUser = (req, res, next) => {
-  userService.deleteUser(req.params.userId)
-    .then(() => res.status(200).json("User deleted"))
-    .catch(error => next(error));
-}
+  userService
+    .deleteUser(req.params.userId)
+    .then(() => res.status(200).json('User deleted'))
+    .catch((error) => next(error));
+};
 
 const getUserCourses = (req, res, next) => {
   userService
@@ -45,23 +49,21 @@ const getUserCourses = (req, res, next) => {
 
 const getUserCourse = async (req, res, next) => {
   try {
-    const course = await userService.getUserCourse(req.params.userId, req.params.courseId)
-    if (course != null) {
+    const userCourse = await userService.getUserCourse(req.params.userId, req.params.courseId);
+    if (userCourse != null) {
       res.status(200).json({
-        ID: course.ID,
-        NAME: course.NAME,
-        PDF_URL: awsService.getSignedUrl(course.PDF_URL),
-        VIDEO_URL: awsService.getSignedUrl(course.VIDEO_URL)
-      })
-    }
-    else
-    {
-      res.status(404).json(null)
+        ID: userCourse.ID,
+        NAME: userCourse.NAME,
+        PDF_URL: awsService.getSignedUrl(userCourse.PDF_URL),
+        VIDEO_URL: awsService.getSignedUrl(userCourse.VIDEO_URL),
+      });
+    } else {
+      res.status(404).json(null);
     }
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
 
 const getUncompletedUserCourses = (req, res, next) => {
   userService
@@ -76,7 +78,7 @@ const getUncompletedUserCourses = (req, res, next) => {
       next(err);
     });
 };
-//#endregion
+// #endregion
 
 module.exports = {
   getUserCourses,
@@ -85,5 +87,5 @@ module.exports = {
   getUsers,
   updateUser,
   deleteUser,
-  updateUserEmployeeType
+  updateUserEmployeeType,
 };

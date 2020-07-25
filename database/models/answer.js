@@ -9,41 +9,41 @@ Answer.init(
       type: Sequelize.BIGINT,
       autoIncrement: true,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
     },
 
     TEXT: {
       type: Sequelize.STRING(500),
-      allowNull: false
+      allowNull: false,
     },
 
     ID_QUESTION: {
       type: Sequelize.INTEGER,
-      allowNull: false
+      allowNull: false,
     },
 
     IS_CORRECT: {
       allowNull: false,
-      type: Sequelize.BOOLEAN
+      type: Sequelize.BOOLEAN,
     },
 
     createdAt: {
       allowNull: false,
-      type: Sequelize.DATE
+      type: Sequelize.DATE,
     },
 
     updatedAt: {
       allowNull: false,
-      type: Sequelize.DATE
-    }
+      type: Sequelize.DATE,
+    },
   },
   {
     sequelize,
     modelName: 'ANSWER',
-    freezeTableName: true
-  }
+    freezeTableName: true,
+  },
 );
 
-// //Association
+// Association
 
 module.exports = Answer;

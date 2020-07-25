@@ -1,7 +1,5 @@
-'use strict';
-
 module.exports = {
-  up: (queryInterface, Sequelize) => {
+  up: (queryInterface) => {
     return queryInterface.sequelize.transaction((t) => {
       return Promise.all([
         queryInterface.bulkInsert(
@@ -14,7 +12,7 @@ module.exports = {
               PHONE_NUMBER: '32432432432',
               DOMAIN: 'FOOD',
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               NAME: 'Company2',
@@ -23,7 +21,7 @@ module.exports = {
               PHONE_NUMBER: '02737373737',
               DOMAIN: 'SPORT',
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               NAME: 'Company3',
@@ -32,19 +30,18 @@ module.exports = {
               PHONE_NUMBER: '0273754373737',
               DOMAIN: 'IT',
               createdAt: new Date(),
-              updatedAt: new Date()
-            }
+              updatedAt: new Date(),
+            },
           ],
-          { transaction: t }
-        )])
-    })
-  },
-
-  down: (queryInterface, Sequelize) => {
-    return queryInterface.sequelize.transaction((t) => {
-      return Promise.all([
-        queryInterface.bulkDelete('COMPANY', null, { transaction: t })
+          { transaction: t },
+        ),
       ]);
     });
-  }
+  },
+
+  down: (queryInterface) => {
+    return queryInterface.sequelize.transaction((t) => {
+      return Promise.all([queryInterface.bulkDelete('COMPANY', null, { transaction: t })]);
+    });
+  },
 };

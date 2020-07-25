@@ -9,7 +9,7 @@ Course.init(
       type: Sequelize.BIGINT,
       autoIncrement: true,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
     },
 
     ID_COURSE_TYPE: {
@@ -17,45 +17,45 @@ Course.init(
       type: Sequelize.BIGINT,
       references: {
         model: 'COURSE_TYPE',
-        key: 'ID'
-      }
+        key: 'ID',
+      },
     },
 
     NAME: {
       type: Sequelize.STRING(200),
-      allowNull: false
+      allowNull: false,
     },
 
     PDF_URL: {
       type: Sequelize.STRING(200),
-      allowNull: false
+      allowNull: false,
     },
 
     VIDEO_URL: {
-      type: Sequelize.STRING(200)
+      type: Sequelize.STRING(200),
     },
 
     createdAt: {
       allowNull: false,
-      type: Sequelize.DATE
+      type: Sequelize.DATE,
     },
 
     updatedAt: {
       allowNull: false,
-      type: Sequelize.DATE
+      type: Sequelize.DATE,
     },
 
     deletedAt: {
       allowNull: true,
       defaultValue: null,
-      type: Sequelize.DATE
-    }
+      type: Sequelize.DATE,
+    },
   },
   {
     sequelize,
     modelName: 'COURSE',
-    freezeTableName: true
-  }
+    freezeTableName: true,
+  },
 );
 
 module.exports = Course;

@@ -1,4 +1,4 @@
-//#region 'LOCAL DEP'
+// #region 'LOCAL DEP'
 const User = require('./user.js');
 const Course = require('./course.js');
 const EmployeeType = require('./employeeType.js');
@@ -9,10 +9,10 @@ const Answer = require('./answer');
 const CourseUser = require('./courseUser');
 const Company = require('./company');
 const EmployeeTypeCourse = require('./employeeTypeCourse');
-//#endregion
+// #endregion
 
-//#region 'Association: USER'
-//-> USER_EMPLOYEE_TYPE
+// #region 'Association: USER'
+// USER_EMPLOYEE_TYPE
 User.belongsToMany(EmployeeType, {
   through: UserEmployeeType,
   foreignKey: 'ID_USER',
@@ -21,19 +21,19 @@ User.belongsToMany(EmployeeType, {
 });
 
 User.belongsTo(Company, { foreignKey: 'ID_COMPANY', targetKey: 'ID' });
-//#endregion
+// #endregion
 
-//#region 'Association: COURSE'
-//-> EMPLOYEE_TYPE_COURSE
+// #region 'Association: COURSE'
+// EMPLOYEE_TYPE_COURSE
 Course.belongsToMany(EmployeeType, {
   through: 'EMPLOYEE_TYPE_COURSE',
   foreignKey: 'ID_COURSE',
   otherKey: 'ID_EMPLOYEE_TYPE',
 });
-//#endregion
+// #endregion
 
-//#region 'Association: EMPLOYEE_TYPE'
-//-> USER_EMPLOYEE_TYPE
+// #region 'Association: EMPLOYEE_TYPE'
+// USER_EMPLOYEE_TYPE
 EmployeeType.belongsToMany(User, {
   through: UserEmployeeType,
   foreignKey: 'ID_EMPLOYEE_TYPE',
@@ -41,7 +41,7 @@ EmployeeType.belongsToMany(User, {
   as: 'users',
 });
 
-//-> EMPLOYEE_TYPE_COURSE
+// EMPLOYEE_TYPE_COURSE
 EmployeeType.belongsToMany(Course, {
   through: 'EMPLOYEE_TYPE_COURSE',
   foreignKey: 'ID_EMPLOYEE_TYPE',
@@ -58,12 +58,12 @@ CourseUser.belongsTo(Course, { foreignKey: 'ID_COURSE', targetKey: 'ID' });
 Course.hasMany(CourseUser, { foreignKey: 'ID_COURSE' });
 User.hasMany(CourseUser, { foreignKey: 'ID_USER' });
 CourseType.belongsTo(Course, { foreignKey: 'ID', targetKey: 'ID_COURSE_TYPE' });
-//UserEmployeeType.belongsTo(EmployeeType, { foreignKey: 'ID_EMPLOYEE_TYPE', targetKey: 'ID' });
+// UserEmployeeType.belongsTo(EmployeeType, { foreignKey: 'ID_EMPLOYEE_TYPE', targetKey: 'ID' });
 // EmployeeType.hasMany(UserEmployeeType, { foreignKey: 'ID_EMPLOYEE_TYPE' });
 // Course.hasMany(EmployeeTypeCourse, {foreignKey: 'ID_COURSE'});
 EmployeeType.hasMany(EmployeeTypeCourse, { foreignKey: 'ID_EMPLOYEE_TYPE' });
 
-//#endregion
+// #endregion
 
 module.exports = {
   User,

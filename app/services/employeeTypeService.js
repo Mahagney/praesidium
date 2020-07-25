@@ -1,16 +1,10 @@
-//#region 'NPM DEP'
-const passGenerator = require('generate-password');
+// #region 'NPM DEP'
 const sequelize = require('../../database/config/sequelizeConfig');
-//#endregion
+// #endregion
 
-//#region 'LOCAL DEP'
-const {
-  EmployeeType,
-  EmployeeTypeCourse,
-  User,
-  CourseUser,
-} = require('../../database/models');
-//#endregion
+// #region 'LOCAL DEP'
+const { EmployeeType, EmployeeTypeCourse, User, CourseUser } = require('../../database/models');
+// #endregion
 
 const getEmployeeTypes = () =>
   EmployeeType.findAll({
@@ -24,10 +18,7 @@ const getEmployeeTypesWithCourse = (courseId) => {
       'ID',
       'NAME',
       'CODE',
-      [
-        sequelize.fn('max', sequelize.col('EMPLOYEE_TYPE_COURSEs.createdAt')),
-        'LAST_SENT',
-      ],
+      [sequelize.fn('max', sequelize.col('EMPLOYEE_TYPE_COURSEs.createdAt')), 'LAST_SENT'],
     ],
     include: {
       model: EmployeeTypeCourse,
@@ -39,24 +30,22 @@ const getEmployeeTypesWithCourse = (courseId) => {
   });
 };
 
-const deleteEmployeeTypes = (id) => {
+const deleteEmployeeTypes = async (id) => {
+  // TODO: find out what happens on else (what to return)
+  // eslint-disable-next-line consistent-return
   return EmployeeType.findByPk(id).then((currentEmployeeType) => {
     // Check if record exists in db
     if (currentEmployeeType) {
-      let newEmployeeType = { ...currentEmployeeType };
+      const newEmployeeType = { ...currentEmployeeType };
       newEmployeeType.deletedAt = new Date();
       return currentEmployeeType.update(newEmployeeType);
     }
   });
 };
 
-const addEmployeeType = (newEmployeeType) =>
-  EmployeeType.create(newEmployeeType);
+const addEmployeeType = (newEmployeeType) => EmployeeType.create(newEmployeeType);
 
-const getUsersWithAssignementsByCourseIdForEmployeeType = (
-  employeeTypeId,
-  courseId
-) => {
+const getUsersWithAssignementsByCourseIdForEmployeeType = (employeeTypeId, courseId) => {
   return EmployeeType.findByPk(employeeTypeId, {
     attributes: ['ID', 'NAME'],
     include: {

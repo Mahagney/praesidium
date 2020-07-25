@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.sequelize.transaction((t) => {
@@ -11,49 +9,49 @@ module.exports = {
               allowNull: false,
               autoIncrement: true,
               primaryKey: true,
-              type: Sequelize.BIGINT
+              type: Sequelize.BIGINT,
             },
             FIRST_NAME: {
-              type: Sequelize.STRING(50)
+              type: Sequelize.STRING(50),
             },
             LAST_NAME: {
-              type: Sequelize.STRING(50)
+              type: Sequelize.STRING(50),
             },
             CNP: {
-              type: Sequelize.STRING(13)
+              type: Sequelize.STRING(13),
             },
             EMAIL: {
               type: Sequelize.STRING(40),
-              unique: true
+              unique: true,
             },
             PASSWORD: {
-              type: Sequelize.STRING(60)
+              type: Sequelize.STRING(60),
             },
             ONE_TIME_AUTH: {
-              type: Sequelize.BOOLEAN
+              type: Sequelize.BOOLEAN,
             },
             ID_COMPANY: {
               allowNull: false,
               type: Sequelize.BIGINT,
               references: {
                 model: 'COMPANY',
-                key: 'ID'
-              }
+                key: 'ID',
+              },
             },
             deletedAt: {
               allowNull: true,
-              type: Sequelize.DATE
+              type: Sequelize.DATE,
             },
             createdAt: {
               allowNull: false,
-              type: Sequelize.DATE
+              type: Sequelize.DATE,
             },
             updatedAt: {
               allowNull: false,
-              type: Sequelize.DATE
-            }
+              type: Sequelize.DATE,
+            },
           },
-          { transaction: t }
+          { transaction: t },
         ),
         queryInterface.createTable(
           'EMPLOYEE_TYPE',
@@ -62,31 +60,31 @@ module.exports = {
               allowNull: false,
               autoIncrement: true,
               primaryKey: true,
-              type: Sequelize.BIGINT
+              type: Sequelize.BIGINT,
             },
             NAME: {
               allowNull: false,
-              type: Sequelize.STRING(50)
+              type: Sequelize.STRING(50),
             },
             CODE: {
               allowNull: false,
               type: Sequelize.STRING(50),
-              unique: true
+              unique: true,
             },
             createdAt: {
               allowNull: false,
-              type: Sequelize.DATE
+              type: Sequelize.DATE,
             },
             updatedAt: {
               allowNull: false,
-              type: Sequelize.DATE
+              type: Sequelize.DATE,
             },
             deletedAt: {
               allowNull: true,
-              type: Sequelize.DATE
+              type: Sequelize.DATE,
             },
           },
-          { transaction: t }
+          { transaction: t },
         ),
         queryInterface.createTable(
           'USER_EMPLOYEE_TYPE',
@@ -95,34 +93,34 @@ module.exports = {
               allowNull: false,
               autoIncrement: true,
               primaryKey: true,
-              type: Sequelize.BIGINT
+              type: Sequelize.BIGINT,
             },
             ID_USER: {
               allowNull: false,
               type: Sequelize.BIGINT,
               references: {
                 model: 'USER',
-                key: 'ID'
-              }
+                key: 'ID',
+              },
             },
             ID_EMPLOYEE_TYPE: {
               allowNull: false,
               type: Sequelize.BIGINT,
               references: {
                 model: 'EMPLOYEE_TYPE',
-                key: 'ID'
-              }
+                key: 'ID',
+              },
             },
             createdAt: {
               allowNull: false,
-              type: Sequelize.DATE
+              type: Sequelize.DATE,
             },
             updatedAt: {
               allowNull: false,
-              type: Sequelize.DATE
-            }
+              type: Sequelize.DATE,
+            },
           },
-          { transaction: t }
+          { transaction: t },
         ),
         queryInterface.createTable(
           'COURSE_TYPE',
@@ -131,26 +129,26 @@ module.exports = {
               allowNull: false,
               autoIncrement: true,
               primaryKey: true,
-              type: Sequelize.BIGINT
+              type: Sequelize.BIGINT,
             },
             NAME: {
               allowNull: false,
-              type: Sequelize.STRING(25)
+              type: Sequelize.STRING(25),
             },
             MONTHS_NUMBER: {
               allowNull: false,
-              type: Sequelize.INTEGER
+              type: Sequelize.INTEGER,
             },
             createdAt: {
               allowNull: false,
-              type: Sequelize.DATE
+              type: Sequelize.DATE,
             },
             updatedAt: {
               allowNull: false,
-              type: Sequelize.DATE
-            }
+              type: Sequelize.DATE,
+            },
           },
-          { transaction: t }
+          { transaction: t },
         ),
         queryInterface.createTable(
           'COURSE',
@@ -159,38 +157,38 @@ module.exports = {
               allowNull: false,
               autoIncrement: true,
               primaryKey: true,
-              type: Sequelize.BIGINT
+              type: Sequelize.BIGINT,
             },
             ID_COURSE_TYPE: {
               allowNull: false,
               type: Sequelize.BIGINT,
               references: {
                 model: 'COURSE_TYPE',
-                key: 'ID'
-              }
+                key: 'ID',
+              },
             },
             NAME: {
               allowNull: false,
-              type: Sequelize.STRING(200)
+              type: Sequelize.STRING(200),
             },
             PDF_URL: {
               allowNull: false,
-              type: Sequelize.STRING(200)
+              type: Sequelize.STRING(200),
             },
             VIDEO_URL: {
               allowNull: false,
-              type: Sequelize.STRING(200)
+              type: Sequelize.STRING(200),
             },
             createdAt: {
               allowNull: false,
-              type: Sequelize.DATE
+              type: Sequelize.DATE,
             },
             updatedAt: {
               allowNull: false,
-              type: Sequelize.DATE
-            }
+              type: Sequelize.DATE,
+            },
           },
-          { transaction: t }
+          { transaction: t },
         ),
         queryInterface.createTable(
           'EMPLOYEE_TYPE_COURSE',
@@ -199,34 +197,34 @@ module.exports = {
               allowNull: false,
               autoIncrement: true,
               primaryKey: true,
-              type: Sequelize.BIGINT
+              type: Sequelize.BIGINT,
             },
             ID_EMPLOYEE_TYPE: {
               allowNull: false,
               type: Sequelize.BIGINT,
               references: {
                 model: 'EMPLOYEE_TYPE',
-                key: 'ID'
-              }
+                key: 'ID',
+              },
             },
             ID_COURSE: {
               allowNull: false,
               type: Sequelize.BIGINT,
               references: {
                 model: 'COURSE',
-                key: 'ID'
-              }
+                key: 'ID',
+              },
             },
             createdAt: {
               allowNull: false,
-              type: Sequelize.DATE
+              type: Sequelize.DATE,
             },
             updatedAt: {
               allowNull: false,
-              type: Sequelize.DATE
-            }
+              type: Sequelize.DATE,
+            },
           },
-          { transaction: t }
+          { transaction: t },
         ),
         queryInterface.createTable(
           'QUESTION',
@@ -235,30 +233,30 @@ module.exports = {
               allowNull: false,
               autoIncrement: true,
               primaryKey: true,
-              type: Sequelize.BIGINT
+              type: Sequelize.BIGINT,
             },
             TEXT: {
               allowNull: false,
-              type: Sequelize.STRING(500)
+              type: Sequelize.STRING(500),
             },
             ID_COURSE: {
               allowNull: false,
               type: Sequelize.BIGINT,
               references: {
                 model: 'COURSE',
-                key: 'ID'
-              }
+                key: 'ID',
+              },
             },
             createdAt: {
               allowNull: false,
-              type: Sequelize.DATE
+              type: Sequelize.DATE,
             },
             updatedAt: {
               allowNull: false,
-              type: Sequelize.DATE
-            }
+              type: Sequelize.DATE,
+            },
           },
-          { transaction: t }
+          { transaction: t },
         ),
         queryInterface.createTable(
           'ANSWER',
@@ -267,34 +265,34 @@ module.exports = {
               allowNull: false,
               autoIncrement: true,
               primaryKey: true,
-              type: Sequelize.BIGINT
+              type: Sequelize.BIGINT,
             },
             ID_QUESTION: {
               allowNull: false,
               type: Sequelize.BIGINT,
               references: {
                 model: 'QUESTION',
-                key: 'ID'
-              }
+                key: 'ID',
+              },
             },
             TEXT: {
               allowNull: false,
-              type: Sequelize.STRING(250)
+              type: Sequelize.STRING(250),
             },
             IS_CORRECT: {
               allowNull: false,
-              type: Sequelize.BOOLEAN
+              type: Sequelize.BOOLEAN,
             },
             createdAt: {
               allowNull: false,
-              type: Sequelize.DATE
+              type: Sequelize.DATE,
             },
             updatedAt: {
               allowNull: false,
-              type: Sequelize.DATE
-            }
+              type: Sequelize.DATE,
+            },
           },
-          { transaction: t }
+          { transaction: t },
         ),
         queryInterface.createTable(
           'COURSE_USER',
@@ -303,23 +301,23 @@ module.exports = {
               allowNull: false,
               autoIncrement: true,
               primaryKey: true,
-              type: Sequelize.BIGINT
+              type: Sequelize.BIGINT,
             },
             ID_COURSE: {
               allowNull: false,
               type: Sequelize.BIGINT,
               references: {
                 model: 'COURSE',
-                key: 'ID'
-              }
+                key: 'ID',
+              },
             },
             ID_USER: {
               allowNull: false,
               type: Sequelize.BIGINT,
               references: {
                 model: 'USER',
-                key: 'ID'
-              }
+                key: 'ID',
+              },
             },
             SCORE: {
               allowNull: false,
@@ -327,25 +325,25 @@ module.exports = {
               defaultValue: 0,
               validate: {
                 min: 0,
-                max: 100
-              }
+                max: 100,
+              },
             },
             createdAt: {
               allowNull: false,
-              type: Sequelize.DATE
+              type: Sequelize.DATE,
             },
             updatedAt: {
               allowNull: false,
-              type: Sequelize.DATE
-            }
+              type: Sequelize.DATE,
+            },
           },
-          { transaction: t }
-        )
+          { transaction: t },
+        ),
       ]);
     });
   },
 
-  down: (queryInterface, Sequelize) => {
+  down: (queryInterface) => {
     return queryInterface.sequelize.transaction((t) => {
       return Promise.all([
         queryInterface.dropTable('COURSE_USER', { transaction: t }),
@@ -356,8 +354,8 @@ module.exports = {
         queryInterface.dropTable('ANSWER', { transaction: t }),
         queryInterface.dropTable('QUESTION', { transaction: t }),
         queryInterface.dropTable('COURSE', { transaction: t }),
-        queryInterface.dropTable('COURSE_TYPE', { transaction: t })
+        queryInterface.dropTable('COURSE_TYPE', { transaction: t }),
       ]);
     });
-  }
+  },
 };

@@ -1,58 +1,53 @@
-//#region 'NPM DEP'
+// #region 'NPM DEP'
 const passGenerator = require('generate-password');
+const { Op } = require('sequelize');
 const sequelize = require('../../database/config/sequelizeConfig');
-const { Op } = require("sequelize");
-//#endregion
+// #endregion
 
-//#region 'LOCAL DEP'
-const {
-  User,
-  Course,
-  EmployeeType,
-  UserEmployeeType,
-  CourseUser,
-  Company
-} = require('../../database/models');
-//#endregion
+// #region 'LOCAL DEP'
+const { User, Course, EmployeeType, UserEmployeeType, CourseUser, Company } = require('../../database/models');
+// #endregion
 
-//#region 'INTERFACE'
+// #region 'INTERFACE'
 const getUsers = () => {
   return User.findAll({
-    attributes: ['ID','FIRST_NAME','LAST_NAME','CNP', 'EMAIL','ID_COMPANY','IS_ADMIN'],
+    attributes: ['ID', 'FIRST_NAME', 'LAST_NAME', 'CNP', 'EMAIL', 'ID_COMPANY', 'IS_ADMIN'],
     where: {
-      deletedAt: null
+      deletedAt: null,
     },
-    include: [{
-      model: Company,
-      attributes: ['ID','NAME']
-    },
-    {
-      model: EmployeeType,
-      through: {
-        where: {
-          deletedAt: null
-        }
+    include: [
+      {
+        model: Company,
+        attributes: ['ID', 'NAME'],
       },
-      as: 'employeeTypes',
-      attributes: ['ID','CODE'],
-      where: { deletedAt: null }
-    }]
-    });
-}
+      {
+        model: EmployeeType,
+        through: {
+          where: {
+            deletedAt: null,
+          },
+        },
+        as: 'employeeTypes',
+        attributes: ['ID', 'CODE'],
+        where: { deletedAt: null },
+      },
+    ],
+  });
+};
 
-const getUserByEmail = (email) => {
+const getUserByEmail = async (email) => {
   return User.findOne({
-    where: { EMAIL: email }
-  }).catch((error) => {
-    let err = new Error();
+    where: { EMAIL: email },
+  }).catch(() => {
+    const err = new Error();
     err.statusCode = 500;
-    //to do logging error object
-    //err.customMessage = 'Getting user by email -> USER SERVICE ERROR';
+    // TODO: logging error object
+    // err.customMessage = 'Getting user by email -> USER SERVICE ERROR';
     throw err;
   });
 };
 
-const createUser = (jsonUser, sendEmail) => {
+const createUser = async (jsonUser, sendEmail) => {
   let seqTransaction = null;
   let employeeTypeDb = null;
   let createdUser = null;
@@ -61,41 +56,42 @@ const createUser = (jsonUser, sendEmail) => {
   return sequelize
     .transaction()
     .then((t) => {
-      return (seqTransaction = t);
+      seqTransaction = t;
     })
     .then(() => {
       return EmployeeType.findOne({
-        where: { ID: user.ID_EMPLOYEE_TYPE }
+        where: { ID: user.ID_EMPLOYEE_TYPE },
       });
     })
     .then((employeeType) => {
       employeeTypeDb = employeeType;
-      let newUser = {
+      const newUser = {
         FIRST_NAME: user.FIRST_NAME,
         LAST_NAME: user.LAST_NAME,
         CNP: user.CNP,
         EMAIL: user.EMAIL,
-        ID_COMPANY: user.ID_COMPANY
+        ID_COMPANY: user.ID_COMPANY,
       };
       const userPassword = passGenerator.generate({
         length: 10,
-        numbers: true
+        numbers: true,
       });
       newUser.PASSWORD = userPassword;
-      const userToReturn = User.create(newUser, { transaction: seqTransaction })
+      const userToReturn = User.create(newUser, { transaction: seqTransaction });
       return userToReturn;
     })
     .then((userDb) => {
       createdUser = userDb;
       const newUserEmployeeType = {
         ID_USER: userDb.ID,
-        ID_EMPLOYEE_TYPE: employeeTypeDb.ID
+        ID_EMPLOYEE_TYPE: employeeTypeDb.ID,
       };
       return UserEmployeeType.create(newUserEmployeeType, {
-        transaction: seqTransaction
+        transaction: seqTransaction,
       });
-    }).then(() => {
-      return sendEmail(createdUser)
+    })
+    .then(() => {
+      return sendEmail(createdUser);
     })
     .then(() => {
       return seqTransaction.commit();
@@ -103,7 +99,7 @@ const createUser = (jsonUser, sendEmail) => {
     .then(() => {
       return createdUser;
     })
-    .catch((error) => {
+    .catch(() => {
       return seqTransaction.rollback();
       // let err = new Error(error);
       // err.statusCode = 500;
@@ -112,7 +108,7 @@ const createUser = (jsonUser, sendEmail) => {
     });
 };
 
-const getUserCourses = (userId) => {
+const getUserCourses = async (userId) => {
   return User.findByPk(userId, {
     include: [
       {
@@ -123,21 +119,21 @@ const getUserCourses = (userId) => {
             model: Course,
             as: 'courses',
             attributes: ['ID', 'NAME'],
-            through: { attributes: [] }
-          }
-        ]
-      }
-    ]
+            through: { attributes: [] },
+          },
+        ],
+      },
+    ],
   })
     .then((user) => {
-      let courses = [];
-      user.employeeTypes.map((employeeType) => {
+      const courses = [];
+      user.employeeTypes.forEach((employeeType) => {
         courses.push(...employeeType.courses);
       });
       return courses;
     })
     .catch((error) => {
-      let err = new Error(error);
+      const err = new Error(error);
       err.statusCode = 500;
       err.customMessage = 'Get user courses -> COURSE SERVICE ERROR';
       throw err;
@@ -150,52 +146,50 @@ const getUserCourse = async (userId, courseId) => {
       attributes: ['ID_COURSE'],
       where: {
         ID_USER: userId,
-        ID_COURSE: courseId
+        ID_COURSE: courseId,
       },
-      include: [{
-        model: Course,
-        attributes: ['ID', 'NAME', 'VIDEO_URL', 'PDF_URL']
-      }]
-    })
+      include: [
+        {
+          model: Course,
+          attributes: ['ID', 'NAME', 'VIDEO_URL', 'PDF_URL'],
+        },
+      ],
+    });
 
     if (userCourse != null) {
       return {
         ID: userCourse.COURSE.ID,
         NAME: userCourse.COURSE.NAME,
         PDF_URL: userCourse.COURSE.PDF_URL,
-        VIDEO_URL: userCourse.COURSE.VIDEO_URL
-      }
+        VIDEO_URL: userCourse.COURSE.VIDEO_URL,
+      };
     }
-    else
-    {
-      return null
-    }
+    return null;
   } catch (error) {
     error.statusCode = 500;
-    throw err;
+    throw error;
   }
-}
+};
 
-const getUncompletedUserCourses = (userId, minScore) => {
+const getUncompletedUserCourses = async (userId, minScore) => {
   return CourseUser.findAll({
     attributes: ['ID_COURSE'],
     where: { ID_USER: userId, SCORE: { [Op.lt]: minScore } },
     include: [
       {
         model: Course,
-        attributes: ['ID','NAME']
-      }
-    ]
+        attributes: ['ID', 'NAME'],
+      },
+    ],
   })
     .then((courses) =>
-      courses
-        .map((currentCourse) => ({
-          ID: currentCourse.COURSE.ID,
-          NAME: currentCourse.COURSE.NAME
-        }))
+      courses.map((currentCourse) => ({
+        ID: currentCourse.COURSE.ID,
+        NAME: currentCourse.COURSE.NAME,
+      })),
     )
     .catch((error) => {
-      let err = new Error(error);
+      const err = new Error(error);
       err.statusCode = 500;
       err.customMessage = 'Get user courses -> COURSE SERVICE ERROR';
       throw err;
@@ -204,90 +198,108 @@ const getUncompletedUserCourses = (userId, minScore) => {
 
 const updateUserPassword = (email, newPassword) => {
   let seqTransaction = null;
-  return sequelize
-    .transaction()
-    .then((t) => {
-      return (seqTransaction = t);
-    })
-    .then(() => {
-      return User.update(
-        { PASSWORD: newPassword },
-        {
-          where: {
-            EMAIL: email
-          },
-          transaction: seqTransaction
-        }
-      );
-    })
-    .then((resultUpdatePassword) => {
-      if (resultUpdatePassword[0]) {
+  return (
+    sequelize
+      .transaction()
+      .then((t) => {
+        seqTransaction = t;
+      })
+      .then(() => {
         return User.update(
-          { ONE_TIME_AUTH: 'true' },
+          { PASSWORD: newPassword },
           {
             where: {
-              EMAIL: email
+              EMAIL: email,
             },
-            transaction: seqTransaction
-          }
+            transaction: seqTransaction,
+          },
         );
-      }
-    })
-    .then((resultUpdateOneTimeAuth) => {
-      if (resultUpdateOneTimeAuth[0]) {
-        return seqTransaction.commit();
-      }
-    })
-    .then((result) => {
-      if (typeof result !== 'undefined') {
-        return true;
-      }
-    })
-    .catch((error) => {
-      seqTransaction.rollback();
-      //LOG ERROR on server -> error.customMessage = 'Update user password -> USER SERVICE ERROR';
-      throw error;
-    });
+      })
+      // TODO: find out what happens on else (what to return)
+      // eslint-disable-next-line consistent-return
+      .then((resultUpdatePassword) => {
+        if (resultUpdatePassword[0]) {
+          return User.update(
+            { ONE_TIME_AUTH: 'true' },
+            {
+              where: {
+                EMAIL: email,
+              },
+              transaction: seqTransaction,
+            },
+          );
+        }
+      })
+      // TODO: find out what happens on else (what to return)
+      // eslint-disable-next-line consistent-return
+      .then((resultUpdateOneTimeAuth) => {
+        if (resultUpdateOneTimeAuth[0]) {
+          return seqTransaction.commit();
+        }
+      })
+      // TODO: find out what happens on else (what to return)
+      // eslint-disable-next-line consistent-return
+      .then((result) => {
+        if (typeof result !== 'undefined') {
+          return true;
+        }
+      })
+      .catch((error) => {
+        seqTransaction.rollback();
+        // LOG ERROR on server -> error.customMessage = 'Update user password -> USER SERVICE ERROR';
+        throw error;
+      })
+  );
 };
 
 const updateUser = (userId, user) => {
-  return User.findByPk(userId)
-    .then(currentUser => {
-      // Check if record exists in db
-      if (currentUser) {
-        return currentUser.update(user)
-      }
-    })
-}
+  // TODO: find out what happens on else (what to return)
+  // eslint-disable-next-line consistent-return
+  return User.findByPk(userId).then((currentUser) => {
+    // Check if record exists in db
+    if (currentUser) {
+      return currentUser.update(user);
+    }
+  });
+};
 
-const deleteUser = (userId) => {
-  return User.findByPk(userId)
-    .then(currentUser => {
-      // Check if record exists in db
-      if (currentUser) {
-        let newUser = { ...currentUser };
-        newUser.deletedAt = new Date();
-        return currentUser.update(newUser)
-      }
-    })
-}
+const deleteUser = async (userId) => {
+  // TODO: find out what happens on else (what to return)
+  // eslint-disable-next-line consistent-return
+  return User.findByPk(userId).then((currentUser) => {
+    // Check if record exists in db
+    if (currentUser) {
+      const newUser = { ...currentUser };
+      newUser.deletedAt = new Date();
+      return currentUser.update(newUser);
+    }
+  });
+};
 
+// TODO: find out what happens on catch (what to return)
+// eslint-disable-next-line consistent-return
 const changeEmployeeTypeForUser = async (userId, employeeTypeId) => {
   const t = await sequelize.transaction();
 
-  try{
+  try {
     const deletedDate = new Date();
-    await UserEmployeeType.update({ deletedAt: deletedDate},{ where : { deletedAt: null, ID_USER : userId }}, { transaction: t });
-    const result = await UserEmployeeType.create({ID_USER: userId, ID_EMPLOYEE_TYPE: employeeTypeId}, { transaction: t });
+    await UserEmployeeType.update(
+      { deletedAt: deletedDate },
+      { where: { deletedAt: null, ID_USER: userId } },
+      { transaction: t },
+    );
+    const result = await UserEmployeeType.create(
+      { ID_USER: userId, ID_EMPLOYEE_TYPE: employeeTypeId },
+      { transaction: t },
+    );
     await t.commit();
 
-    return result
-  } catch (error){
+    return result;
+  } catch (error) {
     await t.rollback();
   }
-}
-
-//#endregion
+};
+// #endregion
 
 module.exports = {
   getUserByEmail,
@@ -299,5 +311,5 @@ module.exports = {
   getUsers,
   updateUser,
   deleteUser,
-  changeEmployeeTypeForUser
+  changeEmployeeTypeForUser,
 };

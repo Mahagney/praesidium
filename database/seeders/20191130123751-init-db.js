@@ -1,7 +1,5 @@
-'use strict';
-
 module.exports = {
-  up: (queryInterface, Sequelize) => {
+  up: (queryInterface) => {
     return queryInterface.sequelize.transaction((t) => {
       return Promise.all([
         queryInterface.bulkInsert(
@@ -16,7 +14,7 @@ module.exports = {
               ONE_TIME_AUTH: false,
               ID_COMPANY: 1,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               FIRST_NAME: 'Ovidiu',
@@ -27,7 +25,7 @@ module.exports = {
               ONE_TIME_AUTH: false,
               ID_COMPANY: 1,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               FIRST_NAME: 'Saleh',
@@ -38,7 +36,7 @@ module.exports = {
               ONE_TIME_AUTH: false,
               ID_COMPANY: 2,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               FIRST_NAME: 'fake',
@@ -49,10 +47,10 @@ module.exports = {
               ONE_TIME_AUTH: false,
               ID_COMPANY: 3,
               createdAt: new Date(),
-              updatedAt: new Date()
-            }
+              updatedAt: new Date(),
+            },
           ],
-          { transaction: t }
+          { transaction: t },
         ),
         queryInterface.bulkInsert(
           'EMPLOYEE_TYPE',
@@ -61,22 +59,22 @@ module.exports = {
               NAME: 'Programator',
               CODE: '1234',
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               NAME: 'Sofer',
               CODE: '1235',
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               NAME: 'Manager',
               CODE: '1236',
               createdAt: new Date(),
-              updatedAt: new Date()
-            }
+              updatedAt: new Date(),
+            },
           ],
-          { transaction: t }
+          { transaction: t },
         ),
         queryInterface.bulkInsert(
           'USER_EMPLOYEE_TYPE',
@@ -85,22 +83,22 @@ module.exports = {
               ID_USER: 1,
               ID_EMPLOYEE_TYPE: 1,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_USER: 2,
               ID_EMPLOYEE_TYPE: 2,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_USER: 3,
               ID_EMPLOYEE_TYPE: 3,
               createdAt: new Date(),
-              updatedAt: new Date()
-            }
+              updatedAt: new Date(),
+            },
           ],
-          { transaction: t }
+          { transaction: t },
         ),
         queryInterface.bulkInsert(
           'COURSE_TYPE',
@@ -109,22 +107,22 @@ module.exports = {
               NAME: 'Lunar',
               MONTHS_NUMBER: 1,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               NAME: 'Trimestrial',
               MONTHS_NUMBER: 2,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               NAME: 'Semestrial',
               MONTHS_NUMBER: 3,
               createdAt: new Date(),
-              updatedAt: new Date()
-            }
+              updatedAt: new Date(),
+            },
           ],
-          { transaction: t }
+          { transaction: t },
         ),
         queryInterface.bulkInsert(
           'COURSE',
@@ -135,7 +133,7 @@ module.exports = {
               VIDEO_URL: 'video/videoplayback.mp4',
               ID_COURSE_TYPE: 1,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               NAME: 'Evacuarea de urgenta',
@@ -143,7 +141,7 @@ module.exports = {
               VIDEO_URL: 'video/videoplayback.mp4',
               ID_COURSE_TYPE: 1,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               NAME: 'Comportament in caz de cutremur',
@@ -151,7 +149,7 @@ module.exports = {
               VIDEO_URL: 'video/videoplayback.mp4',
               ID_COURSE_TYPE: 2,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               NAME: 'Comportament in caz de incendiu',
@@ -159,7 +157,7 @@ module.exports = {
               VIDEO_URL: 'video/videoplayback.mp4',
               ID_COURSE_TYPE: 2,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               NAME: 'Alunecarile si impiedicarile',
@@ -167,7 +165,7 @@ module.exports = {
               VIDEO_URL: 'video/videoplayback.mp4',
               ID_COURSE_TYPE: 3,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               NAME: 'Cum sa nu treci strada pe rosu',
@@ -175,10 +173,10 @@ module.exports = {
               VIDEO_URL: 'video/videoplayback.mp4',
               ID_COURSE_TYPE: 3,
               createdAt: new Date(),
-              updatedAt: new Date()
-            }
+              updatedAt: new Date(),
+            },
           ],
-          { transaction: t }
+          { transaction: t },
         ),
         queryInterface.bulkInsert(
           'QUESTION',
@@ -187,52 +185,52 @@ module.exports = {
               TEXT: 'Ce faci in caz de cutremur?',
               ID_COURSE: 1,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               TEXT: 'Ce faci in caz de incendiu?',
               ID_COURSE: 1,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               TEXT: 'Ce faci in caz de scurtcircuit?',
               ID_COURSE: 1,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               TEXT: 'Ce faci in caz de inundatie?',
               ID_COURSE: 1,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               TEXT: 'Ce faci in caz de cutremur?',
               ID_COURSE: 2,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               TEXT: 'Ce faci in caz de incendiu?',
               ID_COURSE: 2,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               TEXT: 'Ce faci in caz de scurtcircuit?',
               ID_COURSE: 2,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               TEXT: 'Ce faci in caz de inundatie?',
               ID_COURSE: 3,
               createdAt: new Date(),
-              updatedAt: new Date()
-            }
+              updatedAt: new Date(),
+            },
           ],
-          { transaction: t }
+          { transaction: t },
         ),
         queryInterface.bulkInsert(
           'ANSWER',
@@ -242,171 +240,171 @@ module.exports = {
               TEXT: 'Fug cat pot.',
               IS_CORRECT: false,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_QUESTION: 1,
               TEXT: 'Stau sub masa.',
               IS_CORRECT: true,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_QUESTION: 1,
               TEXT: 'Cobor cu liftul.',
               IS_CORRECT: false,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_QUESTION: 1,
               TEXT: 'Cobor pe scari.',
               IS_CORRECT: false,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_QUESTION: 2,
               TEXT: 'Fug cat pot.',
               IS_CORRECT: false,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_QUESTION: 2,
               TEXT: 'Stau sub masa.',
               IS_CORRECT: true,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_QUESTION: 2,
               TEXT: 'Cobor cu liftul.',
               IS_CORRECT: false,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_QUESTION: 2,
               TEXT: 'Cobor pe scari.',
               IS_CORRECT: false,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_QUESTION: 3,
               TEXT: 'Fug cat pot.',
               IS_CORRECT: false,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_QUESTION: 3,
               TEXT: 'Stau sub masa.',
               IS_CORRECT: true,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_QUESTION: 3,
               TEXT: 'Cobor cu liftul.',
               IS_CORRECT: false,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_QUESTION: 3,
               TEXT: 'Cobor pe scari.',
               IS_CORRECT: false,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_QUESTION: 4,
               TEXT: 'Fug cat pot.',
               IS_CORRECT: false,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_QUESTION: 4,
               TEXT: 'Stau sub masa.',
               IS_CORRECT: true,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_QUESTION: 4,
               TEXT: 'Cobor cu liftul.',
               IS_CORRECT: false,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_QUESTION: 5,
               TEXT: 'Fug cat pot.',
               IS_CORRECT: false,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_QUESTION: 5,
               TEXT: 'Stau sub masa.',
               IS_CORRECT: true,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_QUESTION: 5,
               TEXT: 'Cobor cu liftul.',
               IS_CORRECT: false,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_QUESTION: 6,
               TEXT: 'Stau sub masa.',
               IS_CORRECT: true,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_QUESTION: 6,
               TEXT: 'Cobor cu liftul.',
               IS_CORRECT: false,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_QUESTION: 7,
               TEXT: 'Stau sub masa.',
               IS_CORRECT: true,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_QUESTION: 7,
               TEXT: 'Cobor cu liftul.',
               IS_CORRECT: false,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_QUESTION: 8,
               TEXT: 'Stau sub masa.',
               IS_CORRECT: true,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_QUESTION: 8,
               TEXT: 'Cobor cu liftul.',
               IS_CORRECT: false,
               createdAt: new Date(),
-              updatedAt: new Date()
-            }
+              updatedAt: new Date(),
+            },
           ],
-          { transaction: t }
+          { transaction: t },
         ),
         queryInterface.bulkInsert(
           'EMPLOYEE_TYPE_COURSE',
@@ -415,97 +413,97 @@ module.exports = {
               ID_EMPLOYEE_TYPE: 1,
               ID_COURSE: 1,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_EMPLOYEE_TYPE: 1,
               ID_COURSE: 2,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_EMPLOYEE_TYPE: 1,
               ID_COURSE: 3,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_EMPLOYEE_TYPE: 1,
               ID_COURSE: 4,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_EMPLOYEE_TYPE: 2,
               ID_COURSE: 1,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_EMPLOYEE_TYPE: 2,
               ID_COURSE: 2,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_EMPLOYEE_TYPE: 3,
               ID_COURSE: 1,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_EMPLOYEE_TYPE: 3,
               ID_COURSE: 2,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_EMPLOYEE_TYPE: 3,
               ID_COURSE: 3,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_EMPLOYEE_TYPE: 3,
               ID_COURSE: 4,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_EMPLOYEE_TYPE: 3,
               ID_COURSE: 5,
               createdAt: new Date(),
-              updatedAt: new Date()
+              updatedAt: new Date(),
             },
             {
               ID_EMPLOYEE_TYPE: 3,
               ID_COURSE: 6,
               createdAt: new Date(),
-              updatedAt: new Date()
-            }
+              updatedAt: new Date(),
+            },
           ],
-          { transaction: t }
-        )
+          { transaction: t },
+        ),
       ]);
     });
   },
 
-  down: (queryInterface, Sequelize) => {
+  down: (queryInterface) => {
     return queryInterface.sequelize.transaction((t) => {
       return Promise.all([
         queryInterface.bulkDelete('USER', null, { transaction: t }),
         queryInterface.bulkDelete('EMPLOYEE_TYPE', null, { transaction: t }),
         queryInterface.bulkDelete('USER_EMPLOYEE_TYPE', null, {
-          transaction: t
+          transaction: t,
         }),
         queryInterface.bulkDelete('COURSE_TYPE', null, { transaction: t }),
         queryInterface.bulkDelete('COURSE', null, { transaction: t }),
         queryInterface.bulkDelete('EMPLOYEE_TYPE_COURSE', null, {
-          transaction: t
+          transaction: t,
         }),
         queryInterface.bulkDelete('QUESTION', null, { transaction: t }),
-        queryInterface.bulkDelete('ANSWER', null, { transaction: t })
+        queryInterface.bulkDelete('ANSWER', null, { transaction: t }),
       ]);
     });
-  }
+  },
 };

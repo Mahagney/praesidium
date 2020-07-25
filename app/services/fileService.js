@@ -1,7 +1,7 @@
-//#region 'NPM DEP'
+// #region 'NPM DEP'
 const csv = require('fast-csv');
 const fs = require('fs');
-//#endregion
+// #endregion
 
 const readFilePromise = (filePath) => {
   const users = [];
@@ -13,14 +13,14 @@ const readFilePromise = (filePath) => {
           LAST_NAME: data.LastName,
           CNP: data.Cnp,
           EMAIL: data.Email,
-          EmployeeType: data.EmployeeType
-        }))
+          EmployeeType: data.EmployeeType,
+        })),
       )
       .on('data', (row) => {
         const user = JSON.stringify(row);
         users.push(user);
       })
-      .on('end', (rowCount) => resolve(users))
+      .on('end', () => resolve(users))
       .on('error', (error) => reject(error));
   });
 };

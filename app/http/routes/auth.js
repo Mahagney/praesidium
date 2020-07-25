@@ -1,16 +1,17 @@
-//#region 'NPM DEP'
+// #region 'NPM DEP'
 const express = require('express');
+
 const router = express.Router();
 const { body } = require('express-validator');
-//#endregion
+// #endregion
 
-//#region 'LOCAL DEP'
+// #region 'LOCAL DEP'
 const authController = require('../controllers/authController');
-const authenticateToken = require('./../middleware/authenticateToken');
-const showValidationResult = require('./../middleware/showValidationResult');
-//#endregion
+const authenticateToken = require('../middleware/authenticateToken');
+const showValidationResult = require('../middleware/showValidationResult');
+// #endregion
 
-//!!!! keep in mind the order of the endpoints
+// !!!! keep in mind the order of the endpoints
 
 router.post('/login', authController.logIn);
 
@@ -20,26 +21,11 @@ router.put(
   '/update-password',
   authenticateToken,
   [
-    body(
-      'currentPassword',
-      'Parola curenta depaseste lungimea maxima permisa!'
-    )
-    .trim()
-    .isLength({max:50}),
+    body('currentPassword', 'Parola curenta depaseste lungimea maxima permisa!').trim().isLength({ max: 50 }),
 
-    body(
-      'newPassword',
-      'Introduceti o parola care sa contina minim 8 caractere!'
-    )
-    .trim()
-    .isLength({ min: 8 }),
+    body('newPassword', 'Introduceti o parola care sa contina minim 8 caractere!').trim().isLength({ min: 8 }),
 
-    body(
-      'newPassword',
-      'Noua parola depaseste lungimea maxima permisa!'
-    )
-    .trim()
-    .isLength({ max: 50 }),
+    body('newPassword', 'Noua parola depaseste lungimea maxima permisa!').trim().isLength({ max: 50 }),
 
     body('confirmNewPassword')
       .trim()
@@ -48,13 +34,13 @@ router.put(
           throw new Error('Este gresita confirmarea parolei!');
         }
         return true;
-      })
+      }),
   ],
   showValidationResult,
-  authController.updatePassword
+  authController.updatePassword,
 );
 
-//todo : put auth middleware here
-router.post('/register',authenticateToken, authController.register);
+// TODO: put auth middleware here
+router.post('/register', authenticateToken, authController.register);
 
 module.exports = router;
