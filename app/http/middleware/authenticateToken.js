@@ -1,6 +1,6 @@
 // #region 'NPM DEP'
 const jwt = require('jsonwebtoken');
-const { get } = require('lodash').get;
+const { get } = require('lodash');
 // #endregion
 
 module.exports = (req, _res, next) => {
