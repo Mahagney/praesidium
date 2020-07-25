@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const userService = require('../../services/userService');
 const emailService = require('../../services/emailService');
 const fileService = require('../../services/fileService');
-const { role } = require('../../utils/constants').role;
+const { role } = require('../../utils/constants');
 // #endregion
 
 // #region 'INTERFACE'
