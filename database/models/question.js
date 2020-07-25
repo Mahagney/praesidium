@@ -9,36 +9,36 @@ Question.init(
       type: Sequelize.BIGINT,
       autoIncrement: true,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
     },
 
     TEXT: {
       type: Sequelize.STRING(500),
-      allowNull: false
+      allowNull: false,
     },
 
     ID_COURSE: {
       type: Sequelize.INTEGER,
-      allowNull: false
+      allowNull: false,
     },
 
     createdAt: {
       allowNull: false,
-      type: Sequelize.DATE
+      type: Sequelize.DATE,
     },
 
     updatedAt: {
       allowNull: false,
-      type: Sequelize.DATE
-    }
+      type: Sequelize.DATE,
+    },
   },
   {
     sequelize,
     modelName: 'QUESTION',
-    freezeTableName: true
-  }
+    freezeTableName: true,
+  },
 );
 
-// //Association
+// Association
 
 module.exports = Question;

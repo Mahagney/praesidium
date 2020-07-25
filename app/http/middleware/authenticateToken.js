@@ -1,9 +1,10 @@
-//#region 'NPM DEP'
+// #region 'NPM DEP'
 const jwt = require('jsonwebtoken');
-//#endregion
+const { get } = require('lodash').get;
+// #endregion
 
-module.exports = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
+module.exports = (req, _res, next) => {
+  const authHeader = get(req.headers, 'authorization', '');
   const token = authHeader && authHeader.split(' ')[1];
   if (!token) {
     const error = new Error('Not-authorized!');
@@ -25,6 +26,6 @@ module.exports = (req, res, next) => {
 
   req.userId = decodedToken.id;
   req.role = decodedToken.role;
-  
+
   next();
 };

@@ -1,97 +1,100 @@
-//#region 'NPM DEP'
-const bcrypt = require('bcryptjs')
-const saltRounds = 10
-const jwt = require('jsonwebtoken')
+// #region 'NPM DEP'
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+// #endregion
 
-//#endregion
+// #region 'LOCAL DEP'
+const userService = require('../../services/userService');
+const emailService = require('../../services/emailService');
+const fileService = require('../../services/fileService');
+const { role } = require('../../utils/constants').role;
+// #endregion
 
-//#region 'LOCAL DEP'
-const userService = require('../../services/userService')
-const emailService = require('../../services/emailService')
-const fileService = require('../../services/fileService')
-const role = require('./../../utils/constants').role
-//#endregion
-
-//#region 'INTERFACE'
-const register = (req, res, next) => {
-  const file = req.file
+// #region 'INTERFACE'
+const register = async (req, res, next) => {
+  const { file } = req.file;
   if (!file) {
-    return res.status(422).json('Attached file is not CSV type!')
+    return res.status(422).json('Attached file is not CSV type!');
   }
 
-  fileService
+  return fileService
     .readFilePromise(file.path)
     .then((jsonUsers) => {
       return Promise.all(
         jsonUsers.map((jsonUser) => {
-          console.log(jsonUser)
-          return userService.createUser(jsonUser)
-        })
-      )
+          // eslint-disable-next-line no-console
+          console.log(jsonUser);
+          return userService.createUser(jsonUser);
+        }),
+      );
     })
     .then((createdUsers) => {
-      console.log(createdUsers)
+      // eslint-disable-next-line no-console
+      console.log(createdUsers);
       return Promise.all(
         createdUsers.map((createUser) => {
-          return emailService.sendEmail(createUser)
-        })
-      )
+          return emailService.sendEmail(createUser);
+        }),
+      );
     })
     .then((emails) => {
-      console.log(emails)
-      res.status(201).json('Users created.')
+      // eslint-disable-next-line no-console
+      console.log(emails);
+      return res.status(201).json('Users created.');
     })
     .catch((error) => {
-      let err = new Error(error)
-      err.statusCode = 500
-      err.customMessage = 'Register has failed!'
-      next(err)
-    })
-}
+      const err = new Error(error);
+      err.statusCode = 500;
+      err.customMessage = 'Register has failed!';
+      next(err);
+    });
+};
 
-const createUser = (req, res, next) => {
+const createUser = async (req, res, next) => {
   return userService
     .createUser(req.body, emailService.sendEmail)
     .then((createdUser) => {
-      res.status(201).json(createdUser)
+      res.status(201).json(createdUser);
     })
     .catch((error) => {
-      let err = new Error(error)
-      err.statusCode = 500
-      err.customMessage = 'Register has failed!'
-      next(err)
-    })
-}
+      const err = new Error(error);
+      err.statusCode = 500;
+      err.customMessage = 'Register has failed!';
+      next(err);
+    });
+};
 
-const logIn = (req, res, next) => {
-  const email = req.body.email
-  const password = req.body.password
+const logIn = async (req, res, next) => {
+  const { email, password } = req.body;
   if (!email || !password) {
-    const err = new Error('Authentication failed!')
-    err.statusCode = 401
-    throw err
+    const err = new Error('Authentication failed!');
+    err.statusCode = 401;
+    throw err;
   }
-  let loadedUser
+  let loadedUser;
   userService
     .getUserByEmail(email)
     .then((user) => {
       if (!user) {
-        const err = new Error('Authentication failed!')
-        err.statusCode = 401
-        throw err
+        const err = new Error('Authentication failed!');
+        err.statusCode = 401;
+        throw err;
       }
-      loadedUser = user
+      loadedUser = user;
       if (user.ONE_TIME_AUTH) {
-        return bcrypt.compare(password, user.PASSWORD)
-      } else if (user.PASSWORD === password) {
-        return true
+        return bcrypt.compare(password, user.PASSWORD);
       }
+      if (user.PASSWORD === password) {
+        return true;
+      }
+
+      return false;
     })
     .then((isAuth) => {
       if (!isAuth) {
-        const err = new Error('Authentication failed!')
-        err.statusCode = 401
-        throw err
+        const err = new Error('Authentication failed!');
+        err.statusCode = 401;
+        throw err;
       }
 
       const token = jwt.sign(
@@ -102,62 +105,61 @@ const logIn = (req, res, next) => {
           role: loadedUser.IS_ADMIN ? role.ADMIN : role.USER,
         },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: '1h' }
-      )
+        { expiresIn: '1h' },
+      );
 
       res.status(200).json({
-        token: token,
-      })
+        token,
+      });
     })
     .catch((error) => {
-      if (!error.statusCode) {
-        error.statusCode = 500
-      }
-      next(error)
-    })
-}
+      const err = error;
 
-const logOut = (req, res, next) => {
-  res.status(200).json('Logged out.')
-}
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
+const logOut = (_req, res, _next) => {
+  res.status(200).json('Logged out.');
+};
 
 const updatePassword = (req, res, next) => {
-  const email = req.body.email
-  const currentPassword = req.body.currentPassword
-  const newPassword = req.body.newPassword
+  const { email, currentPassword, newPassword } = req.body;
 
   userService
     .getUserByEmail(email)
     .then((user) => {
       if (!user) {
-        const err = new Error()
-        err.statusCode = 401
-        err.customMessage = 'Credentiale gresite!'
-        throw err
+        const err = new Error();
+        err.statusCode = 401;
+        err.customMessage = 'Credentiale gresite!';
+        throw err;
       }
-      return currentPassword === user.PASSWORD ? true : false
+      return currentPassword === user.PASSWORD;
     })
     .then((isValid) => {
       if (isValid) {
-        return bcrypt.hash(newPassword, 12)
-      } else {
-        const err = new Error()
-        err.statusCode = 401
-        err.customMessage = 'Credentiale gresite!'
-        throw err
+        return bcrypt.hash(newPassword, 12);
       }
+
+      const err = new Error();
+      err.statusCode = 401;
+      err.customMessage = 'Credentiale gresite!';
+      throw err;
     })
     .then((hashedPassword) => {
-      return userService.updateUserPassword(email, hashedPassword)
+      return userService.updateUserPassword(email, hashedPassword);
     })
     .then((result) => {
-      res.json(result)
+      res.json(result);
     })
     .catch((error) => {
-      next(error)
-    })
-}
+      next(error);
+    });
+};
+// #endregion
 
-//#endregion
-
-module.exports = { register, logIn, logOut, updatePassword, createUser }
+module.exports = { register, logIn, logOut, updatePassword, createUser };

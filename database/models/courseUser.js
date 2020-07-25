@@ -9,7 +9,7 @@ CourseUser.init(
       type: Sequelize.BIGINT,
       autoIncrement: true,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
     },
 
     ID_USER: {
@@ -17,8 +17,8 @@ CourseUser.init(
       type: Sequelize.BIGINT,
       references: {
         model: 'USER',
-        key: 'ID'
-      }
+        key: 'ID',
+      },
     },
 
     ID_COURSE: {
@@ -26,8 +26,8 @@ CourseUser.init(
       type: Sequelize.BIGINT,
       references: {
         model: 'COURSE',
-        key: 'ID'
-      }
+        key: 'ID',
+      },
     },
 
     SCORE: {
@@ -36,30 +36,30 @@ CourseUser.init(
       defaultValue: 0,
       validate: {
         min: 0,
-        max: 100
-      }
+        max: 100,
+      },
     },
 
     createdAt: {
       allowNull: false,
-      type: Sequelize.DATE
+      type: Sequelize.DATE,
     },
 
     updatedAt: {
       allowNull: false,
-      type: Sequelize.DATE
+      type: Sequelize.DATE,
     },
-    
+
     deletedAt: {
       allowNull: true,
       defaultValue: null,
-      type: Sequelize.DATE
-    }
+      type: Sequelize.DATE,
+    },
   },
   {
     sequelize,
     modelName: 'COURSE_USER',
-    freezeTableName: true
+    freezeTableName: true,
   },
 );
 

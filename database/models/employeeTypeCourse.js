@@ -2,51 +2,51 @@ const Sequelize = require('sequelize');
 
 const sequelize = require('../config/sequelizeConfig');
 
-class EmployeeTypeCourse extends Sequelize.Model { }
+class EmployeeTypeCourse extends Sequelize.Model {}
 EmployeeTypeCourse.init(
   {
     ID: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
-      type: Sequelize.BIGINT
+      type: Sequelize.BIGINT,
     },
     ID_EMPLOYEE_TYPE: {
       allowNull: false,
       type: Sequelize.BIGINT,
       references: {
         model: 'EMPLOYEE_TYPE',
-        key: 'ID'
-      }
+        key: 'ID',
+      },
     },
     ID_COURSE: {
       allowNull: false,
       type: Sequelize.BIGINT,
       references: {
         model: 'COURSE',
-        key: 'ID'
-      }
+        key: 'ID',
+      },
     },
     createdAt: {
       allowNull: false,
-      type: Sequelize.DATE
+      type: Sequelize.DATE,
     },
     updatedAt: {
       allowNull: false,
-      type: Sequelize.DATE
+      type: Sequelize.DATE,
     },
 
     deletedAt: {
       allowNull: true,
       defaultValue: null,
-      type: Sequelize.DATE
-    }
+      type: Sequelize.DATE,
+    },
   },
   {
     sequelize,
     modelName: 'EMPLOYEE_TYPE_COURSE',
-    freezeTableName: true
-  }
+    freezeTableName: true,
+  },
 );
 
 module.exports = EmployeeTypeCourse;

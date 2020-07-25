@@ -1,82 +1,72 @@
-//#region 'LOCAL DEP'
-const {
-  Course,
-  Question,
-  Answer,
-  CourseUser,
-  CourseType,
-  EmployeeTypeCourse,
-} = require('../../database/models');
-const fileService = require('./fileService');
+// #region 'LOCAL DEP'
+const { Course, Question, Answer, CourseUser, CourseType, EmployeeTypeCourse } = require('../../database/models');
 const sequelize = require('../../database/config/sequelizeConfig');
-//#endregion
+// #endregion
 
-//TEMPORARY LOGIC
+// TEMPORARY LOGIC
 const getCourse = (courseId) => {
   return Course.findByPk(courseId);
 };
 
-const getCoursesList = () => {
+const getCoursesList = async () => {
   return Course.findAll({
     where: {
-      deletedAt: null
-    }
-  })    
-    .then((courses) =>
-      courses.map((currentCourse) => ({
-        ID: currentCourse.ID,
-        NAME: currentCourse.NAME
-      })))
+      deletedAt: null,
+    },
+  }).then((courses) =>
+    courses.map((currentCourse) => ({
+      ID: currentCourse.ID,
+      NAME: currentCourse.NAME,
+    })),
+  );
 };
 
 const deleteCourse = async (courseId) => {
-  let seqTransaction = null
-  try{
-    seqTransaction = await sequelize.transaction()
+  let seqTransaction = null;
+  try {
+    seqTransaction = await sequelize.transaction();
 
     const resultUpdateCourse = await Course.update(
-      {deletedAt: new Date()},
+      { deletedAt: new Date() },
       {
         where: {
-          ID: courseId
+          ID: courseId,
         },
-        transaction: seqTransaction
-      }
-    )
-    
-    if(!resultUpdateCourse[0]) 
-      throw new Error("resultUpdateCourse")
-    const resultCourseUser = await CourseUser.update(
-      {deletedAt: new Date()},
-      {
-        where: {
-          ID_COURSE: courseId
-        },
-        transaction: seqTransaction
-      }
-    )
-    
-    const resultEmployeeTypeCourse = await EmployeeTypeCourse.update(
-      {deletedAt: new Date()},
-      {
-        where: {
-          ID_COURSE: courseId
-        },
-        transaction: seqTransaction
-      }
-    )
+        transaction: seqTransaction,
+      },
+    );
 
-    return seqTransaction.commit()
+    if (!resultUpdateCourse[0]) throw new Error('resultUpdateCourse');
+    await CourseUser.update(
+      { deletedAt: new Date() },
+      {
+        where: {
+          ID_COURSE: courseId,
+        },
+        transaction: seqTransaction,
+      },
+    );
 
-  } catch(err) {
-    await seqTransaction.rollback()
-    throw error
+    await EmployeeTypeCourse.update(
+      { deletedAt: new Date() },
+      {
+        where: {
+          ID_COURSE: courseId,
+        },
+        transaction: seqTransaction,
+      },
+    );
+
+    return seqTransaction.commit();
+  } catch (err) {
+    await seqTransaction.rollback();
+    throw err;
   }
-}
+};
 
-const addCourse = (course) => {
+const addCourse = async (course) => {
   return Course.create(course).catch((error) => {
-    let err = new Error(error);
+    const err = new Error(error);
     err.statusCode = 400;
     err.customMessage = 'Invalid course data';
     throw err;
@@ -84,10 +74,7 @@ const addCourse = (course) => {
 };
 
 const assignVideoToCourse = (courseId, videoUrl) => {
-  return Course.update(
-    { VIDEO_URL: videoUrl },
-    { where: { ID: courseId }, returning: true, plain: true }
-  );
+  return Course.update({ VIDEO_URL: videoUrl }, { where: { ID: courseId }, returning: true, plain: true });
 };
 
 const getQuizForCourse = (courseId) => {
@@ -107,8 +94,9 @@ const getQuizForCourse = (courseId) => {
 };
 
 const setQuizForCourse = (courseId, quiz) => {
-  const questionActions = quiz.map((element) => {
-    Question.create({
+  // TODO: improve this
+  const questionActions = quiz.map(async (element) => {
+    return Question.create({
       TEXT: element.TEXT,
       ID_COURSE: courseId,
     }).then((question) => {
@@ -117,7 +105,7 @@ const setQuizForCourse = (courseId, quiz) => {
           TEXT: answer.TEXT,
           IS_CORRECT: answer.IS_CORRECT,
           ID_QUESTION: question.ID,
-        })
+        }),
       );
       return Promise.all(answerActions);
     });
@@ -128,24 +116,24 @@ const setQuizForCourse = (courseId, quiz) => {
 const completeCourse = (courseId, userId, score) => {
   return CourseUser.update(
     { SCORE: score },
-    { where: { ID_USER: userId, ID_COURSE: courseId }, returning: true, plain: true }
+    { where: { ID_USER: userId, ID_COURSE: courseId }, returning: true, plain: true },
   );
 };
 
 const getCourseTypes = async () => {
-  coursesTypes = await CourseType.findAll({ attributes: ['ID', 'NAME', 'MONTHS_NUMBER'] })
-  return coursesTypes
+  const coursesTypes = await CourseType.findAll({ attributes: ['ID', 'NAME', 'MONTHS_NUMBER'] });
+  return coursesTypes;
 };
 
 const assignCourseToUsers = (courseId, userIds) => {
-  let promises = [];
+  const promises = [];
   userIds.forEach((userId) =>
     promises.push(
       CourseUser.create({
         ID_COURSE: courseId,
         ID_USER: userId,
-      })
-    )
+      }),
+    ),
   );
   return Promise.all(promises);
 };
@@ -168,5 +156,5 @@ module.exports = {
   assignVideoToCourse,
   getCourseTypes,
   getCoursesList,
-  deleteCourse
+  deleteCourse,
 };

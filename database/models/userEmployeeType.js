@@ -2,14 +2,14 @@ const Sequelize = require('sequelize');
 
 const sequelize = require('../config/sequelizeConfig');
 
-class UserEmployeeType extends Sequelize.Model { }
+class UserEmployeeType extends Sequelize.Model {}
 UserEmployeeType.init(
   {
     ID: {
       type: Sequelize.BIGINT,
       autoIncrement: true,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
     },
 
     ID_USER: {
@@ -17,8 +17,8 @@ UserEmployeeType.init(
       type: Sequelize.BIGINT,
       references: {
         model: 'USER',
-        key: 'ID'
-      }
+        key: 'ID',
+      },
     },
 
     ID_EMPLOYEE_TYPE: {
@@ -26,31 +26,31 @@ UserEmployeeType.init(
       type: Sequelize.BIGINT,
       references: {
         model: 'EMPLOYEE_TYPE',
-        key: 'ID'
-      }
+        key: 'ID',
+      },
     },
 
     createdAt: {
       allowNull: false,
-      type: Sequelize.DATE
+      type: Sequelize.DATE,
     },
 
     updatedAt: {
       allowNull: false,
-      type: Sequelize.DATE
+      type: Sequelize.DATE,
     },
 
     deletedAt: {
       allowNull: true,
       defaultValue: null,
-      type: Sequelize.DATE
-    }
+      type: Sequelize.DATE,
+    },
   },
   {
     sequelize,
     modelName: 'USER_EMPLOYEE_TYPE',
-    freezeTableName: true
-  }
+    freezeTableName: true,
+  },
 );
 
 module.exports = UserEmployeeType;
