@@ -64,19 +64,6 @@ const deleteCourse = async (courseId) => {
   }
 };
 
-const addCourse = async (course) => {
-  return Course.create(course).catch((error) => {
-    const err = new Error(error);
-    err.statusCode = 400;
-    err.customMessage = 'Invalid course data';
-    throw err;
-  });
-};
-
-const assignVideoToCourse = (courseId, videoUrl) => {
-  return Course.update({ VIDEO_URL: videoUrl }, { where: { ID: courseId }, returning: true, plain: true });
-};
-
 const getQuizForCourse = (courseId) => {
   return Question.findAll({
     attributes: ['ID', 'TEXT'],
@@ -93,24 +80,46 @@ const getQuizForCourse = (courseId) => {
   });
 };
 
-const setQuizForCourse = (courseId, quiz) => {
-  // TODO: improve this
-  const questionActions = quiz.map(async (element) => {
-    return Question.create({
-      TEXT: element.TEXT,
-      ID_COURSE: courseId,
-    }).then((question) => {
+const setQuizForCourse = async (courseId, quiz, t) => {
+  const questionActions = quiz.map(async (element) =>
+    Question.create(
+      {
+        TEXT: element.TEXT,
+        ID_COURSE: courseId,
+      },
+      { transaction: t },
+    ).then(async (question) => {
       const answerActions = element.ANSWERS.map((answer) =>
-        Answer.create({
-          TEXT: answer.TEXT,
-          IS_CORRECT: answer.IS_CORRECT,
-          ID_QUESTION: question.ID,
-        }),
+        Answer.create(
+          {
+            TEXT: answer.TEXT,
+            IS_CORRECT: answer.IS_CORRECT,
+            ID_QUESTION: question.ID,
+          },
+          { transaction: t },
+        ),
       );
-      return Promise.all(answerActions);
-    });
-  });
-  return Promise.all(questionActions);
+      const result = await Promise.all(answerActions);
+      return result;
+    }),
+  );
+  const result = await Promise.all(questionActions);
+  return result;
+};
+
+const addCourse = async (course, quiz) => {
+  const t = await sequelize.transaction();
+
+  try {
+    let newCourse = await Course.create(course, { transaction: t });
+    newCourse = { ID: newCourse.ID, NAME: newCourse.NAME };
+    await setQuizForCourse(newCourse.ID, quiz, t);
+    await t.commit();
+    return newCourse;
+  } catch (error) {
+    await t.rollback();
+    throw error;
+  }
 };
 
 const completeCourse = (courseId, userId, score) => {
@@ -150,10 +159,8 @@ module.exports = {
   assignCourseToUsers,
   getCourse,
   getQuizForCourse,
-  setQuizForCourse,
   completeCourse,
   addCourse,
-  assignVideoToCourse,
   getCourseTypes,
   getCoursesList,
   deleteCourse,
