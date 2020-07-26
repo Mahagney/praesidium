@@ -1,3 +1,4 @@
+const { DEBUG } = require('bunyan');
 const { isUndefined } = require('lodash');
 
 const configLoader = require('../loaders/config');
@@ -9,6 +10,7 @@ const {
   NODE_ENV,
   PORT,
   ACCESS_TOKEN_SECRET,
+  STOUT_LOG_LEVEL,
   // mail
   EMAIL,
   PASSWORD,
@@ -17,6 +19,7 @@ const {
   DB_PASSWORD,
   DB_NAME,
   DB_HOST,
+  DB_LOGGING,
   // aws
   AWS_KEY_PAIR_ID,
   AWS_PRIVATE_KEY_PATH,
@@ -68,5 +71,13 @@ module.exports = {
     database: DB_NAME,
     host: DB_HOST,
     dialect: 'postgres',
+    logging: !isUndefined(DB_LOGGING) ? DB_LOGGING === 'true' : true,
+  },
+  logger: {
+    streams: {
+      stdout: {
+        level: !isUndefined(STOUT_LOG_LEVEL) ? parseInt(STOUT_LOG_LEVEL, 10) : DEBUG,
+      },
+    },
   },
 };

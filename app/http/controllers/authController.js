@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 // #endregion
 
 // #region 'LOCAL DEP'
+const logger = require('../../../loaders/logger');
 const { accessTokenSecret } = require('../../../config');
 const userService = require('../../services/userService');
 const emailService = require('../../services/emailService');
@@ -23,15 +24,13 @@ const register = async (req, res, next) => {
     .then((jsonUsers) => {
       return Promise.all(
         jsonUsers.map((jsonUser) => {
-          // eslint-disable-next-line no-console
-          console.log(jsonUser);
+          logger.debug({ jsonUser });
           return userService.createUser(jsonUser);
         }),
       );
     })
     .then((createdUsers) => {
-      // eslint-disable-next-line no-console
-      console.log(createdUsers);
+      logger.debug({ createdUsers });
       return Promise.all(
         createdUsers.map((createUser) => {
           return emailService.sendEmail(createUser);
@@ -39,8 +38,7 @@ const register = async (req, res, next) => {
       );
     })
     .then((emails) => {
-      // eslint-disable-next-line no-console
-      console.log(emails);
+      logger.debug({ emails });
       return res.status(201).json('Users created.');
     })
     .catch((error) => {

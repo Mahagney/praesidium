@@ -4,16 +4,16 @@
  * Module dependencies.
  */
 
-const debug = require('debug')('praesidium:server');
 const http = require('http');
 
 const app = require('../app');
-const { port: portConfig } = require('../config');
+const config = require('../config');
+const logger = require('../loaders/logger');
 
 /**
  * Get port from environment and store in Express.
  */
-const port = process.argv[2] === '--port' ? process.argv[3] : portConfig;
+const port = process.argv[2] === '--port' ? process.argv[3] : config.port;
 // #region 'MIDDLEWARES'
 app.set('port', port);
 
@@ -37,12 +37,10 @@ function onError(error) {
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      // eslint-disable-next-line no-console
-      console.error(`${bind} requires elevated privileges`);
+      logger.error({ bind }, `${bind} requires elevated privileges`);
       return process.exit(1);
     case 'EADDRINUSE':
-      // eslint-disable-next-line no-console
-      console.error(`${bind} is already in use`);
+      logger.error({ bind }, `${bind} is already in use`);
       return process.exit(1);
     default:
       throw error;
@@ -56,7 +54,9 @@ function onError(error) {
 function onListening() {
   const addr = server.address();
   const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
-  debug(`Listening on ${bind}`);
+
+  logger.debug({ config }, `Server config`);
+  logger.info({ addr }, `Listening on ${bind}`);
 }
 
 /**
