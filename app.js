@@ -6,15 +6,13 @@ const multer = require('multer');
 // #endregion
 
 // #region 'LOCAL DEP'
-const config = require('./config/default');
+const { cors: corsOptions } = require('./config');
 const authRoutes = require('./app/http/routes/auth');
 const usersRoutes = require('./app/http/routes/users');
 const coursesRoutes = require('./app/http/routes/courses');
 const companiesRouter = require('./app/http/routes/companies');
 const employeeTypesRouter = require('./app/http/routes/employeeTypes');
 // #endregion
-
-require('dotenv').config(); // loading env variables to process.env
 
 // #region 'INITS'
 const fileStorage = multer.diskStorage({
@@ -40,11 +38,10 @@ const filter = (_req, file, cb) => {
 
 const app = express();
 
-const CORS_OPTIONS = config.corsOptions;
 // #endregion
 // #region 'MIDDLEWARES'
 
-app.use(cors(CORS_OPTIONS));
+app.use(cors(corsOptions));
 app.use(express.json()); // it includes body-parser
 app.use(express.urlencoded({ extended: true }));
 app.use(logger('dev'));

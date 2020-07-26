@@ -1,6 +1,6 @@
 // #region 'LOCAL DEP'
 const { Course, Question, Answer, CourseUser, CourseType, EmployeeTypeCourse } = require('../../database/models');
-const sequelize = require('../../database/config/sequelizeConfig');
+const sequelize = require('../../loaders/sequelize');
 // #endregion
 
 // TEMPORARY LOGIC

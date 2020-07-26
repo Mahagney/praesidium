@@ -1,7 +1,7 @@
 // #region 'NPM DEP'
 const passGenerator = require('generate-password');
 const { Op } = require('sequelize');
-const sequelize = require('../../database/config/sequelizeConfig');
+const sequelize = require('../../loaders/sequelize');
 // #endregion
 
 // #region 'LOCAL DEP'

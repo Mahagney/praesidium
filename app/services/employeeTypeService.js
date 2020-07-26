@@ -1,5 +1,5 @@
 // #region 'NPM DEP'
-const sequelize = require('../../database/config/sequelizeConfig');
+const sequelize = require('../../loaders/sequelize');
 // #endregion
 
 // #region 'LOCAL DEP'

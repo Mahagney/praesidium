@@ -3,6 +3,8 @@ const jwt = require('jsonwebtoken');
 const { get } = require('lodash');
 // #endregion
 
+const { accessTokenSecret } = require('../../../config');
+
 module.exports = (req, _res, next) => {
   const authHeader = get(req.headers, 'authorization', '');
   const token = authHeader && authHeader.split(' ')[1];
@@ -13,7 +15,7 @@ module.exports = (req, _res, next) => {
   }
   let decodedToken;
   try {
-    decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    decodedToken = jwt.verify(token, accessTokenSecret);
   } catch (error) {
     error.statusCode = 403;
     throw error;
