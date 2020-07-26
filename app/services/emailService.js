@@ -2,12 +2,14 @@
 const nodemailer = require('nodemailer');
 // #endregion
 
+const { mail } = require('../../config');
+
 // Step 1
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: process.env.EMAIL, // your gmail account
-    pass: process.env.PASSWORD, // your gmail password
+    user: mail.address, // your gmail account
+    pass: mail.password, // your gmail password
   },
   tls: { rejectUnauthorized: false },
 });
@@ -15,7 +17,7 @@ const transporter = nodemailer.createTransport({
 const sendEmail = async (user) => {
   // Step 2
   const mailOptions = {
-    from: process.env.EMAIL, // email sender
+    from: mail.address, // email sender
     to: user.EMAIL, //  email receiver
     subject: 'Praesidium Email - Test',
     text: `Utilizator: ${user.EMAIL}\r\nParola: ${user.PASSWORD}`,

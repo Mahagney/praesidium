@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-const sequelize = require('../config/sequelizeConfig');
+const sequelize = require('../../loaders/sequelize');
 
 class Question extends Sequelize.Model {}
 Question.init(

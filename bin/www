@@ -6,12 +6,14 @@
 
 const debug = require('debug')('praesidium:server');
 const http = require('http');
+
 const app = require('../app');
+const { port: portConfig } = require('../config');
 
 /**
  * Get port from environment and store in Express.
  */
-const port = (process.argv[2] === '--port' ? process.argv[3] : process.env.PORT) || 3000;
+const port = process.argv[2] === '--port' ? process.argv[3] : portConfig;
 // #region 'MIDDLEWARES'
 app.set('port', port);
 

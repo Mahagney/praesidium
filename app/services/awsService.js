@@ -2,9 +2,11 @@ const awsSDK = require('aws-sdk');
 const cfsign = require('aws-cloudfront-sign');
 const fs = require('fs');
 
+const { aws: awsConfig, s3: s3Config } = require('../../config');
+
 const signingParams = {
-  keypairId: process.env.AWS_KEY_PAIR_ID,
-  privateKeyPath: process.env.AWS_PRIVATE_KEY_PATH,
+  keypairId: awsConfig.keyPairId,
+  privateKeyPath: awsConfig.privateKeyPath,
   expireTime: new Date().getTime() + 999999999,
 };
 
@@ -12,13 +14,13 @@ const signingParams = {
 const getSignedUrl = (fileName) => {
   if (!fileName) return '';
 
-  return cfsign.getSignedUrl(`${process.env.AWS_DISTRIBUTION}/${fileName}`, signingParams);
+  return cfsign.getSignedUrl(`${awsConfig.distribution}/${fileName}`, signingParams);
 };
 
 const uploadFileToS3 = (fileNameParam, fileDirectoryPath, pathInBucket) => {
   awsSDK.config.update({
-    accessKeyId: process.env.S3_ACCESS_KEY_ID,
-    secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+    accessKeyId: s3Config.accessKeyId,
+    secretAccessKey: s3Config.secretAccessKey,
   });
   const s3 = new awsSDK.S3();
   const fileName = fileNameParam.replace(/\s/g, '');
@@ -29,7 +31,7 @@ const uploadFileToS3 = (fileNameParam, fileDirectoryPath, pathInBucket) => {
       }
       s3.putObject(
         {
-          Bucket: `${process.env.S3_BUCKET_NAME}/${pathInBucket}`,
+          Bucket: `${s3Config.bucketName}/${pathInBucket}`,
           Key: fileName,
           Body: data,
         },

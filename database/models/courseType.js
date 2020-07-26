@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-const sequelize = require('../config/sequelizeConfig');
+const sequelize = require('../../loaders/sequelize');
 
 class CourseType extends Sequelize.Model {}
 CourseType.init(

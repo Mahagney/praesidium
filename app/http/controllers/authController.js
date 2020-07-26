@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 // #endregion
 
 // #region 'LOCAL DEP'
+const { accessTokenSecret } = require('../../../config');
 const userService = require('../../services/userService');
 const emailService = require('../../services/emailService');
 const fileService = require('../../services/fileService');
@@ -104,7 +105,7 @@ const logIn = async (req, res, next) => {
           one_time_auth: loadedUser.ONE_TIME_AUTH,
           role: loadedUser.IS_ADMIN ? role.ADMIN : role.USER,
         },
-        process.env.ACCESS_TOKEN_SECRET,
+        accessTokenSecret,
         { expiresIn: '1h' },
       );
 
