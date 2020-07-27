@@ -3,13 +3,14 @@ const { sequelize } = require('.');
 module.exports = {
   development: {
     ...sequelize,
-    // eslint-disable-next-line no-console
-    logging: console.log,
+    logging: true,
   },
   test: {
     ...sequelize,
+    logging: false,
   },
   production: {
     ...sequelize,
+    logging: false,
   },
 };

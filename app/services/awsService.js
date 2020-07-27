@@ -2,6 +2,7 @@ const awsSDK = require('aws-sdk');
 const cfsign = require('aws-cloudfront-sign');
 const fs = require('fs');
 
+const logger = require('../../loaders/logger');
 const { aws: awsConfig, s3: s3Config } = require('../../config');
 
 const signingParams = {
@@ -37,8 +38,7 @@ const uploadFileToS3 = (fileNameParam, fileDirectoryPath, pathInBucket) => {
         },
         (s3error) => {
           fs.unlink(fileDirectoryPath.toString(), (error) => {
-            // eslint-disable-next-line no-console
-            if (error) console.log(error);
+            if (error) logger.error({ error });
           });
           if (s3error) reject(s3error);
           resolve({
