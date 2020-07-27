@@ -15,18 +15,16 @@ const { role } = require('../../utils/constants');
 
 router.get('/', authenticateToken, authorization(role.ADMIN), coursesController.getCoursesList);
 router.get('/types', authenticateToken, authorization(role.ADMIN), coursesController.getCourseTypes);
-router.delete('/:id', coursesController.deleteCourse);
+router.delete('/:id', authenticateToken, authorization(role.ADMIN), coursesController.deleteCourse);
 router.get('/:id', authenticateToken, authorization(role.ADMIN), coursesController.getCourseWithSignedUrls);
 router.post('/', authenticateToken, authorization(role.ADMIN), coursesController.addCourse);
 
 // TODO: remove ID,unused
+
 router.get('/:id/video', authenticateToken, coursesController.getFile);
 router.post('/:id/employeeType/:employeeTypeId', authenticateToken, coursesController.assignCourse);
-router.post('/:id/video', authenticateToken, coursesController.uploadVideoToCourse);
 
 router.get('/:id/quiz', authenticateToken, coursesController.getQuizForCourse);
-
-router.post('/:id/quiz', authenticateToken, authorization(role.ADMIN), coursesController.setQuizForCourse);
 
 router.put('/:id/user/:userId/complete', authenticateToken, coursesController.completeCourse);
 

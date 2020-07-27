@@ -2,6 +2,7 @@
 const courseService = require('../../services/courseService');
 const awsService = require('../../services/awsService');
 const employeeTypeService = require('../../services/employeeTypeService');
+const { generateSlug } = require('../../utils/usefullFunctions');
 // #endregion
 
 const getCoursesList = (_req, res, _next) => {
@@ -10,26 +11,42 @@ const getCoursesList = (_req, res, _next) => {
   });
 };
 
-const addCourse = (req, res, next) => {
-  const pdfFile = req.files.pdf[0];
-  if (pdfFile) {
-    awsService
-      .uploadFileToS3(pdfFile.originalname, pdfFile.path, 'pdf')
-      .then((result) => {
-        courseService
-          .addCourse({
-            NAME: req.body.name,
-            ID_COURSE_TYPE: req.body.idCourseType,
-            PDF_URL: result.path,
-            VIDEO_URL: '',
-          })
-          .then((course) => {
-            res.status(200).json(course);
-          })
-          .catch((error) => next(error));
-      })
-      .catch((error) => next(error));
-  } else res.status(400).json({ message: 'No pdf file' });
+const addCourse = async (req, res, next) => {
+  const pdfFile = req.files.pdf ? req.files.pdf[0] : null;
+  const { quiz } = req.body;
+  const slug = generateSlug(req.body.name);
+  const promises = [];
+  let videoName = null;
+
+  try {
+    if (pdfFile) {
+      promises.push(awsService.uploadFileToS3(`${slug}.pdf`, pdfFile.path, 'pdf'));
+
+      if (req.files.video) {
+        const videoFile = req.files.video[0];
+        videoName = slug + videoFile.originalname.substring(videoFile.originalname.lastIndexOf('.'));
+        promises.push(awsService.uploadFileToS3(videoName, videoFile.path, 'video'));
+      }
+
+      const results = await Promise.all(promises);
+
+      const pdfPath = results[0].path;
+      const videoPath = results[1] ? results[1].path : '';
+
+      const result = await courseService.addCourse(
+        {
+          NAME: req.body.name,
+          ID_COURSE_TYPE: req.body.idCourseType,
+          PDF_URL: pdfPath,
+          VIDEO_URL: videoPath,
+        },
+        JSON.parse(quiz),
+      );
+      res.status(200).json(result);
+    } else res.status(400).json({ message: 'No pdf file' });
+  } catch (error) {
+    next(error);
+  }
 };
 
 const getFile = (_req, res, _next) => {
@@ -58,17 +75,6 @@ const deleteCourse = (req, res, _next) => {
     });
 };
 
-const uploadVideoToCourse = (req, res, _next) => {
-  const courseId = req.params.id;
-  const video = req.files.video[0];
-  awsService
-    .uploadFileToS3(video.originalname, video.path, 'video')
-    .then((response) => {
-      courseService.assignVideoToCourse(courseId, response.path).then(() => res.send(response));
-    })
-    .catch((err) => res.send(err));
-};
-
 const getCourseWithSignedUrls = (req, res, _next) => {
   const courseId = req.params.id;
   courseService
@@ -91,13 +97,6 @@ const getQuizForCourse = (req, res, _next) => {
       res.send(quiz);
     })
     .catch((err) => res.send(err));
-};
-
-const setQuizForCourse = (req, res, next) => {
-  courseService
-    .setQuizForCourse(req.params.id, req.body.quiz)
-    .then(() => res.status(200).send('quiz added'))
-    .catch((error) => next(error));
 };
 
 const completeCourse = (req, res, next) => {
@@ -139,9 +138,7 @@ module.exports = {
   uploadFile,
   getCourseWithSignedUrls,
   getQuizForCourse,
-  setQuizForCourse,
   completeCourse,
-  uploadVideoToCourse,
   getCourseTypes,
   getCoursesList,
   deleteCourse,
