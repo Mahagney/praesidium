@@ -2,11 +2,10 @@
   "name": "praesidium",
   "version": "0.0.0",
   "private": true,
+  "main": "./src/bin/www",
   "scripts": {
-    "debug": "SET DEBUG=praesidium:* & npm run devstart",
-    "start": "node ./src/bin/www",
-    "prod": "node ./src/bin/www --port 3000",
-    "devstart": "nodemon ./src/bin/www ",
+    "start": "node .",
+    "dev": "nodemon",
     "start-server": "pm2 start ./src/bin/www",
     "lint": "npm run lint:js",
     "lint:eslint": "eslint --ignore-path .gitignore --ext .js",
@@ -41,7 +40,7 @@
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-prettier": "^3.1.4",
-    "nodemon": "^1.19.2",
+    "nodemon": "^1.19.4",
     "prettier": "^2.0.5",
     "sequelize-cli": "^5.5.1"
   }
