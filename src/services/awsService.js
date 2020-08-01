@@ -2,8 +2,8 @@ const awsSDK = require('aws-sdk');
 const cfsign = require('aws-cloudfront-sign');
 const fs = require('fs');
 
-const logger = require('../../loaders/logger');
-const { aws: awsConfig, s3: s3Config } = require('../../config');
+const logger = require('../loaders/logger');
+const { aws: awsConfig, s3: s3Config } = require('../config');
 
 const signingParams = {
   keypairId: awsConfig.keyPairId,

@@ -1,6 +1,7 @@
 const { DEBUG } = require('bunyan');
 const { isUndefined } = require('lodash');
 
+const constants = require('./constants');
 const configLoader = require('../loaders/config');
 
 // Load .env in process.env
@@ -80,4 +81,5 @@ module.exports = {
       },
     },
   },
+  constants,
 };

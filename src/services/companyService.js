@@ -1,5 +1,5 @@
 // #region 'LOCAL DEP'
-const { Company } = require('../../database/models');
+const { Company } = require('../database/models');
 // #endregion
 
 const getCompany = (companyId) => Company.findByPk(companyId);

@@ -1,11 +1,11 @@
 // #region 'NPM DEP'
 const passGenerator = require('generate-password');
 const { Op } = require('sequelize');
-const sequelize = require('../../loaders/sequelize');
+const sequelize = require('../loaders/sequelize');
 // #endregion
 
 // #region 'LOCAL DEP'
-const { User, Course, EmployeeType, UserEmployeeType, CourseUser, Company } = require('../../database/models');
+const { User, Course, EmployeeType, UserEmployeeType, CourseUser, Company } = require('../database/models');
 // #endregion
 
 // #region 'INTERFACE'

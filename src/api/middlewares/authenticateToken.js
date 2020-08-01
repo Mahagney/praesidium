@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const { get } = require('lodash');
 // #endregion
 
-const { accessTokenSecret } = require('../../../config');
+const { accessTokenSecret } = require('../../config');
 
 module.exports = (req, _res, next) => {
   const authHeader = get(req.headers, 'authorization', '');
