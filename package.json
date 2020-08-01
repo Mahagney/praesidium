@@ -4,13 +4,13 @@
   "private": true,
   "scripts": {
     "debug": "SET DEBUG=praesidium:* & npm run devstart",
-    "start": "node ./bin/www",
-    "prod": "node ./bin/www --port 3000",
-    "devstart": "nodemon ./bin/www ",
-    "start-server": "pm2 start ./bin/www",
+    "start": "node ./src/bin/www",
+    "prod": "node ./src/bin/www --port 3000",
+    "devstart": "nodemon ./src/bin/www ",
+    "start-server": "pm2 start ./src/bin/www",
     "lint": "npm run lint:js",
     "lint:eslint": "eslint --ignore-path .gitignore --ext .js",
-    "lint:js": "npm run lint:eslint app/ bin/www database/",
+    "lint:js": "npm run lint:eslint src",
     "lint:fix": "npm run lint:js --fix"
   },
   "dependencies": {

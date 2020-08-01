@@ -42,4 +42,4 @@ echo "Running npm install"
 npm install
 
 #Restart the node server
-pm2 start ./bin/www
+pm2 start ./src/bin/www
