@@ -1,0 +1,15 @@
+{
+  "watch": [
+    "src",
+    ".env"
+  ],
+  "ignore": [
+    ".gitignore",
+    "node_modules/"
+  ],
+  "ext": "js,json,yml",
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "exec": "npm run start"
+}
