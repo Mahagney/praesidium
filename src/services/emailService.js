@@ -2,7 +2,7 @@
 const nodemailer = require('nodemailer');
 // #endregion
 
-const { mail } = require('../../config');
+const { mail } = require('../config');
 
 // Step 1
 const transporter = nodemailer.createTransport({

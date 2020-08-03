@@ -1,77 +1,49 @@
-// #region 'NPM DEP'
-const cors = require('cors');
 const express = require('express');
-const logger = require('morgan');
-const multer = require('multer');
-// #endregion
 
-// #region 'LOCAL DEP'
-const { cors: corsOptions } = require('./config');
-const authRoutes = require('./app/http/routes/auth');
-const usersRoutes = require('./app/http/routes/users');
-const coursesRoutes = require('./app/http/routes/courses');
-const companiesRouter = require('./app/http/routes/companies');
-const employeeTypesRouter = require('./app/http/routes/employeeTypes');
-// #endregion
+const logger = require('./loaders/logger');
+const appLoader = require('./loaders/app');
 
-// #region 'INITS'
-const fileStorage = multer.diskStorage({
-  destination: (_req, _file, cb) => {
-    cb(null, 'uploads');
-  },
-  filename: (_req, file, cb) => {
-    cb(null, `${new Date().toISOString().replace(/:/g, '-')}_${file.originalname}`);
-  },
-});
-const filter = (_req, file, cb) => {
-  if (
-    file.mimetype === 'text/csv' ||
-    file.mimetype === 'application/pdf' ||
-    file.mimetype === 'audio/mpeg' ||
-    file.mimetype === 'video/mp4'
-  ) {
-    cb(null, true);
-  } else {
-    cb(null, false);
-  }
-};
+function startServer(config) {
+  const app = express();
 
-const app = express();
+  appLoader(app, config);
 
-// #endregion
-// #region 'MIDDLEWARES'
+  const server = app.listen(config.port, (err) => {
+    if (err) {
+      logger.error({ err }, `Error caught on server listen ...`);
+      process.exit(1);
+    }
+  });
 
-app.use(cors(corsOptions));
-app.use(express.json()); // it includes body-parser
-app.use(express.urlencoded({ extended: true }));
-app.use(logger('dev'));
-app.use(
-  multer({ storage: fileStorage, fileFilter: filter }).fields([
-    { name: 'video', maxCount: 1 },
-    { name: 'pdf', maxCount: 1 },
-  ]),
-);
-// #endregion
+  server.on('error', function onError(error) {
+    if (error.syscall !== 'listen') {
+      throw error;
+    }
 
-// ROUTES
-app.use('/auth', authRoutes);
-app.use('/users', usersRoutes);
-app.use('/courses', coursesRoutes);
-app.use('/companies', companiesRouter);
-app.use('/employeeTypes', employeeTypesRouter);
+    const bind = typeof port === 'string' ? `Pipe ${config.port}` : `Port ${config.port}`;
 
-app.get('/health', (_req, res, _next) => res.send('Running'));
+    // handle specific listen errors with friendly messages
+    switch (error.code) {
+      case 'EACCES':
+        logger.error({ bind }, `${bind} requires elevated privileges`);
+        return process.exit(1);
+      case 'EADDRINUSE':
+        logger.error({ bind }, `${bind} is already in use`);
+        return process.exit(1);
+      default:
+        throw error;
+    }
+  });
 
-// global error handler for the app
-app.use((error, _req, res, _next) => {
-  const status = error.statusCode || 500;
-  let customMessage = null;
-  if (status === 500) {
-    customMessage = 'Eroare server!';
-  } else {
-    customMessage = error.customMessage || error.message;
-  }
-  res.status(status).json({ customMessage });
-});
+  server.on('listening', function onListening() {
+    const addr = server.address();
+    const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
 
-module.exports = app;
+    logger.debug({ config }, `Server config`);
+    logger.info({ addr }, `Listening on ${bind}`);
+  });
+
+  return server;
+}
+
+module.exports = startServer;

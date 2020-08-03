@@ -1,6 +1,8 @@
 // #region 'LOCAL DEP'
 const userService = require('../../services/userService');
-const { course } = require('../../utils/constants');
+const {
+  constants: { course },
+} = require('../../config');
 const awsService = require('../../services/awsService');
 // #endregion
 

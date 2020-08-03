@@ -2,7 +2,7 @@
 const courseService = require('../../services/courseService');
 const awsService = require('../../services/awsService');
 const employeeTypeService = require('../../services/employeeTypeService');
-const { generateSlug } = require('../../utils/usefullFunctions');
+const { generateSlug } = require('../../utils');
 // #endregion
 
 const getCoursesList = (_req, res, _next) => {

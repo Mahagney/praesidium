@@ -1,9 +1,9 @@
 // #region 'NPM DEP'
-const sequelize = require('../../loaders/sequelize');
+const sequelize = require('../loaders/sequelize');
 // #endregion
 
 // #region 'LOCAL DEP'
-const { EmployeeType, EmployeeTypeCourse, User, CourseUser } = require('../../database/models');
+const { EmployeeType, EmployeeTypeCourse, User, CourseUser } = require('../database/models');
 // #endregion
 
 const getEmployeeTypes = () =>

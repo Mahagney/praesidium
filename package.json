@@ -2,14 +2,14 @@
   "name": "praesidium",
   "version": "0.0.0",
   "private": true,
-  "main": "./src/bin/www",
+  "main": "./index.js",
   "scripts": {
     "start": "node .",
     "dev": "nodemon",
-    "start-server": "pm2 start ./src/bin/www",
+    "start-server": "pm2 start ./index.js",
     "lint": "npm run lint:js",
-    "lint:eslint": "eslint --ignore-path .gitignore --ext .js",
     "lint:js": "npm run lint:eslint src",
+    "lint:eslint": "eslint --ignore-path .gitignore --ext .js",
     "lint:fix": "npm run lint:js --fix"
   },
   "dependencies": {

@@ -1,6 +1,6 @@
 const { Sequelize } = require('sequelize');
 
-const logger = require('../loaders/logger');
+const logger = require('./logger');
 const { sequelize: sequelizeConfig } = require('../config');
 
 const sequelizeLogger = (...args) => {

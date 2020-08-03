@@ -4,12 +4,14 @@ const jwt = require('jsonwebtoken');
 // #endregion
 
 // #region 'LOCAL DEP'
-const logger = require('../../../loaders/logger');
-const { accessTokenSecret } = require('../../../config');
+const logger = require('../../loaders/logger');
+const {
+  accessTokenSecret,
+  constants: { role },
+} = require('../../config');
 const userService = require('../../services/userService');
 const emailService = require('../../services/emailService');
 const fileService = require('../../services/fileService');
-const { role } = require('../../utils/constants');
 // #endregion
 
 // #region 'INTERFACE'
