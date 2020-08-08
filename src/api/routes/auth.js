@@ -1,15 +1,16 @@
 const { Router } = require('express');
 const { body } = require('express-validator');
 
+const { auth } = require('../middlewares');
 const authenticateToken = require('../middlewares/authenticateToken');
 const showValidationResult = require('../middlewares/showValidationResult');
-const { logIn, logOut, register, updatePassword } = require('../controllers/authController');
+const { logOut, register, updatePassword } = require('../controllers/authController');
 
 const router = () => {
   const authRouter = Router();
 
   // ! Keep in mind the order of the endpoints
-  authRouter.post('/login', logIn);
+  authRouter.post('/login', auth.loginMiddleware);
   authRouter.get('/logout', logOut);
   authRouter.put(
     '/update-password',

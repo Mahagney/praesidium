@@ -1,20 +1,17 @@
-// #region 'NPM DEP'
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-// #endregion
+const { isUndefined: _isUndefined, isNull: _isNull } = require('lodash');
 
-// #region 'LOCAL DEP'
 const logger = require('../../loaders/logger');
+const userService = require('../../services/userService');
+const fileService = require('../../services/fileService');
+const emailService = require('../../services/emailService');
+const { UserWithEmailNotFoundError, BadUserPasswordError } = require('../../models/errors/auth');
 const {
   accessTokenSecret,
   constants: { role },
 } = require('../../config');
-const userService = require('../../services/userService');
-const emailService = require('../../services/emailService');
-const fileService = require('../../services/fileService');
-// #endregion
 
-// #region 'INTERFACE'
 const register = async (req, res, next) => {
   const { file } = req.file;
   if (!file) {
@@ -65,62 +62,37 @@ const createUser = async (req, res, next) => {
     });
 };
 
-const logIn = async (req, res, next) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
-    const err = new Error('Authentication failed!');
-    err.statusCode = 401;
+const login = async (email, password) => {
+  try {
+    const user = await userService.getUserByEmail(email);
+
+    if (_isUndefined(user) || _isNull(user)) {
+      throw new UserWithEmailNotFoundError(`User with email ${email} not found`);
+    }
+
+    const passwordIsGood = user.ONE_TIME_AUTH ? bcrypt.compare(password, user.PASSWORD) : user.PASSWORD === password;
+
+    if (!passwordIsGood) {
+      throw new BadUserPasswordError(`Bad password received for email ${email}`);
+    }
+
+    // TODO: this step must be moved to a middleware
+    const token = jwt.sign(
+      {
+        id: user.ID,
+        email: user.EMAIL,
+        one_time_auth: user.ONE_TIME_AUTH,
+        role: user.IS_ADMIN ? role.ADMIN : role.USER,
+      },
+      accessTokenSecret,
+      { expiresIn: '1h' },
+    );
+
+    return token;
+  } catch (err) {
+    logger.error({ err, message: err.message }, 'Error caught in auth login controller');
     throw err;
   }
-  let loadedUser;
-  userService
-    .getUserByEmail(email)
-    .then((user) => {
-      if (!user) {
-        const err = new Error('Authentication failed!');
-        err.statusCode = 401;
-        throw err;
-      }
-      loadedUser = user;
-      if (user.ONE_TIME_AUTH) {
-        return bcrypt.compare(password, user.PASSWORD);
-      }
-      if (user.PASSWORD === password) {
-        return true;
-      }
-
-      return false;
-    })
-    .then((isAuth) => {
-      if (!isAuth) {
-        const err = new Error('Authentication failed!');
-        err.statusCode = 401;
-        throw err;
-      }
-
-      const token = jwt.sign(
-        {
-          id: loadedUser.ID,
-          email: loadedUser.EMAIL,
-          one_time_auth: loadedUser.ONE_TIME_AUTH,
-          role: loadedUser.IS_ADMIN ? role.ADMIN : role.USER,
-        },
-        accessTokenSecret,
-        { expiresIn: '1h' },
-      );
-
-      res.status(200).json({
-        token,
-      });
-    })
-    .catch((error) => {
-      const err = error;
-
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
-      next(err);
-    });
 };
 
 const logOut = (_req, res, _next) => {
@@ -163,4 +135,4 @@ const updatePassword = (req, res, next) => {
 };
 // #endregion
 
-module.exports = { register, logIn, logOut, updatePassword, createUser };
+module.exports = { register, login, logOut, updatePassword, createUser };
