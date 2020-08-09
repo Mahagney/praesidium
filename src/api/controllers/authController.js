@@ -70,7 +70,10 @@ const login = async (email, password) => {
       throw new UserWithEmailNotFoundError(`User with email ${email} not found`);
     }
 
-    const passwordIsGood = user.ONE_TIME_AUTH ? bcrypt.compare(password, user.PASSWORD) : user.PASSWORD === password;
+    // TODO: encrypt first password and change check accordingly
+    const passwordIsGood = user.ONE_TIME_AUTH
+      ? await bcrypt.compare(password, user.PASSWORD)
+      : user.PASSWORD === password;
 
     if (!passwordIsGood) {
       throw new BadUserPasswordError(`Bad password received for email ${email}`);
