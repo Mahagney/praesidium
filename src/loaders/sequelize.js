@@ -4,7 +4,7 @@ const logger = require('./logger');
 const { sequelize: sequelizeConfig } = require('../config');
 
 const sequelizeLogger = (...args) => {
-  logger.debug({ args }, 'sequelize log ...');
+  logger.debug({ query: args[0] }, 'sequelize log ...');
 };
 
 const sequelizeLoader = new Sequelize(sequelizeConfig.database, sequelizeConfig.username, sequelizeConfig.password, {
